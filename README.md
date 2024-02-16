@@ -4,7 +4,7 @@ A [Transmitly](https://github.com/transmitly/transmitly) channel provider that e
 
 ### Getting started
 
-To use the SendGrid channel provider, first install the [NuGet package](https://nuget.org/packages/transmitly.channelprovider.infobip):
+To use the Infobip channel provider, first install the [NuGet package](https://nuget.org/packages/transmitly.channelprovider.infobip):
 
 ```shell
 dotnet add package Transmitly.ChannelProvider.Infobip
