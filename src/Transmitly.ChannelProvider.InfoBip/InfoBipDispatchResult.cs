@@ -17,7 +17,7 @@ using System.Collections.Generic;
 
 namespace Transmitly.Infobip
 {
-	internal class InfoBipDispatchResult : IDispatchResult
+	internal sealed class InfobipDispatchResult : IDispatchResult
 	{
 		public string? ResourceId { get; set; }
 

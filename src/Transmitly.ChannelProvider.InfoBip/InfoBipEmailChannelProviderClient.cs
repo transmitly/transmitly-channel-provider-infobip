@@ -24,7 +24,7 @@ using Transmitly.Exceptions;
 
 namespace Transmitly.Infobip
 {
-	internal class InfoBipEmailChannelProviderClient(IB.Configuration optionObj) : ChannelProviderClient<IEmail>
+	internal sealed class InfobipEmailChannelProviderClient(IB.Configuration optionObj) : ChannelProviderClient<IEmail>
 	{
 		private readonly IB.Configuration _optionObj = Guard.AgainstNull(optionObj);
 
@@ -50,7 +50,7 @@ namespace Transmitly.Infobip
 
 			var message = sendResult.Messages[0];
 			Dispatched(communicationContext, email);
-			return [new InfoBipDispatchResult
+			return [new InfobipDispatchResult
 			{
 				ResourceId = message.MessageId,
 				DispatchStatus = DispatchStatus.Dispatched,

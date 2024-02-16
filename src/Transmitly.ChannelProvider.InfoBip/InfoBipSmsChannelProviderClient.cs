@@ -25,7 +25,7 @@ using Transmitly.Exceptions;
 
 namespace Transmitly.Infobip
 {
-	internal class InfoBipSmsChannelProviderClient(IB.Configuration optionObj) : ChannelProviderClient<ISms>
+	internal sealed class InfobipSmsChannelProviderClient(IB.Configuration optionObj) : ChannelProviderClient<ISms>
 	{
 		private readonly IB.Configuration _optionObj = Guard.AgainstNull(optionObj);
 
@@ -52,7 +52,7 @@ namespace Transmitly.Infobip
 
 			var message = sendResult.Messages[0];
 			Dispatched(communicationContext, sms);
-			return [new InfoBipDispatchResult
+			return [new InfobipDispatchResult
 			{
 				ResourceId = message.MessageId,
 				DispatchStatus = DispatchStatus.Dispatched,
