@@ -13,7 +13,6 @@
 //  limitations under the License.
 
 using System;
-using Transmitly.Channel.Configuration;
 using Infobip.Api.Client;
 using Transmitly.Infobip;
 namespace Transmitly
@@ -29,17 +28,15 @@ namespace Transmitly
 			return $"{InfobipId}.{string.Join(".", providerId)}";
 		}
 
-		public static CommunicationsClientBuilder AddInfobipSupport(this ChannelProviderConfigurationBuilder channelProviderConfiguration, Action<Configuration> options, string? providerId = null)
-		{
-			var optionObj = new Configuration();
-			options(optionObj);
-			channelProviderConfiguration.Add(Id.ChannelProvider.Infobip(providerId), new InfobipSmsChannelProviderClient(optionObj), Id.Channel.Sms());
-			return channelProviderConfiguration.Add(Id.ChannelProvider.Infobip(providerId), new InfobipEmailChannelProviderClient(optionObj), Id.Channel.Email());
-		}
 
 		public static CommunicationsClientBuilder AddInfobipSupport(this CommunicationsClientBuilder communicationsClientBuilder, Action<Configuration> options, string? providerId = null)
 		{
-			return communicationsClientBuilder.ChannelProvider.AddInfobipSupport(options, providerId);
+			var optionObj = new Configuration();
+			options(optionObj);
+			communicationsClientBuilder.AddChannelProvider<InfobipSmsChannelProviderClient, ISms>(Id.ChannelProvider.Infobip(providerId), optionObj, Id.Channel.Sms());
+			communicationsClientBuilder.AddChannelProvider<InfobipEmailChannelProviderClient, IEmail>(Id.ChannelProvider.Infobip(providerId), optionObj, Id.Channel.Email());
+			return communicationsClientBuilder;
+
 		}
 	}
 }
