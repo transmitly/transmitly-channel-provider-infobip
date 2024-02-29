@@ -16,12 +16,35 @@ Then add the channel provider using `AddInfobipSupport()`:
 using Transmitly;
 ...
 var communicationClient = new CommunicationsClientBuilder()
-	.AddInfobipSupport(options =>
+.AddInfobipSupport(options =>
+{
+	options.BasePath = "https://base.infobip.com";
+	options.ApiKey = "key";
+	options.ApiKeyPrefix = "App";
+})
+.AddPipeline("first-pipeline", pipeline =>
+{
+	//AddEmail is a channel that is core to the Transmitly library.
+	//AsAudienceAddress() is also a convenience method that helps us create an audience address
+	//Audience addresses can be anything, email, phone, or even a device/app Id for push notifications!
+	pipeline.AddEmail("from@mydomain.com".AsAudienceAddress("Test Display Name"), email =>
 	{
-		options.BasePath = "https://base.infobip.com";
-		options.ApiKey = "key";
-		options.ApiKeyPrefix = "App";
-	})
+		//Transmitly is a bit different. All of our content is supported by templates out of the box.
+		//There are multiple types of templates to get you started. You can even create templates 
+		//specific to certain cultures!
+		email.Subject.AddStringTemplate("Hey, Check out Transmit.ly!");
+		email.HtmlBody.AddStringTemplate("Hey, check out this cool new library for managing app communications. <a href=\"https://transmit.ly\">");
+		email.TextBody.AddStringTemplate("Hey, check out this cool new library. https://transmitly.ly");
+	});
+
+	//AddSms is a channel that is core to the Transmitly library.
+	pipeline.AddSms(sms =>
+	{
+		sms.Body.AddStringTemplate("Check out Transmit.ly!");
+	});
+});
+//Dispatch (send) the transsactional messages to our friend Joe (joe@mydomain.com & 888-555-1234) using our configured InfoBip account with our "first-pipeline" pipeline.
+var result = await communicationsClient.DispatchAsync("first-pipeline", ["joe@mydomain.com".AsAudienceAddress("Joe"),"+18885551234".AsAudienceAddress()], new { });
 ```
 * See the [Transmitly](https://github.com/transmitly/transmitly) project for more details on what a channel provider is and how it can be configured.
 
