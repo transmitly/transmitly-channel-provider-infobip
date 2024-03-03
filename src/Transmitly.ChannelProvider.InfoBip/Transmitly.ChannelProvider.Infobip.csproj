@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFrameworks Condition=" '$(OS)' == 'Windows_NT'">net48;net471</TargetFrameworks>
-		<TargetFrameworks>$(TargetFrameworks);netstandard2.0;net6.0</TargetFrameworks>
+		<TargetFrameworks>$(TargetFrameworks);netstandard2.0;net6.0;net8.0</TargetFrameworks>
 		<Nullable>enable</Nullable>
 		<LangVersion>latest</LangVersion>
 		<IsPackable>true</IsPackable>
@@ -13,10 +13,11 @@
 		<Company>Code Impressions</Company>
 		<Title>Transmit.ly Infobip Channel Provider</Title>
 		<Description>A channel provider for the Transmitly communications library.</Description>
-		<Copyright>Copyright © (c) Code Impressions, LLC</Copyright>
+		<Copyright>Copyright (c) Code Impressions, LLC</Copyright>
 		<Authors>Code Impressions</Authors>
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 		<PackageIcon>icon-dark.png</PackageIcon>
+		<PackageIconUrl>https://github.com/transmitly/transmitly-channel-provider-infobip/blob/main/assets/icon-dark.png</PackageIconUrl>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<RepositoryUrl>https://github.com/transmitly/transmitly-channel-provider-infobip.git</RepositoryUrl>
 		<PackageTags>email,sms;infobip;channel provider; transmitly</PackageTags>
@@ -41,7 +42,11 @@
 		<PackageReference Include="Infobip.Api.Client" Version="2.1.3" />
 		<PackageReference Include="Transmitly" Version="0.1.0-*" />
 	</ItemGroup>
-	<ItemGroup Condition="'$(OS)' == 'Windows_NT'">
+	<ItemGroup>
+		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
+		<PackageReference Include="PolySharp" Version="1.14.1" PrivateAssets="All" />
+	</ItemGroup>
+	<ItemGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETFramework'">
 		<Reference Include="System.Net.Http" />
 	</ItemGroup>
 </Project>

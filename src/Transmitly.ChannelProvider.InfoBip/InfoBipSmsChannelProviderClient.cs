@@ -38,8 +38,6 @@ namespace Transmitly.Infobip
 			var messageId = Guid.NewGuid().ToString("N");
 			var apiClient = new IBApi.SendSmsApi(_optionObj);
 			var to = sms.To?.Select(s => new SmsDestination(messageId, s.Value)).ToList();
-			//var cc = string.Join(";", email.Cc.Concat(email.To.Skip(1)));
-			//var bcc = string.Join(";", email.Bcc.ToList());
 			//var attachment = email.Attachments.FirstOrDefault()?.ContentStream;
 			//var from = email.From.ToEmailAddress();
 			var sendResult = await apiClient.SendSmsMessageAsync(new IB.Model.SmsAdvancedTextualRequest(null, [new SmsTextualMessage(from: sms.From?.Value, destinations: to, text: sms.Body)]), cancellationToken);
@@ -59,7 +57,6 @@ namespace Transmitly.Infobip
 				ChannelId = communicationContext.ChannelId,
 				ChannelProviderId = communicationContext.ChannelProviderId,
 				MessageString = message.Status.Name,
-				IsDelivered = false
 			}];
 		}
 	}

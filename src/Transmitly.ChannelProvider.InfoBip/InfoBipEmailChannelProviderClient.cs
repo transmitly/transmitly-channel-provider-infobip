@@ -57,7 +57,6 @@ namespace Transmitly.Infobip
 				ChannelId = communicationContext.ChannelId,
 				ChannelProviderId = communicationContext.ChannelProviderId,
 				MessageString = message.Status.Name,
-				IsDelivered = false
 			}];
 		}
 	}

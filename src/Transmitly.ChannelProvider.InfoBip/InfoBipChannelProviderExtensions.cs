@@ -13,6 +13,7 @@
 //  limitations under the License.
 
 using System;
+using System.Reflection;
 using Infobip.Api.Client;
 using Transmitly.Infobip;
 namespace Transmitly
@@ -20,23 +21,34 @@ namespace Transmitly
 	public static class InfobipChannelProviderExtensions
 	{
 		private const string InfobipId = "Infobip";
-		public static string Infobip(this ChannelProviders channelProviders, params string?[] providerId)
+
+		public static string Infobip(this ChannelProviders channelProviders, string? providerId = null)
 		{
 			Guard.AgainstNull(channelProviders);
-			if (providerId == null || providerId.Length == 0)
-				providerId = ["Default"];
-			return $"{InfobipId}.{string.Join(".", providerId)}";
+			return channelProviders.GetId(InfobipId, providerId);
 		}
-
 
 		public static CommunicationsClientBuilder AddInfobipSupport(this CommunicationsClientBuilder communicationsClientBuilder, Action<Configuration> options, string? providerId = null)
 		{
 			var optionObj = new Configuration();
 			options(optionObj);
+			optionObj.UserAgent = GetUserAgent();
 			communicationsClientBuilder.AddChannelProvider<InfobipSmsChannelProviderClient, ISms>(Id.ChannelProvider.Infobip(providerId), optionObj, Id.Channel.Sms());
 			communicationsClientBuilder.AddChannelProvider<InfobipEmailChannelProviderClient, IEmail>(Id.ChannelProvider.Infobip(providerId), optionObj, Id.Channel.Email());
 			return communicationsClientBuilder;
-
+		}
+		private static string GetUserAgent()
+		{
+			string version = "0.1.0";
+			try
+			{
+				version = typeof(InfobipChannelProviderExtensions).Assembly.GetName().Version.ToString();
+			}
+			catch
+			{
+				//eat error
+			}
+			return $"transmitly-channelprovider-infobip/{version}";
 		}
 	}
 }
