@@ -13,7 +13,6 @@
 //  limitations under the License.
 
 using System;
-using System.Reflection;
 using Infobip.Api.Client;
 using Transmitly.Infobip;
 namespace Transmitly
