@@ -12,21 +12,19 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-using System;
-using System.Collections.Generic;
-
-namespace Transmitly.Infobip
+namespace Transmitly.ChannelProvider.Infobip.Voice
 {
-	internal sealed class InfobipDispatchResult : IDispatchResult
+	sealed class SingleVoiceMessageRequest
 	{
-		public string? ResourceId { get; set; }
-
-		string? IDispatchResult.ChannelProviderId { get; }
-
-		string? IDispatchResult.ChannelId { get; }
-
-		public DispatchStatus DispatchStatus { get; set; }
-
-		public Exception? Exception { get; set; }
+		public SingleVoiceMessageRequest(string text, string to)
+		{
+			this.text = text;
+			this.to = to;
+		}
+		public string text { get; }
+		public string language { get; set; } = "en";
+		public string? from { get; set; }
+		public string to { get; set; }
+		public InfobipVoiceType? voice { get; set; }
 	}
 }

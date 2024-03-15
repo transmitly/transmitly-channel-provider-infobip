@@ -32,8 +32,10 @@ namespace Transmitly
 			var optionObj = new Configuration();
 			options(optionObj);
 			optionObj.UserAgent = GetUserAgent();
+			
 			communicationsClientBuilder.AddChannelProvider<InfobipSmsChannelProviderClient, ISms>(Id.ChannelProvider.Infobip(providerId), optionObj, Id.Channel.Sms());
 			communicationsClientBuilder.AddChannelProvider<InfobipEmailChannelProviderClient, IEmail>(Id.ChannelProvider.Infobip(providerId), optionObj, Id.Channel.Email());
+			communicationsClientBuilder.AddChannelProvider<InfobipVoiceChannelProviderClient, IVoice>(Id.ChannelProvider.Infobip(providerId), optionObj, Id.Channel.Voice());
 			return communicationsClientBuilder;
 		}
 		private static string GetUserAgent()
@@ -47,7 +49,7 @@ namespace Transmitly
 			{
 				//eat error
 			}
-			return $"transmitly-channelprovider-infobip/{version}";
+			return $"transmitly-infobip/{version}";
 		}
 	}
 }
