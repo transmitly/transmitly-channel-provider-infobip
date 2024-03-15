@@ -54,9 +54,6 @@ namespace Transmitly.Infobip
 			{
 				ResourceId = message.MessageId,
 				DispatchStatus = DispatchStatus.Dispatched,
-				ChannelId = communicationContext.ChannelId,
-				ChannelProviderId = communicationContext.ChannelProviderId,
-				MessageString = message.Status.Name,
 			}];
 		}
 	}

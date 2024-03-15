@@ -17,16 +17,18 @@ using System.Collections.Generic;
 
 namespace Transmitly.Infobip
 {
-	internal sealed class InfobipDispatchResult : IDispatchResult
+	public sealed class InfobipRequestErrorException : Exception
 	{
-		public string? ResourceId { get; set; }
-
-		string? IDispatchResult.ChannelProviderId { get; }
-
-		string? IDispatchResult.ChannelId { get; }
-
-		public DispatchStatus DispatchStatus { get; set; }
-
-		public Exception? Exception { get; set; }
+		public string? MessageId { get; }
+		public string? Text { get; }
+		public IReadOnlyCollection<string>? ValidationErrors { get; }
+		internal InfobipRequestErrorException(RequestError? requestError) : base(string.Join(",", requestError?.serviceException?.validationErrors))
+		{
+			if (requestError == null || requestError.serviceException == null)
+				return;
+			MessageId = requestError.serviceException.messageId;
+			Text = requestError.serviceException.text;
+			ValidationErrors = requestError.serviceException.validationErrors?.AsReadOnly();
+		}
 	}
 }

@@ -12,21 +12,10 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-using System;
-using System.Collections.Generic;
-
 namespace Transmitly.Infobip
 {
-	internal sealed class InfobipDispatchResult : IDispatchResult
+	sealed class RequestError
 	{
-		public string? ResourceId { get; set; }
-
-		string? IDispatchResult.ChannelProviderId { get; }
-
-		string? IDispatchResult.ChannelId { get; }
-
-		public DispatchStatus DispatchStatus { get; set; }
-
-		public Exception? Exception { get; set; }
+		public ServiceException? serviceException { get; set; }
 	}
 }

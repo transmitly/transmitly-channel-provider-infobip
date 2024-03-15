@@ -21,56 +21,92 @@ using Transmitly.ChannelProvider;
 using System.Net.Http;
 using Infobip.Api.Client;
 using Newtonsoft.Json;
-using System.Linq;
+using System.Text;
+using Transmitly.ChannelProvider.Infobip.Voice;
+using System.Globalization;
 
 namespace Transmitly.Infobip
 {
-	sealed class SingleVoiceMessageRequest
+	internal sealed class InfobipVoiceChannelProviderClient(IB.Configuration optionObj) : ChannelProviderClient<IVoice>
 	{
-		public SingleVoiceMessageRequest(string text)
-		{
-			this.text = text;
-		}
-		public string text { get; set; }
-		public string language { get; set; } = "en";
-		public string from { get; set; }
-		public string to { get; set; }
-	}
-
-	sealed class SingleVoiceMessageResponse
-	{
-		public string bulkId { get; set; }
-		public List<string> Messages { get; set; } = [];
-	}
-	sealed class VoiceMessageStatus
-	{
-		public int groupId { get; set; }
-		public string groupName { get; set; }
-		public int id { get; set; }
-		public string name { get; set; }
-		public string description { get; set; }
-	}
-
-	sealed class SingleVoiceMessage
-	{
-		public string to { get; set; }
-		public string messageId { get; set; }
-		public VoiceMessageStatus status { get; set; } = new VoiceMessageStatus();
-	}
-
-	internal sealed class InfobipVoiceChannelProviderClient : ChannelProviderClient<IVoice>
-	{
-		private const string SingleMessagePath = "tts/v3/single";
-		private static HttpClient? _httpClient;
+		private const string SingleMessagePath = "tts/3/single";
+		private HttpClient? _httpClient;
 		private static readonly object _resourceLock = new();
-		private readonly Configuration _optionObj;
+		private readonly Configuration _optionObj = Guard.AgainstNull(optionObj);
 
-		public InfobipVoiceChannelProviderClient(IB.Configuration optionObj)
+		public override IReadOnlyCollection<string>? RegisteredEvents => [DeliveryReportEvent.Name.Dispatched(), DeliveryReportEvent.Name.Error()];
+
+		public override async Task<IReadOnlyCollection<IDispatchResult?>> DispatchAsync(IVoice voice, IDispatchCommunicationContext communicationContext, CancellationToken cancellationToken)
 		{
-			_optionObj = Guard.AgainstNull(optionObj);
+			Guard.AgainstNull(voice);
+			Guard.AgainstNull(communicationContext);
+
+			var recipients = voice.To ?? [];
+
+			var results = new List<IDispatchResult>(recipients.Length);
+
+			foreach (var recipient in recipients)
+			{
+				var result = await GetHttpClient(_optionObj).
+					PostAsync(SingleMessagePath, CreateSingleMessageRequest(recipient, voice, communicationContext), cancellationToken).
+					ConfigureAwait(false);
+
+				var responseContent = await result.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+				if (!result.IsSuccessStatusCode)
+				{
+					var error = JsonConvert.DeserializeObject<RequestError>(responseContent);
+					results.Add(new InfobipDispatchResult
+					{
+						DispatchStatus = DispatchStatus.Error,
+						ResourceId = error?.serviceException?.messageId,
+						Exception = new InfobipRequestErrorException(error),
+					});
+					Error(communicationContext, voice);
+				}
+				else
+				{
+					var success = Guard.AgainstNull(JsonConvert.DeserializeObject<SingleVoiceMessageResponse>(responseContent));
+					foreach (var message in success.messages)
+					{
+						results.Add(new InfobipDispatchResult { ResourceId = message.messageId, DispatchStatus = ConvertStatus(message.status.groupName) });
+						Dispatched(communicationContext, voice);
+					}
+				}
+			}
+
+			return results;
 		}
 
-		private static HttpClient GetHttpClient(Configuration configuration)
+		private DispatchStatus ConvertStatus(InfobipGroupName status)
+		{
+			return status switch
+			{
+				InfobipGroupName.COMPLETED or
+				InfobipGroupName.PENDING or
+				InfobipGroupName.IN_PROGRESS =>
+					DispatchStatus.Dispatched,
+				InfobipGroupName.FAILED =>
+					DispatchStatus.Error,
+				_ =>
+					DispatchStatus.Unknown,
+			};
+		}
+
+		private HttpContent CreateSingleMessageRequest(IAudienceAddress recipient, IVoice voice, IDispatchCommunicationContext context)
+		{
+			var language = context.CultureInfo == CultureInfo.InvariantCulture ? "en" : context.CultureInfo.TwoLetterISOLanguageName;
+			var request = new SingleVoiceMessageRequest(Guard.AgainstNull(voice.Message), Guard.AgainstNullOrWhiteSpace(recipient.Value))
+			{
+				from = Guard.AgainstNullOrWhiteSpace(voice.From?.Value),
+				language = language,
+				voice = new InfobipVoiceType(voice.VoiceType)
+			};
+
+			return new StringContent(JsonConvert.SerializeObject(request), Encoding.UTF8, "application/json");
+		}
+
+		private HttpClient GetHttpClient(Configuration configuration)
 		{
 			if (_httpClient == null)
 			{
@@ -83,30 +119,11 @@ namespace Transmitly.Infobip
 							BaseAddress = new Uri(configuration.BasePath)
 						};
 						_httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue(configuration.ApiKeyPrefix, configuration.ApiKey);
-						_httpClient.DefaultRequestHeaders.Add("Content-Type", "application/json");
 						_httpClient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
 					}
 				}
 			}
 			return _httpClient;
-		}
-
-		public override IReadOnlyCollection<string>? RegisteredEvents => [DeliveryReportEvent.Name.Dispatched(), DeliveryReportEvent.Name.Error()];
-
-		public override async Task<IReadOnlyCollection<IDispatchResult?>> DispatchAsync(IVoice voice, IDispatchCommunicationContext communicationContext, CancellationToken cancellationToken)
-		{
-			Guard.AgainstNull(voice);
-			Guard.AgainstNull(communicationContext);
-			var messageId = Guid.NewGuid().ToString("N");
-			Guard.AgainstNull(voice.From);
-			Guard.AgainstNull(voice.To);
-
-			var result = await GetHttpClient(_optionObj).PostAsync(SingleMessagePath, new StringContent(JsonConvert.SerializeObject(new SingleVoiceMessageRequest("")
-			{
-				to = voice.To.First().Value,
-				from = voice.From.Value
-			})));
-			return [new DispatchResult(DispatchStatus.Dispatched, messageId)];
 		}
 	}
 }
