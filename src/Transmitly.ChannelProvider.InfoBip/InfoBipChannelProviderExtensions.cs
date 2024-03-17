@@ -19,12 +19,15 @@ namespace Transmitly
 {
 	public static class InfobipChannelProviderExtensions
 	{
-		private const string InfobipId = "Infobip";
-
 		public static string Infobip(this ChannelProviders channelProviders, string? providerId = null)
 		{
 			Guard.AgainstNull(channelProviders);
-			return channelProviders.GetId(InfobipId, providerId);
+			return channelProviders.GetId(InfobipConst.Id, providerId);
+		}
+
+		public static InfobipExtendedEmailProperties Infobip(this IEmailChannel email)
+		{
+			return new InfobipExtendedEmailProperties(email);
 		}
 
 		public static CommunicationsClientBuilder AddInfobipSupport(this CommunicationsClientBuilder communicationsClientBuilder, Action<Configuration> options, string? providerId = null)
@@ -32,12 +35,13 @@ namespace Transmitly
 			var optionObj = new Configuration();
 			options(optionObj);
 			optionObj.UserAgent = GetUserAgent();
-			
+
 			communicationsClientBuilder.AddChannelProvider<InfobipSmsChannelProviderClient, ISms>(Id.ChannelProvider.Infobip(providerId), optionObj, Id.Channel.Sms());
 			communicationsClientBuilder.AddChannelProvider<InfobipEmailChannelProviderClient, IEmail>(Id.ChannelProvider.Infobip(providerId), optionObj, Id.Channel.Email());
 			communicationsClientBuilder.AddChannelProvider<InfobipVoiceChannelProviderClient, IVoice>(Id.ChannelProvider.Infobip(providerId), optionObj, Id.Channel.Voice());
 			return communicationsClientBuilder;
 		}
+
 		private static string GetUserAgent()
 		{
 			string version = "0.1.0";
