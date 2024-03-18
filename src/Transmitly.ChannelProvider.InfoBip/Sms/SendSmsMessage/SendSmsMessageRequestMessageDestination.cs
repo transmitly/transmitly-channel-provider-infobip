@@ -13,19 +13,24 @@
 //  limitations under the License.
 
 using System;
+using System.Text.Json.Serialization;
 
-namespace Transmitly.Infobip
+namespace Transmitly.ChannelProvider.Infobip.Sms.SendSmsMessage
 {
-	internal sealed class InfobipDispatchResult : IDispatchResult
+	/// <summary>
+	/// 
+	/// </summary>
+	internal sealed class SendSmsMessageRequestMessageDestination(string to)
 	{
-		public string? ResourceId { get; set; }
-
-		string? IDispatchResult.ChannelProviderId { get; }
-
-		string? IDispatchResult.ChannelId { get; }
-
-		public DispatchStatus DispatchStatus { get; set; }
-
-		public Exception? Exception { get; set; }
+		/// <summary>
+		/// The ID that uniquely identifies the message sent.
+		/// </summary>
+		[JsonPropertyName("messageId")]
+		public string? MessageId { get; set; } = Guid.NewGuid().ToString("N");
+		/// <summary>
+		/// Message destination address. Addresses must be in international format (Example: 41793026727).
+		/// </summary>
+		[JsonPropertyName("to")]
+		public string? To { get; set; } = Guard.AgainstNullOrWhiteSpace(to);
 	}
 }

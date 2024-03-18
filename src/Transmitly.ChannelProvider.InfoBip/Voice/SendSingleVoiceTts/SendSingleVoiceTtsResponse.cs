@@ -12,23 +12,25 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
-namespace Transmitly.Infobip
+namespace Transmitly.ChannelProvider.Infobip.Voice
 {
-	public sealed class InfobipRequestErrorException : Exception
+	//https://www.infobip.com/docs/api/channels/voice/voice-message/send-single-voice-tts
+	sealed class SendSingleVoiceTtsResponse
 	{
-		public string? MessageId { get; }
-		public string? Text { get; }
-		public IReadOnlyCollection<string>? ValidationErrors { get; }
-		internal InfobipRequestErrorException(RequestError? requestError) : base(string.Join(",", requestError?.serviceException?.validationErrors))
-		{
-			if (requestError == null || requestError.serviceException == null)
-				return;
-			MessageId = requestError.serviceException.messageId;
-			Text = requestError.serviceException.text;
-			ValidationErrors = requestError.serviceException.validationErrors?.AsReadOnly();
-		}
+		/// <summary>
+		/// The ID that uniquely identifies the request. 
+		/// Bulk ID will be received only when you send a message to more than one destination address.
+		/// </summary>
+		[JsonPropertyName("bulkId")]
+		public string? BulkId { get; set; }
+
+		/// <summary>
+		/// Array of sent messages, one object per every message.
+		/// </summary>
+		[JsonPropertyName("messages")]
+		public List<SendSingleVoiceTtsResponseMessage> Messages { get; set; } = [];
 	}
 }

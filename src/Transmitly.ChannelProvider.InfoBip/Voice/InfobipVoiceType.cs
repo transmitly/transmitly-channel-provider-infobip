@@ -12,18 +12,37 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
+using System;
+
 namespace Transmitly.ChannelProvider.Infobip.Voice
 {
-    internal sealed class InfobipVoiceType
-    {
-        public InfobipVoiceType(IVoiceType? voiceType)
-        {
-            if (voiceType == null)
-                return;
-            Gender = voiceType.Gender;
-            Name = voiceType.Name;
-        }
-        public string? Gender { get; }
-        public string? Name { get; }
-    }
+	/// <summary>
+	/// <see href="https://www.infobip.com/docs/voice-and-video/getting-started#text-to-speech"/>
+	/// </summary>
+	internal sealed class InfobipVoiceType
+	{
+		public InfobipVoiceType(IVoiceType? voiceType) : this(voiceType, VoiceGender.Unspecified, null)
+		{
+			if (voiceType == null)
+				return;
+			Gender = voiceType.Gender;
+			Name = voiceType.Name;
+		}
+
+		public InfobipVoiceType(IVoiceType? voiceType, VoiceGender overrideGender, string? overrideName)
+		{
+			if (overrideGender != VoiceGender.Unspecified)
+				Gender = Enum.GetName(typeof(VoiceGender), overrideGender);
+			else
+				Gender = voiceType?.Gender;
+
+			if (!string.IsNullOrEmpty(overrideName))
+				Name = overrideName;
+			else
+				Name = voiceType?.Name;
+		}
+
+		public string? Gender { get; set; }
+		public string? Name { get; set; }
+	}
 }

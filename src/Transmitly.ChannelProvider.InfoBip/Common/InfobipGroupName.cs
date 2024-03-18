@@ -12,19 +12,13 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-namespace Transmitly.ChannelProvider.Infobip.Voice
+namespace Transmitly.ChannelProvider.Infobip
 {
-	sealed class SingleVoiceMessageRequest
-	{
-		public SingleVoiceMessageRequest(string text, string to)
-		{
-			this.text = text;
-			this.to = to;
-		}
-		public string text { get; }
-		public string language { get; set; } = "en";
-		public string? from { get; set; }
-		public string to { get; set; }
-		public InfobipVoiceType? voice { get; set; }
-	}
+    enum InfobipGroupName
+    {
+        PENDING,
+        IN_PROGRESS,
+        COMPLETED,
+        FAILED
+    }
 }

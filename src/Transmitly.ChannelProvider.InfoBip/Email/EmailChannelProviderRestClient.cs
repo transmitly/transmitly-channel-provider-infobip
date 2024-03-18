@@ -17,24 +17,24 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Net.Http;
-using Infobip.Api.Client;
+using Transmitly.Infobip;
 
-namespace Transmitly.Infobip
+namespace Transmitly.ChannelProvider.Infobip.Email
 {
-	internal sealed class InfobipEmailChannelProviderRestClient(Configuration configuration, HttpClient? httpClient) : ClientChannelProviderRestClient<IEmail>(configuration, httpClient)
+    internal sealed class EmailChannelProviderRestClient(InfobipChannelProviderConfiguration configuration, HttpClient? httpClient) : ChannelProviderRestClient<IEmail>(httpClient)
 	{
 		private const string SendEmailPath = "/email/3/send";
+		private readonly InfobipChannelProviderConfiguration _configuration = configuration;
 
-		public InfobipEmailChannelProviderRestClient(Configuration configuration) : this(configuration, null)
+		public EmailChannelProviderRestClient(InfobipChannelProviderConfiguration configuration) : this(configuration, null)
 		{
 			System.Text.Json.JsonSerializer.Serialize(new { });
 		}
 
 		protected override void ConfigureHttpClient(HttpClient client)
 		{
-			client.BaseAddress = new Uri(configuration.BasePath);
-			client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue(configuration.ApiKeyPrefix, configuration.ApiKey);
-			client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+			RestClientConfiguration.Configure(client, _configuration);
+			base.ConfigureHttpClient(client);
 		}
 
 		protected override async Task<IReadOnlyCollection<IDispatchResult?>> DispatchAsync(HttpClient restClient, IEmail communication, IDispatchCommunicationContext communicationContext, CancellationToken cancellationToken)

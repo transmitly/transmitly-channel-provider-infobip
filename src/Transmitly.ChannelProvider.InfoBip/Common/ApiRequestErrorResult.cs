@@ -12,14 +12,13 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-namespace Transmitly.ChannelProvider.Infobip.Voice
+using System.Text.Json.Serialization;
+
+namespace Transmitly.ChannelProvider.Infobip
 {
-    sealed class VoiceMessageStatus
+    internal sealed class ApiRequestErrorResult
     {
-        public int groupId { get; set; }
-        public InfobipGroupName groupName { get; set; }
-        public int id { get; set; }
-        public string name { get; set; }
-        public string description { get; set; }
+        [JsonPropertyName("serviceException")]
+        public ServiceExceptionResult? ServiceException { get; set; }
     }
 }

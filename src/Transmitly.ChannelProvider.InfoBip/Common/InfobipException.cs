@@ -12,10 +12,11 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-namespace Transmitly
+using System;
+
+namespace Transmitly.ChannelProvider.Infobip
 {
-	internal static class InfobipConst
-	{
-		public const string Id = "Infobip";
-	}
+    public class InfobipException(string message) : Exception(message)
+    {
+    }
 }

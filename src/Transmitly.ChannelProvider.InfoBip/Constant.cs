@@ -12,10 +12,13 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-namespace Transmitly.Infobip
+namespace Transmitly
 {
-	sealed class RequestError
+	internal static class Constant
 	{
-		public ServiceException? serviceException { get; set; }
+		public const string Id = "Infobip";
+		public const string EmailPropertiesKey = $"{Id}.Email";
+		public const string VoicePropertiesKey = $"{Id}.Voice";
+		public const string SmsPropertiesKey = $"{Id}.Sms";
 	}
 }

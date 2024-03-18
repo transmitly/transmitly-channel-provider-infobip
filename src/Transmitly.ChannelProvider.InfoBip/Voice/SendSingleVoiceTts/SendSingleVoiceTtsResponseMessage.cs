@@ -27,12 +27,27 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
+using System.Text.Json.Serialization;
+
 namespace Transmitly.ChannelProvider.Infobip.Voice
 {
-    sealed class SingleVoiceMessage
-    {
-        public string to { get; set; }
-        public string messageId { get; set; }
-        public VoiceMessageStatus status { get; set; } = new VoiceMessageStatus();
-    }
+	sealed class SendSingleVoiceTtsResponseMessage
+	{
+		/// <summary>
+		/// The message destination address.
+		/// </summary>
+		[JsonPropertyName("to")]
+		public string? To { get; set; }
+		/// <summary>
+		/// The ID that uniquely identifies the message sent.
+		/// </summary>
+		[JsonPropertyName("messageId")]
+		public string? MessageId { get; set; }
+		/// <summary>
+		/// Indicates whether the message is successfully sent, not sent, delivered, not delivered, waiting for delivery or any other possible status.
+		/// <see href="https://dev.infobip.com/getting-started/response-status-and-error-codes#status-object-example">Response status and error codes</see>
+		/// </summary>
+		[JsonPropertyName("status")]
+		public ApiMessageStatus Status { get; set; } = new ApiMessageStatus();
+	}
 }
