@@ -12,21 +12,13 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
-namespace Transmitly.ChannelProvider.Infobip.Voice
+namespace Transmitly.ChannelProvider.Infobip
 {
-	enum InfobipGroupName
-	{
-		PENDING,
-		IN_PROGRESS,
-		COMPLETED,
-		FAILED
-	}
-
-	sealed class SingleVoiceMessageResponse
-	{
-		public string bulkId { get; set; }
-		public List<SingleVoiceMessage> messages { get; set; }
-	}
+    internal sealed class ApiRequestErrorResult
+    {
+        [JsonPropertyName("serviceException")]
+        public ServiceExceptionResult? ServiceException { get; set; }
+    }
 }

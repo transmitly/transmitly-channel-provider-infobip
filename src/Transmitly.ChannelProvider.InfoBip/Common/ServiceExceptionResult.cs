@@ -13,13 +13,17 @@
 //  limitations under the License.
 
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
-namespace Transmitly.Infobip
+namespace Transmitly.ChannelProvider.Infobip
 {
-	sealed class ServiceException
+	internal sealed class ServiceExceptionResult
 	{
-		public string? messageId { get; set; }
-		public string? text { get; set; }
-		public List<string>? validationErrors { get; set; }
+		[JsonPropertyName("messageId")]
+		public string? MessageId { get; set; }
+		[JsonPropertyName("text")]
+		public string? Text { get; set; }
+		[JsonPropertyName("validationErrors")]
+		public List<string>? ValidationErrors { get; set; }
 	}
 }

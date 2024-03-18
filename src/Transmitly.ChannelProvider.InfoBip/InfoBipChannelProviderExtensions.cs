@@ -13,43 +13,33 @@
 //  limitations under the License.
 
 using System;
-using Infobip.Api.Client;
-using Transmitly.Infobip;
+using Transmitly.ChannelProvider.Infobip.Email;
+using Transmitly.ChannelProvider.Infobip.Sms;
+using Transmitly.ChannelProvider.Infobip.Voice;
 namespace Transmitly
 {
 	public static class InfobipChannelProviderExtensions
 	{
-		private const string InfobipId = "Infobip";
-
 		public static string Infobip(this ChannelProviders channelProviders, string? providerId = null)
 		{
 			Guard.AgainstNull(channelProviders);
-			return channelProviders.GetId(InfobipId, providerId);
+			return channelProviders.GetId(Constant.Id, providerId);
 		}
 
-		public static CommunicationsClientBuilder AddInfobipSupport(this CommunicationsClientBuilder communicationsClientBuilder, Action<Configuration> options, string? providerId = null)
+		public static ExtendedEmailChannelProperties Infobip(this IEmailChannel email)
 		{
-			var optionObj = new Configuration();
-			options(optionObj);
-			optionObj.UserAgent = GetUserAgent();
-			
-			communicationsClientBuilder.AddChannelProvider<InfobipSmsChannelProviderClient, ISms>(Id.ChannelProvider.Infobip(providerId), optionObj, Id.Channel.Sms());
-			communicationsClientBuilder.AddChannelProvider<InfobipEmailChannelProviderClient, IEmail>(Id.ChannelProvider.Infobip(providerId), optionObj, Id.Channel.Email());
-			communicationsClientBuilder.AddChannelProvider<InfobipVoiceChannelProviderClient, IVoice>(Id.ChannelProvider.Infobip(providerId), optionObj, Id.Channel.Voice());
-			return communicationsClientBuilder;
+			return new ExtendedEmailChannelProperties(email);
 		}
-		private static string GetUserAgent()
+
+		public static CommunicationsClientBuilder AddInfobipSupport(this CommunicationsClientBuilder communicationsClientBuilder, Action<InfobipChannelProviderConfiguration> options, string? providerId = null)
 		{
-			string version = "0.1.0";
-			try
-			{
-				version = typeof(InfobipChannelProviderExtensions).Assembly.GetName().Version.ToString();
-			}
-			catch
-			{
-				//eat error
-			}
-			return $"transmitly-infobip/{version}";
+			var optionObj = new InfobipChannelProviderConfiguration();
+			options(optionObj);
+
+			communicationsClientBuilder.AddChannelProvider<SmsChannelProviderClient, ISms>(Id.ChannelProvider.Infobip(providerId), optionObj, Id.Channel.Sms());
+			//communicationsClientBuilder.AddChannelProvider<EmailChannelProviderClient, IEmail>(Id.ChannelProvider.Infobip(providerId), optionObj, Id.Channel.Email());
+			communicationsClientBuilder.AddChannelProvider<VoiceChannelProviderClient, IVoice>(Id.ChannelProvider.Infobip(providerId), optionObj, Id.Channel.Voice());
+			return communicationsClientBuilder;
 		}
 	}
 }

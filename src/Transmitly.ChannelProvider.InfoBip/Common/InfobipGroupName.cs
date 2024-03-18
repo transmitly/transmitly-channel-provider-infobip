@@ -12,10 +12,13 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-namespace Transmitly.Infobip
+namespace Transmitly.ChannelProvider.Infobip
 {
-	sealed class RequestError
-	{
-		public ServiceException? serviceException { get; set; }
-	}
+    enum InfobipGroupName
+    {
+        PENDING,
+        IN_PROGRESS,
+        COMPLETED,
+        FAILED
+    }
 }

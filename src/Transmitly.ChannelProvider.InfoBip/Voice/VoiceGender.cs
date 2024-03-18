@@ -14,17 +14,10 @@
 
 namespace Transmitly.ChannelProvider.Infobip.Voice
 {
-	sealed class SingleVoiceMessageRequest
+	public enum VoiceGender
 	{
-		public SingleVoiceMessageRequest(string text, string to)
-		{
-			this.text = text;
-			this.to = to;
-		}
-		public string text { get; }
-		public string language { get; set; } = "en";
-		public string? from { get; set; }
-		public string to { get; set; }
-		public InfobipVoiceType? voice { get; set; }
+		Unspecified,
+		Female,
+		Male
 	}
 }

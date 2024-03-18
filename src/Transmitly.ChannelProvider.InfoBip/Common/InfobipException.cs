@@ -12,14 +12,11 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-namespace Transmitly.ChannelProvider.Infobip.Voice
+using System;
+
+namespace Transmitly.ChannelProvider.Infobip
 {
-    sealed class VoiceMessageStatus
+    public class InfobipException(string message) : Exception(message)
     {
-        public int groupId { get; set; }
-        public InfobipGroupName groupName { get; set; }
-        public int id { get; set; }
-        public string name { get; set; }
-        public string description { get; set; }
     }
 }

@@ -10,17 +10,17 @@
 		<PackageId>Transmitly.ChannelProvider.Infobip</PackageId>
 		<Product>Transmitly</Product>
 		<ProductName>Transmit.ly</ProductName>
-		<Company>Code Impressions</Company>
+		<Company>Code Impressions, LLC</Company>
 		<Title>Transmit.ly Infobip Channel Provider</Title>
-		<Description>A channel provider for the Transmitly communications library.</Description>
+		<Description>An Infobip channel provider for the Transmitly library.</Description>
 		<Copyright>Copyright (c) Code Impressions, LLC</Copyright>
-		<Authors>Code Impressions</Authors>
+		<Authors>Code Impressions, LLC</Authors>
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 		<PackageIcon>icon-dark.png</PackageIcon>
 		<PackageIconUrl>https://github.com/transmitly/transmitly-channel-provider-infobip/blob/main/assets/icon-dark.png</PackageIconUrl>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<RepositoryUrl>https://github.com/transmitly/transmitly-channel-provider-infobip.git</RepositoryUrl>
-		<PackageTags>email,sms;infobip;channel provider; transmitly</PackageTags>
+		<PackageTags>email sms infobip channel provider transmitly</PackageTags>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(TF_BUILD)' == 'true'">
 		<ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
@@ -29,20 +29,20 @@
 		<ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
 	</PropertyGroup>
 	<ItemGroup>
-	  <None Include="..\..\assets\icon-dark.png">
-	    <Pack>True</Pack>
-	    <PackagePath>\</PackagePath>
-	  </None>
-	  <None Include="..\..\README.md">
-	    <Pack>True</Pack>
-	    <PackagePath>\</PackagePath>
-	  </None>
+		<None Include="..\..\assets\icon-dark.png">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+		<None Include="..\..\README.md">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="Infobip.Api.Client" Version="2.1.3" />
-		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
+		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
 		<PackageReference Include="PolySharp" Version="1.14.1" PrivateAssets="All" />
 		<PackageReference Include="Transmitly" Version="0.1.0-*" />
+		<PackageReference Include="System.Text.Json" Version="6.0.0" Condition="'$(TargetFrameworkIdentifier)' == '.NETFramework' or '$(TargetFrameworkIdentifier)' == '.NETStandard'" />
 	</ItemGroup>
 	<ItemGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETFramework'">
 		<Reference Include="System.Net.Http" />

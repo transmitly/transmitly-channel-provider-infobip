@@ -12,20 +12,13 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-using System;
-
-namespace Transmitly.Infobip
+namespace Transmitly
 {
-	internal sealed class InfobipDispatchResult : IDispatchResult
+	internal static class Constant
 	{
-		public string? ResourceId { get; set; }
-
-		string? IDispatchResult.ChannelProviderId { get; }
-
-		string? IDispatchResult.ChannelId { get; }
-
-		public DispatchStatus DispatchStatus { get; set; }
-
-		public Exception? Exception { get; set; }
+		public const string Id = "Infobip";
+		public const string EmailPropertiesKey = $"{Id}.Email";
+		public const string VoicePropertiesKey = $"{Id}.Voice";
+		public const string SmsPropertiesKey = $"{Id}.Sms";
 	}
 }
