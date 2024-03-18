@@ -30,15 +30,20 @@ namespace Transmitly
 
 		private static string GetUserAgent()
 		{
-			string version = "0.1.0";
+			string? version = null;
 			try
 			{
-				version = typeof(InfobipChannelProviderExtensions).Assembly.GetName().Version.ToString();
+				version = typeof(InfobipChannelProviderExtensions).Assembly.GetName().Version?.ToString();
 			}
 			catch
 			{
 				//eat error
+
 			}
+			
+			if (string.IsNullOrWhiteSpace(version))
+				version = "0.1.0";
+
 			return $"transmitly-infobip/{version}";
 		}
 	}

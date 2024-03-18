@@ -22,7 +22,7 @@ namespace Transmitly.ChannelProvider.Infobip
         public string? MessageId { get; }
         public string? Text { get; }
         public IReadOnlyCollection<string>? ValidationErrors { get; }
-        internal ApiResultException(ApiRequestErrorResult? requestError) : base(string.Join(",", requestError?.ServiceException?.ValidationErrors))
+        internal ApiResultException(ApiRequestErrorResult? requestError) : base(string.Join(",", requestError?.ServiceException?.ValidationErrors??[]))
         {
             if (requestError == null || requestError.ServiceException == null)
                 return;

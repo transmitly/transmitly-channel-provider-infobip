@@ -33,7 +33,7 @@ namespace Transmitly.ChannelProvider.Infobip
 				});
 			}
 
-			httpClient.BaseAddress = new Uri(channelProviderConfiguration.BasePath);
+			httpClient.BaseAddress = new Uri(Guard.AgainstNullOrWhiteSpace(channelProviderConfiguration.BasePath));
 			httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(channelProviderConfiguration.UserAgent);
 			httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(channelProviderConfiguration.ApiKeyPrefix, channelProviderConfiguration.ApiKey);
 		}
