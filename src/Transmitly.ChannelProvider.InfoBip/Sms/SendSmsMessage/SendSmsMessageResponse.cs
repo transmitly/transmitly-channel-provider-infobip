@@ -26,11 +26,11 @@ namespace Transmitly.ChannelProvider.Infobip.Sms.SendSmsMessage
 		/// <see href="https://www.infobip.com/docs/api/channels/sms/sms-messaging/outbound-sms/send-sms-message#channels/sms/get-outbound-sms-message-logs"/>message logs</see>.
 		/// </summary>
 		[JsonPropertyName("bulkId")]
-		public string? BulkId{get;set; }
+		public string? BulkId { get; set; }
 		/// <summary>
 		/// An array of message objects of a single message or multiple messages sent under one bulk ID.
 		/// </summary>
-		[JsonPropertyName("status")]
-		public List<ApiMessageStatus> Messages { get; set; } = [];
+		[JsonPropertyName("messages")]
+		public List<SendSmsMessageResponseMessage> Messages { get; set; } = [];
 	}
 }

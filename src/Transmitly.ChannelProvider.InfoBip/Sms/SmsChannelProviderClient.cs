@@ -23,9 +23,9 @@ using System.Text;
 
 namespace Transmitly.ChannelProvider.Infobip.Sms
 {
-	internal sealed class SmsChannelProviderClient(InfobipChannelProviderConfiguration configuration, HttpClient? httpClient) : ChannelProviderRestClient<ISms>(httpClient)
+	internal sealed class SmsChannelProviderClient(InfobipChannelProviderConfiguration configuration) : ChannelProviderRestClient<ISms>(null)
 	{
-		private const string SendSingleVoiceTts = "tts/3/single";
+		private const string SendAdvancedSmsMessage = "sms/2/text/advanced";
 		private readonly InfobipChannelProviderConfiguration _configuration = configuration;
 
 		public override IReadOnlyCollection<string>? RegisteredEvents => [DeliveryReportEvent.Name.Dispatched(), DeliveryReportEvent.Name.Error()];
@@ -43,7 +43,7 @@ namespace Transmitly.ChannelProvider.Infobip.Sms
 			{
 				var result = await restClient
 					.PostAsync(
-						SendSingleVoiceTts,
+						SendAdvancedSmsMessage,
 						CreateSingleMessageRequestContent(recipient, communication),
 						cancellationToken
 					)
@@ -70,8 +70,8 @@ namespace Transmitly.ChannelProvider.Infobip.Sms
 
 						results.Add(new InfobipDispatchResult
 						{
-							ResourceId = message.Id.ToString(),
-							DispatchStatus = ConvertStatus(message.GroupName)
+							ResourceId = message.MessageId,
+							DispatchStatus = ConvertStatus(message.Status.GroupName)
 						});
 
 						Dispatched(communicationContext, communication);

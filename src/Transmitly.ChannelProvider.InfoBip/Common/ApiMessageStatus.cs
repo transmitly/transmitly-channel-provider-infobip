@@ -35,6 +35,7 @@ namespace Transmitly.ChannelProvider.Infobip
 		/// PENDING, UNDELIVERABLE, DELIVERED, EXPIRED, REJECTED.
 		/// </summary>
 		[JsonPropertyName("groupName")]
+		[JsonConverter(typeof(JsonStringEnumConverter))]
 		public InfobipGroupName GroupName { get; set; }
 		/// <summary>
 		/// Status ID.

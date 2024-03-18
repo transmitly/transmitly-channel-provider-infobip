@@ -13,6 +13,7 @@
 //  limitations under the License.
 
 using System;
+using System.Text.Json.Serialization;
 
 namespace Transmitly.ChannelProvider.Infobip.Voice
 {
@@ -40,9 +41,14 @@ namespace Transmitly.ChannelProvider.Infobip.Voice
 				Name = overrideName;
 			else
 				Name = voiceType?.Name;
+
+			Name = Name?.ToLowerInvariant();
+			Gender = Gender?.ToLowerInvariant();
 		}
 
+		[JsonPropertyName("gender")]
 		public string? Gender { get; set; }
+		[JsonPropertyName("name")]
 		public string? Name { get; set; }
 	}
 }

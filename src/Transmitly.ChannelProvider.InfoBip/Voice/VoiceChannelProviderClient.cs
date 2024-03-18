@@ -22,7 +22,7 @@ using System.Text.Json;
 
 namespace Transmitly.ChannelProvider.Infobip.Voice
 {
-    internal sealed class VoiceChannelProviderClient(InfobipChannelProviderConfiguration configuration, HttpClient? httpClient) : ChannelProviderRestClient<IVoice>(httpClient)
+	internal sealed class VoiceChannelProviderClient(InfobipChannelProviderConfiguration configuration) : ChannelProviderRestClient<IVoice>(null)
 	{
 		private const string SendSingleVoiceTts = "tts/3/single";
 		private readonly InfobipChannelProviderConfiguration _configuration = configuration;
@@ -43,7 +43,7 @@ namespace Transmitly.ChannelProvider.Infobip.Voice
 				var result = await restClient
 					.PostAsync(
 						SendSingleVoiceTts,
-						CreateSingleMessageRequest(recipient, communication, communicationContext), 
+						CreateSingleMessageRequest(recipient, communication, communicationContext),
 						cancellationToken
 					)
 					.ConfigureAwait(false);
@@ -73,14 +73,14 @@ namespace Transmitly.ChannelProvider.Infobip.Voice
 			}
 
 			return results;
-		}		
+		}
 
 		private HttpContent CreateSingleMessageRequest(IAudienceAddress recipient, IVoice voice, IDispatchCommunicationContext context)
 		{
 			var voiceProperties = new ExtendedVoiceChannelProperties(voice.ExtendedProperties);
-			
+
 			Guard.AgainstNull(voice.From);
-			
+
 			var request = new SendSingleVoiceTtsRequest(voice.Message, voice.From.Value, recipient.Value)
 			{
 				Language = context.CultureInfo.TwoLetterISOLanguageNameDefault(),
