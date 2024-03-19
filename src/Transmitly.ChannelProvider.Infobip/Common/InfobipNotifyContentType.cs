@@ -14,11 +14,9 @@
 
 namespace Transmitly.ChannelProvider.Infobip
 {
-	enum InfobipGroupName
+	public enum InfobipNotifyContentType
 	{
-		PENDING,
-		IN_PROGRESS,
-		COMPLETED,
-		FAILED
+		Json,
+		Xml
 	}
 }

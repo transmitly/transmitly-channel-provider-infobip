@@ -40,6 +40,7 @@ namespace Transmitly.ChannelProvider.Infobip.Voice
 		/// <seealso href="https://www.infobip.com/docs/voice-and-video/getting-started#text-to-speech">Voice Text-To-Speech Languages</seealso>
 		/// </summary>
 		[JsonPropertyName("language")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string? Language { get; set; }
 
 		/// <summary>
@@ -63,6 +64,7 @@ namespace Transmitly.ChannelProvider.Infobip.Voice
 		/// If voice is not set, then default voice is used
 		/// </summary>
 		[JsonPropertyName("voice")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public InfobipVoiceType? Voice { get; set; }
 
 		/// <summary>
@@ -73,6 +75,7 @@ namespace Transmitly.ChannelProvider.Infobip.Voice
 		/// Standard http ports (like 80, 8080, etc.) are advised.
 		/// </summary>
 		[JsonPropertyName("audioFileUrl")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string? AudioFileUrl { get; set; }
 	}
 }

@@ -26,6 +26,7 @@ namespace Transmitly.ChannelProvider.Infobip.Sms.SendSmsMessage
 		/// The ID that uniquely identifies the message sent.
 		/// </summary>
 		[JsonPropertyName("messageId")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string? MessageId { get; set; } = Guid.NewGuid().ToString("N");
 		/// <summary>
 		/// Message destination address. Addresses must be in international format (Example: 41793026727).

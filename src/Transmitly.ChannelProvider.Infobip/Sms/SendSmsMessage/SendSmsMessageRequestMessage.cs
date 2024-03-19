@@ -25,6 +25,7 @@ namespace Transmitly.ChannelProvider.Infobip.Sms.SendSmsMessage
 		/// The maximum value is 4000 characters and any overhead may be truncated
 		/// </summary>
 		[JsonPropertyName("callbackData")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string? CallbackData { get; set; }
 
 		/// <summary>
@@ -44,6 +45,7 @@ namespace Transmitly.ChannelProvider.Infobip.Sms.SendSmsMessage
 		/// Validity period longer than 48h is not supported. Any bigger value will automatically default back to 2880.
 		/// </summary>
 		[JsonPropertyName("validityPeriod")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public long? ValidityPeriod { get; set; }
 
 		/// <summary>
@@ -52,6 +54,7 @@ namespace Transmitly.ChannelProvider.Infobip.Sms.SendSmsMessage
 		/// <see href="https://www.infobip.com/docs/cpaas-x/application-and-entity-management">documentation</see>
 		/// </summary>
 		[JsonPropertyName("applicationId")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string? ApplicationId { get; set; }
 
 		/// <summary>
@@ -60,6 +63,7 @@ namespace Transmitly.ChannelProvider.Infobip.Sms.SendSmsMessage
 		/// <see href="https://www.infobip.com/docs/cpaas-x/application-and-entity-management">documentation</see>.
 		/// </summary>
 		[JsonPropertyName("entityId")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string? EntityId { get; set; }
 	}
 }

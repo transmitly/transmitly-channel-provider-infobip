@@ -12,13 +12,14 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-namespace Transmitly.ChannelProvider.Infobip
+using System;
+using System.IO;
+
+namespace Transmitly.ChannelProvider.Infobip.Email.SendEmail
 {
-	enum InfobipGroupName
+	internal sealed class EmailAttachment(Stream stream, string? fileName = null)
 	{
-		PENDING,
-		IN_PROGRESS,
-		COMPLETED,
-		FAILED
+		public string FileName { get; set; } = string.IsNullOrWhiteSpace(fileName) ? Guid.NewGuid().ToString("N") : fileName;
+		public Stream Stream { get; set; } = Guard.AgainstNull(stream);
 	}
 }

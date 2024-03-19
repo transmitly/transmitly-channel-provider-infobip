@@ -37,7 +37,7 @@ namespace Transmitly
 			options(optionObj);
 
 			communicationsClientBuilder.AddChannelProvider<SmsChannelProviderClient, ISms>(Id.ChannelProvider.Infobip(providerId), optionObj, Id.Channel.Sms());
-			//communicationsClientBuilder.AddChannelProvider<EmailChannelProviderClient, IEmail>(Id.ChannelProvider.Infobip(providerId), optionObj, Id.Channel.Email());
+			communicationsClientBuilder.AddChannelProvider<EmailChannelProviderClient, IEmail>(Id.ChannelProvider.Infobip(providerId), optionObj, Id.Channel.Email());
 			communicationsClientBuilder.AddChannelProvider<VoiceChannelProviderClient, IVoice>(Id.ChannelProvider.Infobip(providerId), optionObj, Id.Channel.Voice());
 			return communicationsClientBuilder;
 		}

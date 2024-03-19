@@ -71,7 +71,7 @@ namespace Transmitly.ChannelProvider.Infobip.Sms
 						results.Add(new InfobipDispatchResult
 						{
 							ResourceId = message.MessageId,
-							DispatchStatus = ConvertStatus(message.Status.GroupName)
+							DispatchStatus = message.Status.GroupName.ToDispatchStatus()
 						});
 
 						Dispatched(communicationContext, communication);
@@ -103,20 +103,7 @@ namespace Transmitly.ChannelProvider.Infobip.Sms
 			return new StringContent(JsonSerializer.Serialize(request), Encoding.UTF8, "application/json");
 		}
 
-		private DispatchStatus ConvertStatus(InfobipGroupName status)
-		{
-			return status switch
-			{
-				InfobipGroupName.COMPLETED or
-				InfobipGroupName.PENDING or
-				InfobipGroupName.IN_PROGRESS =>
-					DispatchStatus.Dispatched,
-				InfobipGroupName.FAILED =>
-					DispatchStatus.Error,
-				_ =>
-					DispatchStatus.Unknown,
-			};
-		}
+
 
 		protected override void ConfigureHttpClient(HttpClient client)
 		{

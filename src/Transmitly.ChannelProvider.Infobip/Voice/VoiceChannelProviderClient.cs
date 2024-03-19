@@ -84,7 +84,7 @@ namespace Transmitly.ChannelProvider.Infobip.Voice
 			var request = new SendSingleVoiceTtsRequest(voice.Message, voice.From.Value, recipient.Value)
 			{
 				Language = context.CultureInfo.TwoLetterISOLanguageNameDefault(),
-				Voice = new InfobipVoiceType(voice.VoiceType, voiceProperties.VoiceGender, voiceProperties.VoiceName),
+				Voice = new InfobipVoiceType(voice.VoiceType, voiceProperties.VoiceGender, voiceProperties.VoiceName).ToObject(),
 			};
 
 			return new StringContent(JsonSerializer.Serialize(request), Encoding.UTF8, "application/json");

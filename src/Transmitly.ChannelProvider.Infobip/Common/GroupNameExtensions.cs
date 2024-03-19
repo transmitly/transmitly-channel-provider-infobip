@@ -14,11 +14,21 @@
 
 namespace Transmitly.ChannelProvider.Infobip
 {
-	enum InfobipGroupName
+	static class GroupNameExtensions
 	{
-		PENDING,
-		IN_PROGRESS,
-		COMPLETED,
-		FAILED
+		public static DispatchStatus ToDispatchStatus(this InfobipGroupName status)
+		{
+			return status switch
+			{
+				InfobipGroupName.COMPLETED or
+				InfobipGroupName.PENDING or
+				InfobipGroupName.IN_PROGRESS =>
+					DispatchStatus.Dispatched,
+				InfobipGroupName.FAILED =>
+					DispatchStatus.Error,
+				_ =>
+					DispatchStatus.Unknown,
+			};
+		}
 	}
 }

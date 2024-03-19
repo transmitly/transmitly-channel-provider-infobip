@@ -29,6 +29,7 @@ namespace Transmitly.ChannelProvider.Infobip.Sms.SendSmsMessage
 		/// and <see href="https://www.infobip.com/docs/api/channels/sms/sms-messaging/outbound-sms/send-sms-message#channels/sms/get-outbound-sms-message-logs">message logs</see>.
 		/// </summary>
 		[JsonPropertyName("bulkId")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string? BulkId { get; set; }
 
 		/// <summary>

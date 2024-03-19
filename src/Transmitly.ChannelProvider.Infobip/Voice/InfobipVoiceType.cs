@@ -45,10 +45,17 @@ namespace Transmitly.ChannelProvider.Infobip.Voice
 			Name = Name?.ToLowerInvariant();
 			Gender = Gender?.ToLowerInvariant();
 		}
-
+		public InfobipVoiceType? ToObject()
+		{
+			if (string.IsNullOrWhiteSpace(Name) && string.IsNullOrWhiteSpace(Gender))
+				return null;
+			return this;
+		}
 		[JsonPropertyName("gender")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string? Gender { get; set; }
 		[JsonPropertyName("name")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string? Name { get; set; }
 	}
 }
