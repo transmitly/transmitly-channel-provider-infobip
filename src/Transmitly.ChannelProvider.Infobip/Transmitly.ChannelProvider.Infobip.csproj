@@ -41,7 +41,7 @@
 	<ItemGroup>
 		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
 		<PackageReference Include="PolySharp" Version="1.14.1" PrivateAssets="All" />
-		<PackageReference Include="Transmitly" Version="0.1.0-134.5ce017f" />
+		<PackageReference Include="Transmitly" Version="0.1.0-*" />
 		<PackageReference Include="System.Text.Json" Version="6.0.0" Condition="'$(TargetFrameworkIdentifier)' == '.NETFramework' or '$(TargetFrameworkIdentifier)' == '.NETStandard'" />
 	</ItemGroup>
 	<ItemGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETFramework'">
