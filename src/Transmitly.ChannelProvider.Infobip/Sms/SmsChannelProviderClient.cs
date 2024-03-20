@@ -60,7 +60,7 @@ namespace Transmitly.ChannelProvider.Infobip.Sms
 						ResourceId = error?.ServiceException?.MessageId,
 						Exception = new ApiResultException(error),
 					});
-					Error(communicationContext, communication);
+					Error(communicationContext, communication, results);
 				}
 				else
 				{
@@ -74,7 +74,7 @@ namespace Transmitly.ChannelProvider.Infobip.Sms
 							DispatchStatus = message.Status.GroupName.ToDispatchStatus()
 						});
 
-						Dispatched(communicationContext, communication);
+						Dispatched(communicationContext, communication, results);
 					}
 				}
 			}
