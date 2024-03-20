@@ -59,7 +59,7 @@ namespace Transmitly.ChannelProvider.Infobip.Voice
 						ResourceId = error?.ServiceException?.MessageId,
 						Exception = new ApiResultException(error),
 					});
-					Error(communicationContext, communication);
+					Error(communicationContext, communication, results);
 				}
 				else
 				{
@@ -67,7 +67,7 @@ namespace Transmitly.ChannelProvider.Infobip.Voice
 					foreach (var message in success.Messages)
 					{
 						results.Add(new InfobipDispatchResult { ResourceId = message.MessageId, DispatchStatus = ConvertStatus(message.Status.GroupName) });
-						Dispatched(communicationContext, communication);
+						Dispatched(communicationContext, communication, results);
 					}
 				}
 			}

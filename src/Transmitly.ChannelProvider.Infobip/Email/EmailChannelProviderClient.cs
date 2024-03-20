@@ -67,7 +67,7 @@ namespace Transmitly.ChannelProvider.Infobip.Email
 					ResourceId = error?.ServiceException?.MessageId,
 					Exception = new ApiResultException(error),
 				});
-				Error(communicationContext, communication);
+				Error(communicationContext, communication, results);
 			}
 			else
 			{
@@ -81,7 +81,7 @@ namespace Transmitly.ChannelProvider.Infobip.Email
 						DispatchStatus = message.Status.GroupName.ToDispatchStatus()
 					});
 
-					Dispatched(communicationContext, communication);
+					Dispatched(communicationContext, communication, results);
 				}
 			}
 			return results;
