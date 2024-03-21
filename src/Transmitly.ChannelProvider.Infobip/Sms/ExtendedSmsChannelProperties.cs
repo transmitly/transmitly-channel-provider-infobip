@@ -12,6 +12,8 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
+using System;
+
 namespace Transmitly.ChannelProvider.Infobip.Sms
 {
 	public sealed class ExtendedSmsChannelProperties
@@ -74,6 +76,32 @@ namespace Transmitly.ChannelProvider.Infobip.Sms
 
 				_extendedProperties.AddOrUpdate(ProviderKey, nameof(ApplicationId), value);
 			}
+		}
+
+		/// <summary>
+		/// The URL on your call back server on to which a delivery report will be sent. 
+		/// The retry cycle for when your URL becomes unavailable uses the following formula: 1min + (1min * retryNumber * retryNumber).
+		/// <para><see href="https://www.infobip.com/docs/api/channels/sms/sms-messaging/outbound-sms/send-sms-message#channels/sms/receive-sent-sms-report">Delivery report format</see></para>
+		///  <para>The communication's ResourceId will be added to the querystring.
+		/// Example: https://yourUrl.com/path?<strong>resourceId=1234abc</strong></para>
+		/// <para>If you require dynamic resolution see: <see cref="NotifyUrlResolver"/>. Setting the <see cref="NotifyUrlResolver"/> will override this value.</para>
+		/// </summary>
+		public string? NotifyUrl
+		{
+			get => _extendedProperties.GetValue<string?>(ProviderKey, nameof(NotifyUrl));
+			set => _extendedProperties.AddOrUpdate(ProviderKey, nameof(NotifyUrl), value);
+		}
+
+		/// <summary>
+		/// The resolver that will return the URL on your call back server on to which a delivery report will be sent. 
+		/// The retry cycle for when your URL becomes unavailable uses the following formula: 1min + (1min * retryNumber * retryNumber).
+		/// <para><see href="https://www.infobip.com/docs/api/channels/sms/sms-messaging/outbound-sms/send-sms-message#channels/sms/receive-sent-sms-report">Delivery report format</see></para>
+		/// <para>This will override any value set in the <see cref="NotifyUrl"/> property.</para>
+		/// </summary>
+		public Func<IDispatchCommunicationContext, string>? NotifyUrlResolver
+		{
+			get => _extendedProperties.GetValue<Func<IDispatchCommunicationContext, string>>(ProviderKey, nameof(NotifyUrlResolver));
+			set => _extendedProperties.AddOrUpdate(ProviderKey, nameof(NotifyUrlResolver), value);
 		}
 	}
 }

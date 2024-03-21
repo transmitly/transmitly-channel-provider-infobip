@@ -65,5 +65,12 @@ namespace Transmitly.ChannelProvider.Infobip.Sms.SendSmsMessage
 		[JsonPropertyName("entityId")]
 		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string? EntityId { get; set; }
+
+		/// <summary>
+		/// The URL on your call back server on to which a delivery report will be sent.
+		/// </summary>
+		[JsonPropertyName("notifyUrl")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+		public string? NotifyUrl { get; set; }
 	}
 }

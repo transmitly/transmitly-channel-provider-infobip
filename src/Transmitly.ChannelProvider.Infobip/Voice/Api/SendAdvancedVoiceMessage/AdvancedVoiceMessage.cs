@@ -192,7 +192,6 @@ namespace Transmitly.ChannelProvider.Infobip.Voice.SendAdvancedVoiceMessage
 		/// </summary>
 		[JsonPropertyName("voiceType")]
 		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-		public InfobipVoiceType? VoiceType{get;set; }
-
+		public InfobipVoiceType? VoiceType { get; set; }
 	}
 }

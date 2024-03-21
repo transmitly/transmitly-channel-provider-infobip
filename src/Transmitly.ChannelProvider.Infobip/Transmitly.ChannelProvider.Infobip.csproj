@@ -46,5 +46,6 @@
 	</ItemGroup>
 	<ItemGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETFramework'">
 		<Reference Include="System.Net.Http" />
+		<Reference Include="System.Web" />
 	</ItemGroup>
 </Project>

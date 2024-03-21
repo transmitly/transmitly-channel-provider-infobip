@@ -20,6 +20,8 @@ using System.Text.Json;
 using Transmitly.Infobip;
 using Transmitly.ChannelProvider.Infobip.Sms.SendSmsMessage;
 using System.Text;
+using System.Web;
+using System;
 
 namespace Transmitly.ChannelProvider.Infobip.Sms
 {
@@ -44,7 +46,7 @@ namespace Transmitly.ChannelProvider.Infobip.Sms
 				var result = await restClient
 					.PostAsync(
 						SendAdvancedSmsMessage,
-						CreateSingleMessageRequestContent(recipient, communication),
+						CreateSingleMessageRequestContent(recipient, communication, communicationContext),
 						cancellationToken
 					)
 					.ConfigureAwait(false);
@@ -82,28 +84,55 @@ namespace Transmitly.ChannelProvider.Infobip.Sms
 			return results;
 		}
 
-		private HttpContent CreateSingleMessageRequestContent(IAudienceAddress recipient, ISms sms)
+
+		private HttpContent CreateSingleMessageRequestContent(IAudienceAddress recipient, ISms sms, IDispatchCommunicationContext communicationContext)
 		{
 			var smsProperties = new ExtendedSmsChannelProperties(sms.ExtendedProperties);
 
-			Guard.AgainstNull(sms.From);
+			var messageId = Guid.NewGuid().ToString("N");
+			var bulkId = Guid.NewGuid().ToString("N");
 
-			var messages = new SendSmsMessageRequestMessage(sms.Message, [new SendSmsMessageRequestMessageDestination(recipient.Value)])
+			var messages = new SendSmsMessageRequestMessage(sms.Message, [new SendSmsMessageRequestMessageDestination(recipient.Value, messageId)])
 			{
 				ValidityPeriod = smsProperties.ValidityPeriod,
 				EntityId = smsProperties.EntityId,
-				ApplicationId = smsProperties.ApplicationId
+				ApplicationId = smsProperties.ApplicationId,
+				NotifyUrl = GetNotifyUrl(messageId, smsProperties, communicationContext)
 			};
 
 			var request = new SendSmsMessageRequest([messages])
 			{
-				From = sms.From?.Value
+				BulkId = bulkId,
+				From = sms.From?.Value,
 			};
 
 			return new StringContent(JsonSerializer.Serialize(request), Encoding.UTF8, "application/json");
 		}
 
+		private static string? GetNotifyUrl(string messageId, ExtendedSmsChannelProperties voiceProperties, IDispatchCommunicationContext context)
+		{
+			if (string.IsNullOrWhiteSpace(voiceProperties.NotifyUrl) && voiceProperties.NotifyUrlResolver == null)
+				return null;
 
+			string? url = voiceProperties.NotifyUrl;
+
+			if (voiceProperties.NotifyUrlResolver != null)
+				return voiceProperties.NotifyUrlResolver(context);
+			else if (string.IsNullOrWhiteSpace(url))
+				return null;
+
+			return AddParameter(new Uri(url), "resourceId", messageId).ToString();
+		}
+
+		private static Uri AddParameter(Uri url, string paramName, string paramValue)
+		{
+			var uriBuilder = new UriBuilder(url);
+			var query = HttpUtility.ParseQueryString(uriBuilder.Query);
+			query[paramName] = paramValue;
+			uriBuilder.Query = query.ToString();
+
+			return uriBuilder.Uri;
+		}
 
 		protected override void ConfigureHttpClient(HttpClient client)
 		{

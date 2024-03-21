@@ -12,7 +12,6 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-using System;
 using System.Text.Json.Serialization;
 
 namespace Transmitly.ChannelProvider.Infobip.Sms.SendSmsMessage
@@ -20,14 +19,14 @@ namespace Transmitly.ChannelProvider.Infobip.Sms.SendSmsMessage
 	/// <summary>
 	/// 
 	/// </summary>
-	internal sealed class SendSmsMessageRequestMessageDestination(string to)
+	internal sealed class SendSmsMessageRequestMessageDestination(string to, string? messageId = null)
 	{
 		/// <summary>
 		/// The ID that uniquely identifies the message sent.
 		/// </summary>
 		[JsonPropertyName("messageId")]
 		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-		public string? MessageId { get; set; } = Guid.NewGuid().ToString("N");
+		public string? MessageId { get; set; } = messageId;
 		/// <summary>
 		/// Message destination address. Addresses must be in international format (Example: 41793026727).
 		/// </summary>

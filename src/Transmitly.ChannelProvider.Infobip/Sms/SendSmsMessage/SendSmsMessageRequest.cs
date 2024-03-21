@@ -44,12 +44,14 @@ namespace Transmitly.ChannelProvider.Infobip.Sms.SendSmsMessage
 		/// (Default: false)
 		/// </summary>
 		[JsonPropertyName("flash")]
-		public bool Flash { get; set; }
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+		public bool? Flash { get; set; }
 
 		/// <summary>
 		/// The sender ID which can be alphanumeric or numeric (e.g., CompanyName). Make sure you don't exceed <see href="https://www.infobip.com/docs/sms/get-started#sender-names">character limit</see>.
 		/// </summary>
 		[JsonPropertyName("from")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
 		public string? From { get; set; }
 	}
 }

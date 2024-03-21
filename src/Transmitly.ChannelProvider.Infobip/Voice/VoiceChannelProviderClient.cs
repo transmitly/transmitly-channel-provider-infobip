@@ -21,6 +21,7 @@ using Transmitly.Infobip;
 using System.Text.Json;
 using Transmitly.ChannelProvider.Infobip.Voice.SendAdvancedVoiceMessage;
 using System;
+using System.Web;
 
 namespace Transmitly.ChannelProvider.Infobip.Voice
 {
@@ -88,18 +89,21 @@ namespace Transmitly.ChannelProvider.Infobip.Voice
 		private HttpContent CreateAdvancedMessagePayload(IAudienceAddress recipient, IVoice voice, IDispatchCommunicationContext context)
 		{
 			var voiceProperties = new ExtendedVoiceChannelProperties(voice.ExtendedProperties);
+			var messageId = Guid.NewGuid().ToString("N");
+			var bulkId = Guid.NewGuid().ToString("N");
 
-			var request = new AdvancedVoiceMessage(recipient.Value)
+			var request = new AdvancedVoiceMessage(recipient.Value, messageId)
 			{
 				Text = voice.Message,
 				From = voice.From?.Value,
 				MachineDetection = ConvertMachineDetection(voice.MachineDetection, voiceProperties.MachineDetection),
-				NotifyUrl = voiceProperties.NotifyUrl,
+				NotifyUrl = GetNotifyUrl(messageId, voiceProperties, context),
 				CallTimeout = voiceProperties.CallTimeout,
 				Language = context.CultureInfo.TwoLetterISOLanguageNameDefault(),
 				VoiceType = new InfobipVoiceType(voice.VoiceType, voiceProperties.VoiceGender, voiceProperties.VoiceName).ToObject(),
+
 			};
-			var message = new SendAdvancedVoiceMessageRequest([request], Guid.NewGuid().ToString("N"));
+			var message = new SendAdvancedVoiceMessageRequest([request], bulkId);
 			return new StringContent(JsonSerializer.Serialize(message), Encoding.UTF8, "application/json");
 		}
 
@@ -118,7 +122,22 @@ namespace Transmitly.ChannelProvider.Infobip.Voice
 			};
 		}
 
-		private DispatchStatus ConvertStatus(InfobipGroupName status)
+		private static string? GetNotifyUrl(string messageId, ExtendedVoiceChannelProperties voiceProperties, IDispatchCommunicationContext context)
+		{
+			if (string.IsNullOrWhiteSpace(voiceProperties.NotifyUrl) && voiceProperties.NotifyUrlResolver == null)
+				return null;
+
+			string? url = voiceProperties.NotifyUrl;
+
+			if (voiceProperties.NotifyUrlResolver != null)
+				return voiceProperties.NotifyUrlResolver(context);
+			else if (string.IsNullOrWhiteSpace(url))
+				return null;
+
+			return AddParameter(new Uri(url), "resourceId", messageId).ToString();
+		}
+
+		private static DispatchStatus ConvertStatus(InfobipGroupName status)
 		{
 			return status switch
 			{
@@ -133,6 +152,15 @@ namespace Transmitly.ChannelProvider.Infobip.Voice
 			};
 		}
 
+		private static Uri AddParameter(Uri url, string paramName, string paramValue)
+		{
+			var uriBuilder = new UriBuilder(url);
+			var query = HttpUtility.ParseQueryString(uriBuilder.Query);
+			query[paramName] = paramValue;
+			uriBuilder.Query = query.ToString();
+
+			return uriBuilder.Uri;
+		}
 		protected override void ConfigureHttpClient(HttpClient client)
 		{
 			RestClientConfiguration.Configure(client, _configuration);
