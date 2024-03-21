@@ -31,7 +31,7 @@ using System.Text.Json.Serialization;
 
 namespace Transmitly.ChannelProvider.Infobip.Voice
 {
-	sealed class SendSingleVoiceTtsResponseMessage
+	sealed class SendVoiceApiResponseMessage
 	{
 		/// <summary>
 		/// The message destination address.

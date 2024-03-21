@@ -87,16 +87,46 @@ namespace Transmitly.ChannelProvider.Infobip.Voice
 			}
 		}
 
+		/// <summary>
+		/// Name of the voice. Example: Joanna
+		/// </summary>
 		public string? VoiceName
 		{
 			get => _extendedProperties.GetValue<string?>(ProviderKey, nameof(VoiceName));
 			set => _extendedProperties.AddOrUpdate(ProviderKey, nameof(VoiceName), value);
 		}
-
+		/// <summary>
+		/// Gender of the voice. Can be male or female.
+		/// </summary>
 		public VoiceGender VoiceGender
 		{
 			get => _extendedProperties.GetValue(ProviderKey, nameof(VoiceGender), VoiceGender.Unspecified);
 			set => _extendedProperties.AddOrUpdate(ProviderKey, nameof(VoiceGender), value);
+		}
+		/// <summary>
+		/// Used for enabling detection of answering machine after the call has been answered.
+		/// 
+		/// When set to hangup, if a machine is detected call will hang up. When set to continue, 
+		/// if a machine is detected, then voice message starts playing into voice mail after the 
+		/// answering message is finished with its greeting. If machineDetection is used, there is a minimum of 4 
+		/// seconds detection time, which can result in delay of playing the message. Answering machine detection 
+		/// is additionally charged. For more information please contact your account manager and check 
+		/// documentation on Answering Machine Detection.
+		/// <see href="https://www.infobip.com/docs/voice-and-video/add-ons#answering-machine-detection">Answering Machine Detection</see>
+		/// </summary>
+		public MachineDetection MachineDetection
+		{
+			get => _extendedProperties.GetValue(ProviderKey, nameof(MachineDetection), MachineDetection.HangUp);
+			set => _extendedProperties.AddOrUpdate(ProviderKey, nameof(MachineDetection), value);
+		}
+
+		/// <summary>
+		/// The URL on your callback server on which the Delivery report will be sent.
+		/// </summary>
+		public string? NotifyUrl
+		{
+			get => _extendedProperties.GetValue<string?>(ProviderKey, nameof(NotifyUrl));
+			set => _extendedProperties.AddOrUpdate(ProviderKey, nameof(NotifyUrl), value);
 		}
 	}
 }

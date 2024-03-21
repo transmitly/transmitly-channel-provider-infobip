@@ -12,22 +12,25 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
-namespace Transmitly.Infobip
+namespace Transmitly.ChannelProvider.Infobip.Voice
 {
-	internal sealed class InfobipDispatchResult : IDispatchResult
+	//https://www.infobip.com/docs/api/channels/voice/voice-message/send-single-voice-tts
+	sealed class SendVoiceApiSuccessResponse
 	{
-		public string? ResourceId { get; set; }
-
+		/// <summary>
+		/// The ID that uniquely identifies the request. 
+		/// Bulk ID will be received only when you send a message to more than one destination address.
+		/// </summary>
+		[JsonPropertyName("bulkId")]
 		public string? BulkId { get; set; }
 
-		string? IDispatchResult.ChannelProviderId { get; }
-
-		string? IDispatchResult.ChannelId { get; }
-
-		public DispatchStatus DispatchStatus { get; set; }
-		
-		public Exception? Exception { get; set; }
+		/// <summary>
+		/// Array of sent messages, one object per every message.
+		/// </summary>
+		[JsonPropertyName("messages")]
+		public List<SendVoiceApiResponseMessage> Messages { get; set; } = [];
 	}
 }

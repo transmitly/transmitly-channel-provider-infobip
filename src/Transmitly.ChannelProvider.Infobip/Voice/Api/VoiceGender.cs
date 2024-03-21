@@ -12,12 +12,19 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
+using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
+
 namespace Transmitly.ChannelProvider.Infobip.Voice
 {
+	[JsonConverter(typeof(JsonStringEnumConverter))]
 	public enum VoiceGender
 	{
+		[EnumMember(Value = null)]
 		Unspecified,
+		[EnumMember(Value = "female")]
 		Female,
+		[EnumMember(Value = "male")]
 		Male
 	}
 }

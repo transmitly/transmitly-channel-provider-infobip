@@ -12,25 +12,28 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-using System.Collections.Generic;
+using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
+using Transmitly.Serialization;
 
 namespace Transmitly.ChannelProvider.Infobip.Voice
 {
-	//https://www.infobip.com/docs/api/channels/voice/voice-message/send-single-voice-tts
-	sealed class SendSingleVoiceTtsResponse
+	[JsonConverter(typeof(JsonEnumMemberAttributeConverter<MachineDetection>))]
+	public enum MachineDetection
 	{
+		[EnumMember(Value = null)]
+		Unspecified,
 		/// <summary>
-		/// The ID that uniquely identifies the request. 
-		/// Bulk ID will be received only when you send a message to more than one destination address.
+		/// If a machine is detected call will hang up.
 		/// </summary>
-		[JsonPropertyName("bulkId")]
-		public string? BulkId { get; set; }
+		[EnumMember(Value = "hangup")]
+		HangUp,
+		/// <summary>
+		/// If a machine is detected, then voice message starts playing into voice mail after the 
+		/// answering message is finished with its greeting.
+		/// </summary>
+		[EnumMember(Value = "continue")]
+		Continue
 
-		/// <summary>
-		/// Array of sent messages, one object per every message.
-		/// </summary>
-		[JsonPropertyName("messages")]
-		public List<SendSingleVoiceTtsResponseMessage> Messages { get; set; } = [];
 	}
 }

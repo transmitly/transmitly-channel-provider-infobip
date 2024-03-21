@@ -19,15 +19,17 @@ using System.Net.Http;
 using System.Text;
 using Transmitly.Infobip;
 using System.Text.Json;
+using Transmitly.ChannelProvider.Infobip.Voice.SendAdvancedVoiceMessage;
+using System;
 
 namespace Transmitly.ChannelProvider.Infobip.Voice
 {
 	internal sealed class VoiceChannelProviderClient(InfobipChannelProviderConfiguration configuration) : ChannelProviderRestClient<IVoice>(null)
 	{
-		private const string SendSingleVoiceTts = "tts/3/single";
+		private const string AdvancedCallEndpoint = "tts/3/advanced";
 		private readonly InfobipChannelProviderConfiguration _configuration = configuration;
 
-		public override IReadOnlyCollection<string>? RegisteredEvents => [DeliveryReportEvent.Name.Dispatched(), DeliveryReportEvent.Name.Error()];
+		public override IReadOnlyCollection<string>? RegisteredEvents => [DeliveryReportEvent.Name.Dispatch(), DeliveryReportEvent.Name.Dispatched(), DeliveryReportEvent.Name.Error()];
 
 		protected override async Task<IReadOnlyCollection<IDispatchResult?>> DispatchAsync(HttpClient restClient, IVoice communication, IDispatchCommunicationContext communicationContext, CancellationToken cancellationToken)
 		{
@@ -40,10 +42,12 @@ namespace Transmitly.ChannelProvider.Infobip.Voice
 
 			foreach (var recipient in recipients)
 			{
+				Dispatch(communicationContext, communication);
+
 				var result = await restClient
 					.PostAsync(
-						SendSingleVoiceTts,
-						CreateSingleMessageRequest(recipient, communication, communicationContext),
+						AdvancedCallEndpoint,
+						CreateAdvancedMessagePayload(recipient, communication, communicationContext),
 						cancellationToken
 					)
 					.ConfigureAwait(false);
@@ -63,10 +67,16 @@ namespace Transmitly.ChannelProvider.Infobip.Voice
 				}
 				else
 				{
-					var success = Guard.AgainstNull(JsonSerializer.Deserialize<SendSingleVoiceTtsResponse>(responseContent));
+					var success = Guard.AgainstNull(JsonSerializer.Deserialize<SendVoiceApiSuccessResponse>(responseContent));
 					foreach (var message in success.Messages)
 					{
-						results.Add(new InfobipDispatchResult { ResourceId = message.MessageId, DispatchStatus = ConvertStatus(message.Status.GroupName) });
+						results.Add(new InfobipDispatchResult
+						{
+							ResourceId = message.MessageId,
+							DispatchStatus = ConvertStatus(message.Status.GroupName),
+							BulkId = success.BulkId
+						});
+
 						Dispatched(communicationContext, communication, results);
 					}
 				}
@@ -75,19 +85,37 @@ namespace Transmitly.ChannelProvider.Infobip.Voice
 			return results;
 		}
 
-		private HttpContent CreateSingleMessageRequest(IAudienceAddress recipient, IVoice voice, IDispatchCommunicationContext context)
+		private HttpContent CreateAdvancedMessagePayload(IAudienceAddress recipient, IVoice voice, IDispatchCommunicationContext context)
 		{
 			var voiceProperties = new ExtendedVoiceChannelProperties(voice.ExtendedProperties);
 
-			Guard.AgainstNull(voice.From);
-
-			var request = new SendSingleVoiceTtsRequest(voice.Message, voice.From.Value, recipient.Value)
+			var request = new AdvancedVoiceMessage(recipient.Value)
 			{
+				Text = voice.Message,
+				From = voice.From?.Value,
+				MachineDetection = ConvertMachineDetection(voice.MachineDetection, voiceProperties.MachineDetection),
+				NotifyUrl = voiceProperties.NotifyUrl,
+				CallTimeout = voiceProperties.CallTimeout,
 				Language = context.CultureInfo.TwoLetterISOLanguageNameDefault(),
-				Voice = new InfobipVoiceType(voice.VoiceType, voiceProperties.VoiceGender, voiceProperties.VoiceName).ToObject(),
+				VoiceType = new InfobipVoiceType(voice.VoiceType, voiceProperties.VoiceGender, voiceProperties.VoiceName).ToObject(),
 			};
+			var message = new SendAdvancedVoiceMessageRequest([request], Guid.NewGuid().ToString("N"));
+			return new StringContent(JsonSerializer.Serialize(message), Encoding.UTF8, "application/json");
+		}
 
-			return new StringContent(JsonSerializer.Serialize(request), Encoding.UTF8, "application/json");
+		private MachineDetection? ConvertMachineDetection(Transmitly.MachineDetection tlyValue, MachineDetection? overrideValue)
+		{
+			if (overrideValue.HasValue)
+				return overrideValue;
+
+			return tlyValue switch
+			{
+				Transmitly.MachineDetection.Disabled =>
+					(MachineDetection?)MachineDetection.HangUp,
+				Transmitly.MachineDetection.Enabled or Transmitly.MachineDetection.MessageEnd =>
+					(MachineDetection?)MachineDetection.Continue,
+				_ => null,
+			};
 		}
 
 		private DispatchStatus ConvertStatus(InfobipGroupName status)
