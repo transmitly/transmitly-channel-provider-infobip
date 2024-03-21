@@ -88,7 +88,7 @@ namespace Transmitly.ChannelProvider.Infobip.Sms
 
 			Guard.AgainstNull(sms.From);
 
-			var messages = new SendSmsMessageRequestMessage(sms.Body, [new SendSmsMessageRequestMessageDestination(recipient.Value)])
+			var messages = new SendSmsMessageRequestMessage(sms.Message, [new SendSmsMessageRequestMessageDestination(recipient.Value)])
 			{
 				ValidityPeriod = smsProperties.ValidityPeriod,
 				EntityId = smsProperties.EntityId,
