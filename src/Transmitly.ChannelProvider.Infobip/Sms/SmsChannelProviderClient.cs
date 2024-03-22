@@ -123,7 +123,7 @@ namespace Transmitly.ChannelProvider.Infobip.Sms
 
 			return AddParameter(new Uri(url), "resourceId", messageId).ToString();
 		}
-
+		//Source=https://stackoverflow.com/a/19679135
 		private static Uri AddParameter(Uri url, string paramName, string paramValue)
 		{
 			var uriBuilder = new UriBuilder(url);

@@ -151,7 +151,7 @@ namespace Transmitly.ChannelProvider.Infobip.Voice
 					DispatchStatus.Unknown,
 			};
 		}
-
+		//Source=https://stackoverflow.com/a/19679135
 		private static Uri AddParameter(Uri url, string paramName, string paramValue)
 		{
 			var uriBuilder = new UriBuilder(url);
