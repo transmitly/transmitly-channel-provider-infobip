@@ -13,6 +13,7 @@
 //  limitations under the License.
 
 using System;
+using System.Threading.Tasks;
 
 namespace Transmitly.ChannelProvider.Infobip.Voice
 {
@@ -138,9 +139,9 @@ namespace Transmitly.ChannelProvider.Infobip.Voice
 		/// The resolver that will return the URL on your call back server on to which a delivery report will be sent. 
 		/// <para>This will override any value set in the <see cref="NotifyUrl"/> property.</para>
 		/// </summary>
-		public Func<IDispatchCommunicationContext, string?>? NotifyUrlResolver
+		public Func<IDispatchCommunicationContext, Task<string?>>? NotifyUrlResolver
 		{
-			get => _extendedProperties.GetValue<Func<IDispatchCommunicationContext, string?>>(ProviderKey, nameof(NotifyUrlResolver));
+			get => _extendedProperties.GetValue<Func<IDispatchCommunicationContext, Task<string?>>>(ProviderKey, nameof(NotifyUrlResolver));
 			set => _extendedProperties.AddOrUpdate(ProviderKey, nameof(NotifyUrlResolver), value);
 		}
 	}

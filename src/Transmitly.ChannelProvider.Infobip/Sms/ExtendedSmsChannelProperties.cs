@@ -13,6 +13,7 @@
 //  limitations under the License.
 
 using System;
+using System.Threading.Tasks;
 
 namespace Transmitly.ChannelProvider.Infobip.Sms
 {
@@ -98,9 +99,9 @@ namespace Transmitly.ChannelProvider.Infobip.Sms
 		/// <para><see href="https://www.infobip.com/docs/api/channels/sms/sms-messaging/outbound-sms/send-sms-message#channels/sms/receive-sent-sms-report">Delivery report format</see></para>
 		/// <para>This will override any value set in the <see cref="NotifyUrl"/> property.</para>
 		/// </summary>
-		public Func<IDispatchCommunicationContext, string>? NotifyUrlResolver
+		public Func<IDispatchCommunicationContext, Task<string?>>? NotifyUrlResolver
 		{
-			get => _extendedProperties.GetValue<Func<IDispatchCommunicationContext, string>>(ProviderKey, nameof(NotifyUrlResolver));
+			get => _extendedProperties.GetValue<Func<IDispatchCommunicationContext, Task<string?>>>(ProviderKey, nameof(NotifyUrlResolver));
 			set => _extendedProperties.AddOrUpdate(ProviderKey, nameof(NotifyUrlResolver), value);
 		}
 	}

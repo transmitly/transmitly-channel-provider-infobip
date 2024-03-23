@@ -48,7 +48,7 @@ namespace Transmitly.ChannelProvider.Infobip.Voice
 				var result = await restClient
 					.PostAsync(
 						AdvancedCallEndpoint,
-						CreateAdvancedMessagePayload(recipient, communication, communicationContext),
+						await CreateAdvancedMessagePayloadAsync(recipient, communication, communicationContext).ConfigureAwait(false),
 						cancellationToken
 					)
 					.ConfigureAwait(false);
@@ -86,7 +86,7 @@ namespace Transmitly.ChannelProvider.Infobip.Voice
 			return results;
 		}
 
-		private HttpContent CreateAdvancedMessagePayload(IAudienceAddress recipient, IVoice voice, IDispatchCommunicationContext context)
+		private async Task<HttpContent> CreateAdvancedMessagePayloadAsync(IAudienceAddress recipient, IVoice voice, IDispatchCommunicationContext context)
 		{
 			var voiceProperties = new ExtendedVoiceChannelProperties(voice.ExtendedProperties);
 			var messageId = Guid.NewGuid().ToString("N");
@@ -97,7 +97,7 @@ namespace Transmitly.ChannelProvider.Infobip.Voice
 				Text = voice.Message,
 				From = voice.From?.Value,
 				MachineDetection = ConvertMachineDetection(voice.MachineDetection, voiceProperties.MachineDetection),
-				NotifyUrl = GetNotifyUrl(messageId, voiceProperties, context),
+				NotifyUrl = await GetNotifyUrl(messageId, voiceProperties, voice, context).ConfigureAwait(false),
 				CallTimeout = voiceProperties.CallTimeout,
 				Language = context.CultureInfo.TwoLetterISOLanguageNameDefault(),
 				VoiceType = new InfobipVoiceType(voice.VoiceType, voiceProperties.VoiceGender, voiceProperties.VoiceName).ToObject(),
@@ -122,16 +122,14 @@ namespace Transmitly.ChannelProvider.Infobip.Voice
 			};
 		}
 
-		private static string? GetNotifyUrl(string messageId, ExtendedVoiceChannelProperties voiceProperties, IDispatchCommunicationContext context)
+		private static async Task<string?> GetNotifyUrl(string messageId, ExtendedVoiceChannelProperties smsProperties, IVoice voice, IDispatchCommunicationContext context)
 		{
-			if (string.IsNullOrWhiteSpace(voiceProperties.NotifyUrl) && voiceProperties.NotifyUrlResolver == null)
-				return null;
+			var urlResolver = smsProperties.NotifyUrlResolver ?? voice.StatusCallbackUrlResolver;
+			if (urlResolver != null)
+				return await urlResolver(context).ConfigureAwait(false);
 
-			string? url = voiceProperties.NotifyUrl;
-
-			if (voiceProperties.NotifyUrlResolver != null)
-				return voiceProperties.NotifyUrlResolver(context);
-			else if (string.IsNullOrWhiteSpace(url))
+			string? url = smsProperties.NotifyUrl ?? voice.StatusCallbackUrl;
+			if (string.IsNullOrWhiteSpace(url))
 				return null;
 
 			return AddParameter(new Uri(url), "resourceId", messageId).ToString();
