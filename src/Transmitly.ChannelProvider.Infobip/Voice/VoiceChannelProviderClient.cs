@@ -60,7 +60,7 @@ namespace Transmitly.ChannelProvider.Infobip.Voice
 					var error = JsonSerializer.Deserialize<ApiRequestErrorResult>(responseContent);
 					results.Add(new InfobipDispatchResult
 					{
-						DispatchStatus = DispatchStatus.Error,
+						DispatchStatus = DispatchStatus.Exception,
 						ResourceId = error?.ServiceException?.MessageId,
 						Exception = new ApiResultException(error),
 					});
@@ -144,7 +144,7 @@ namespace Transmitly.ChannelProvider.Infobip.Voice
 				InfobipGroupName.IN_PROGRESS =>
 					DispatchStatus.Dispatched,
 				InfobipGroupName.FAILED =>
-					DispatchStatus.Error,
+					DispatchStatus.Exception,
 				_ =>
 					DispatchStatus.Unknown,
 			};

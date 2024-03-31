@@ -16,6 +16,7 @@ using System;
 using Transmitly.ChannelProvider.Infobip.Email;
 using Transmitly.ChannelProvider.Infobip.Sms;
 using Transmitly.ChannelProvider.Infobip.Voice;
+
 namespace Transmitly
 {
 	public static class InfobipChannelProviderExtensions
@@ -77,6 +78,8 @@ namespace Transmitly
 			communicationsClientBuilder.AddChannelProvider<SmsChannelProviderClient, ISms>(Id.ChannelProvider.Infobip(providerId), optionObj, Id.Channel.Sms());
 			communicationsClientBuilder.AddChannelProvider<EmailChannelProviderClient, IEmail>(Id.ChannelProvider.Infobip(providerId), optionObj, Id.Channel.Email());
 			communicationsClientBuilder.AddChannelProvider<VoiceChannelProviderClient, IVoice>(Id.ChannelProvider.Infobip(providerId), optionObj, Id.Channel.Voice());
+			communicationsClientBuilder.ChannelProvider.AddResponseHandler<SmsCallbackHandler>();
+			communicationsClientBuilder.ChannelProvider.AddResponseHandler<VoiceCallbackHandler>();
 			return communicationsClientBuilder;
 		}
 	}

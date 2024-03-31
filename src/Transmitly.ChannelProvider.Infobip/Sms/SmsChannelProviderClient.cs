@@ -58,7 +58,7 @@ namespace Transmitly.ChannelProvider.Infobip.Sms
 					var error = JsonSerializer.Deserialize<ApiRequestErrorResult>(responseContent);
 					results.Add(new InfobipDispatchResult
 					{
-						DispatchStatus = DispatchStatus.Error,
+						DispatchStatus = DispatchStatus.Exception,
 						ResourceId = error?.ServiceException?.MessageId,
 						Exception = new ApiResultException(error),
 					});

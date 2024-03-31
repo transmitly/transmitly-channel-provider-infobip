@@ -12,23 +12,13 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-namespace Transmitly.ChannelProvider.Infobip
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
+namespace Transmitly.ChannelProvider.Infobip.Sms
 {
-	static class GroupNameExtensions
+	sealed class SmsMessageReports
 	{
-		public static DispatchStatus ToDispatchStatus(this InfobipGroupName status)
-		{
-			return status switch
-			{
-				InfobipGroupName.COMPLETED or
-				InfobipGroupName.PENDING or
-				InfobipGroupName.IN_PROGRESS =>
-					DispatchStatus.Dispatched,
-				InfobipGroupName.FAILED =>
-					DispatchStatus.Exception,
-				_ =>
-					DispatchStatus.Unknown,
-			};
-		}
+		[JsonPropertyName("results")]
+		public List<SmsMessageReport>? Results { get; set; }
 	}
 }
