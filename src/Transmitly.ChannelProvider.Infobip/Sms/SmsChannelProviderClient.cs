@@ -97,14 +97,11 @@ namespace Transmitly.ChannelProvider.Infobip.Sms
 				ValidityPeriod = smsProperties.ValidityPeriod,
 				EntityId = smsProperties.EntityId,
 				ApplicationId = smsProperties.ApplicationId,
-				NotifyUrl = await GetNotifyUrl(messageId, smsProperties, sms, communicationContext).ConfigureAwait(false)
-			};
-
-			var request = new SendSmsMessageRequest([messages])
-			{
-				BulkId = bulkId,
+				NotifyUrl = await GetNotifyUrl(messageId, smsProperties, sms, communicationContext).ConfigureAwait(false),
 				From = sms.From?.Value,
 			};
+
+			var request = new SendSmsMessageRequest([messages]) { BulkId = bulkId, };
 
 			return new StringContent(JsonSerializer.Serialize(request), Encoding.UTF8, "application/json");
 		}

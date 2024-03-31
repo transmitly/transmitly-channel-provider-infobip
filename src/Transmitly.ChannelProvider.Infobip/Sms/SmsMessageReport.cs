@@ -14,13 +14,15 @@
 
 using System;
 using System.Text.Json.Serialization;
+using Transmitly.ChannelProvider.Infobip.Common;
 using Transmitly.ChannelProvider.ProviderResponse;
 namespace Transmitly.ChannelProvider.Infobip.Sms
 {
 	sealed class SmsMessageReport : ChannelProviderReport
 	{
 		public override string? Id => MessageId;
-		public override DispatchStatus Status
+		
+		public override DispatchStatus DispatchStatus
 		{
 			get
 			{
@@ -50,9 +52,11 @@ namespace Transmitly.ChannelProvider.Infobip.Sms
 		public string? From { get => ExtendedProperties.GetValue<string?>(Constant.SmsPropertiesKey, nameof(From)); set => ExtendedProperties.AddOrUpdate(Constant.SmsPropertiesKey, nameof(From), value); }
 
 		[JsonPropertyName("sentAt")]
+		[JsonConverter(typeof(DateTimeOffsetConverter))]
 		public DateTimeOffset? SentAt { get => ExtendedProperties.GetValue<DateTimeOffset?>(Constant.SmsPropertiesKey, nameof(SentAt)); set => ExtendedProperties.AddOrUpdate(Constant.SmsPropertiesKey, nameof(SentAt), value); }
 
 		[JsonPropertyName("doneAt")]
+		[JsonConverter(typeof(DateTimeOffsetConverter))]
 		public DateTimeOffset? DoneAt { get => ExtendedProperties.GetValue<DateTimeOffset?>(Constant.SmsPropertiesKey, nameof(DoneAt)); set => ExtendedProperties.AddOrUpdate(Constant.SmsPropertiesKey, nameof(DoneAt), value); }
 
 		[JsonPropertyName("smsCount")]

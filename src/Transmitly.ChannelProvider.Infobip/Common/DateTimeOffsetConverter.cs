@@ -13,24 +13,25 @@
 //  limitations under the License.
 
 using System;
-using System.Collections.Generic;
+using System.Diagnostics;
+using System.Text.Json.Serialization;
 using System.Text.Json;
-using Transmitly.ChannelProvider.ProviderResponse;
-namespace Transmitly.ChannelProvider.Infobip.Sms
+using System.Globalization;
+
+namespace Transmitly.ChannelProvider.Infobip.Common
 {
-	sealed class SmsCallbackHandler : IChannelProviderStatusReportHandler
+	//Source = https://stackoverflow.com/a/67857546
+	sealed class DateTimeOffsetConverter : JsonConverter<DateTimeOffset>
 	{
-		public bool Handles(string requestBody)
+		public override DateTimeOffset Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
 		{
-			return Array.TrueForAll(["messageId", "groupId", "groupName", "smsCount"], x => requestBody.Contains(x));
+			Debug.Assert(typeToConvert == typeof(DateTimeOffset));
+			return DateTimeOffset.Parse(reader.GetString(), new CultureInfo("en-US"));
 		}
 
-		IReadOnlyCollection<ChannelProviderReport> IChannelProviderStatusReportHandler.Handle(string requestBody)
+		public override void Write(Utf8JsonWriter writer, DateTimeOffset value, JsonSerializerOptions options)
 		{
-			var obj = JsonSerializer.Deserialize<SmsMessageReports>(requestBody);
-			if (obj == null)
-				return null;
-			return obj.Results.AsReadOnly();
+			writer.WriteStringValue(value.ToString());
 		}
 	}
 }

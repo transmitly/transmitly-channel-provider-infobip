@@ -20,6 +20,22 @@ namespace Transmitly.ChannelProvider.Infobip.Sms.SendSmsMessage
 	internal sealed class SendSmsMessageRequestMessage(string? text, List<SendSmsMessageRequestMessageDestination> destinations)
 	{
 		/// <summary>
+		/// Allows for sending a flash SMS to automatically appear on recipient devices without interaction. 
+		/// Set to true to enable flash SMS, or leave the default value, false to send a standard SMS.
+		/// (Default: false)
+		/// </summary>
+		[JsonPropertyName("flash")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+		public bool? Flash { get; set; }
+
+		/// <summary>
+		/// The sender ID which can be alphanumeric or numeric (e.g., CompanyName). Make sure you don't exceed <see href="https://www.infobip.com/docs/sms/get-started#sender-names">character limit</see>.
+		/// </summary>
+		[JsonPropertyName("from")]
+		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+		public string? From { get; set; }
+
+		/// <summary>
 		/// Additional data that can be used for identifying, managing, or monitoring a message. 
 		/// Data included here will also be automatically included in the message Delivery Report. 
 		/// The maximum value is 4000 characters and any overhead may be truncated

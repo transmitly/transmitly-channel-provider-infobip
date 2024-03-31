@@ -36,6 +36,7 @@ namespace Transmitly.ChannelProvider.Infobip.Voice
 		{
 			Guard.AgainstNull(communication);
 			Guard.AgainstNull(communicationContext);
+			Guard.AgainstNullOrWhiteSpace(communication.From?.Value);
 
 			var recipients = communication.To ?? [];
 

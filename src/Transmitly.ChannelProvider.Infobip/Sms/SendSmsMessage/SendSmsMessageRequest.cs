@@ -38,20 +38,6 @@ namespace Transmitly.ChannelProvider.Infobip.Sms.SendSmsMessage
 		[JsonPropertyName("messages")]
 		public List<SendSmsMessageRequestMessage> Messages { get; } = Guard.AgainstNullOrEmpty(messages);
 
-		/// <summary>
-		/// Allows for sending a flash SMS to automatically appear on recipient devices without interaction. 
-		/// Set to true to enable flash SMS, or leave the default value, false to send a standard SMS.
-		/// (Default: false)
-		/// </summary>
-		[JsonPropertyName("flash")]
-		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-		public bool? Flash { get; set; }
-
-		/// <summary>
-		/// The sender ID which can be alphanumeric or numeric (e.g., CompanyName). Make sure you don't exceed <see href="https://www.infobip.com/docs/sms/get-started#sender-names">character limit</see>.
-		/// </summary>
-		[JsonPropertyName("from")]
-		[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-		public string? From { get; set; }
+		
 	}
 }

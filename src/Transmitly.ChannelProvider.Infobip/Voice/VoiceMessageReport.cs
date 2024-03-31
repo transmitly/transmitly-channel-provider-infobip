@@ -16,37 +16,37 @@ using System.Text.Json.Serialization;
 using Transmitly.ChannelProvider.ProviderResponse;
 namespace Transmitly.ChannelProvider.Infobip.Voice
 {
-    sealed class VoiceMessageReport : ChannelProviderReport
-    {
-        public override string? Id => MessageId;
+	sealed class VoiceMessageReport : ChannelProviderReport
+	{
+		public override string? Id => MessageId;
 
-        public override DispatchStatus Status
-        {
-            get
-            {
-                return (StatusDetail?.GroupId) switch
-                {
-                    //PENDING
-                    1 => DispatchStatus.Dispatched,
-                    //UNDELIVERABLE
-                    2 or 4 or 5 => DispatchStatus.Undeliverable,
-                    //DELIVERED
-                    3 => DispatchStatus.Delivered,
-                    _ => DispatchStatus.Unknown,
-                };
-            }
-        }
+		public override DispatchStatus DispatchStatus
+		{
+			get
+			{
+				return (StatusDetail?.GroupId) switch
+				{
+					//PENDING
+					1 => DispatchStatus.Dispatched,
+					//UNDELIVERABLE
+					2 or 4 or 5 => DispatchStatus.Undeliverable,
+					//DELIVERED
+					3 => DispatchStatus.Delivered,
+					_ => DispatchStatus.Unknown,
+				};
+			}
+		}
 
-        [JsonPropertyName("messageId")]
-        public string? MessageId { get => ExtendedProperties.GetValue<string?>(Constant.SmsPropertiesKey, nameof(MessageId)); set => ExtendedProperties.AddOrUpdate(Constant.SmsPropertiesKey, nameof(MessageId), value); }
+		[JsonPropertyName("messageId")]
+		public string? MessageId { get => ExtendedProperties.GetValue<string?>(Constant.SmsPropertiesKey, nameof(MessageId)); set => ExtendedProperties.AddOrUpdate(Constant.SmsPropertiesKey, nameof(MessageId), value); }
 
-        [JsonPropertyName("feature")]
-        public string? Feature { get => ExtendedProperties.GetValue<string?>(Constant.SmsPropertiesKey, nameof(Feature)); set => ExtendedProperties.AddOrUpdate(Constant.SmsPropertiesKey, nameof(Feature), value); }
+		[JsonPropertyName("feature")]
+		public string? Feature { get => ExtendedProperties.GetValue<string?>(Constant.SmsPropertiesKey, nameof(Feature)); set => ExtendedProperties.AddOrUpdate(Constant.SmsPropertiesKey, nameof(Feature), value); }
 
-        [JsonPropertyName("status")]
-        public CallbackStatus? StatusDetail { get => ExtendedProperties.GetValue<CallbackStatus?>(Constant.SmsPropertiesKey, nameof(StatusDetail)); set => ExtendedProperties.AddOrUpdate(Constant.SmsPropertiesKey, nameof(StatusDetail), value); }
+		[JsonPropertyName("status")]
+		public CallbackStatus? StatusDetail { get => ExtendedProperties.GetValue<CallbackStatus?>(Constant.SmsPropertiesKey, nameof(StatusDetail)); set => ExtendedProperties.AddOrUpdate(Constant.SmsPropertiesKey, nameof(StatusDetail), value); }
 
-        [JsonPropertyName("error")]
-        public ErrorStatus? Error { get => ExtendedProperties.GetValue<ErrorStatus?>(Constant.SmsPropertiesKey, nameof(Error)); set => ExtendedProperties.AddOrUpdate(Constant.SmsPropertiesKey, nameof(Error), value); }
-    }
+		[JsonPropertyName("error")]
+		public ErrorStatus? Error { get => ExtendedProperties.GetValue<ErrorStatus?>(Constant.SmsPropertiesKey, nameof(Error)); set => ExtendedProperties.AddOrUpdate(Constant.SmsPropertiesKey, nameof(Error), value); }
+	}
 }
