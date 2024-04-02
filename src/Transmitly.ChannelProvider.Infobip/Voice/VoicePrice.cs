@@ -12,27 +12,21 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-using System;
-using System.Collections.Generic;
-using System.Text.Json;
-using Transmitly.ChannelProvider.Infobip.Sms;
-using Transmitly.ChannelProvider.ProviderResponse;
+using System.Text.Json.Serialization;
+
 namespace Transmitly.ChannelProvider.Infobip.Voice
 {
-	sealed class VoiceCallbackHandler : IChannelProviderStatusReportHandler
+	public sealed class VoicePrice
 	{
-		public bool Handles(string requestBody)
-		{
-			return Array.TrueForAll(["messageId", "groupId", "groupName", "voiceCall", "feature"], x => requestBody.Contains(x));
-
-		}
-
-		IReadOnlyCollection<ChannelProviderReport> IChannelProviderStatusReportHandler.Handle(string requestBody)
-		{
-			var obj = JsonSerializer.Deserialize<SmsMessageReports>(requestBody);
-			if (obj == null)
-				return null;
-			return obj.Results.AsReadOnly();
-		}
+		/// <summary>
+		/// Price per one second of the Voice message.
+		/// </summary>
+		[JsonPropertyName("pricePerSecond")]
+		public double? PricePerMessage { get; set; }
+		/// <summary>
+		/// The currency in which the price is expressed.
+		/// </summary>
+		[JsonPropertyName("currency")]
+		public string? Currency { get; set; }
 	}
 }

@@ -15,7 +15,7 @@
 using System.Text.Json.Serialization;
 namespace Transmitly.ChannelProvider.Infobip
 {
-	sealed class ErrorStatus
+	public sealed class ErrorStatus
 	{
 		[JsonPropertyName("groupId")]
 		public int? GroupId { get; set; }

@@ -13,6 +13,7 @@
 //  limitations under the License.
 
 using System;
+using Transmitly.ChannelProvider;
 using Transmitly.ChannelProvider.Infobip.Email;
 using Transmitly.ChannelProvider.Infobip.Sms;
 using Transmitly.ChannelProvider.Infobip.Voice;
@@ -64,6 +65,16 @@ namespace Transmitly
 		}
 
 		/// <summary>
+		/// Infobip specific settings for sms delivery reports.
+		/// </summary>
+		/// <param name="deliveryReport">Delivery Report.</param>
+		/// <returns>Infobip SMS delivery report properties.</returns>
+		public static ExtendedSmsDeliveryReportProperties Infobip(this DeliveryReport deliveryReport)
+		{
+			return new ExtendedSmsDeliveryReportProperties(deliveryReport);
+		}
+
+		/// <summary>
 		/// Adds channel provider support for Infobip.
 		/// </summary>
 		/// <param name="communicationsClientBuilder">Communications builder.</param>
@@ -78,9 +89,11 @@ namespace Transmitly
 			communicationsClientBuilder.AddChannelProvider<SmsChannelProviderClient, ISms>(Id.ChannelProvider.Infobip(providerId), optionObj, Id.Channel.Sms());
 			communicationsClientBuilder.AddChannelProvider<EmailChannelProviderClient, IEmail>(Id.ChannelProvider.Infobip(providerId), optionObj, Id.Channel.Email());
 			communicationsClientBuilder.AddChannelProvider<VoiceChannelProviderClient, IVoice>(Id.ChannelProvider.Infobip(providerId), optionObj, Id.Channel.Voice());
-			communicationsClientBuilder.ChannelProvider.AddResponseHandler<SmsCallbackHandler>();
-			communicationsClientBuilder.ChannelProvider.AddResponseHandler<VoiceCallbackHandler>();
+			communicationsClientBuilder.ChannelProvider.AddDeliveryReportRequestAdaptor<SmsDeliveryStatusReportAdaptor>();
+			communicationsClientBuilder.ChannelProvider.AddDeliveryReportRequestAdaptor<VoiceDeliveryStatusReportAdaptor>();
 			return communicationsClientBuilder;
 		}
+
+
 	}
 }

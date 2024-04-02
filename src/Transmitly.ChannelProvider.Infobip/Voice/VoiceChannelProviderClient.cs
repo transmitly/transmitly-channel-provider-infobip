@@ -30,8 +30,6 @@ namespace Transmitly.ChannelProvider.Infobip.Voice
 		private const string AdvancedCallEndpoint = "tts/3/advanced";
 		private readonly InfobipChannelProviderConfiguration _configuration = configuration;
 
-		public override IReadOnlyCollection<string>? RegisteredEvents => [DeliveryReportEvent.Name.Dispatch(), DeliveryReportEvent.Name.Dispatched(), DeliveryReportEvent.Name.Error()];
-
 		protected override async Task<IReadOnlyCollection<IDispatchResult?>> DispatchAsync(HttpClient restClient, IVoice communication, IDispatchCommunicationContext communicationContext, CancellationToken cancellationToken)
 		{
 			Guard.AgainstNull(communication);
@@ -125,11 +123,11 @@ namespace Transmitly.ChannelProvider.Infobip.Voice
 
 		private static async Task<string?> GetNotifyUrl(string messageId, ExtendedVoiceChannelProperties smsProperties, IVoice voice, IDispatchCommunicationContext context)
 		{
-			var urlResolver = smsProperties.NotifyUrlResolver ?? voice.StatusCallbackUrlResolver;
+			var urlResolver = smsProperties.NotifyUrlResolver ?? voice.DeliveryReportCallbackUrlResolver;
 			if (urlResolver != null)
 				return await urlResolver(context).ConfigureAwait(false);
 
-			string? url = smsProperties.NotifyUrl ?? voice.StatusCallbackUrl;
+			string? url = smsProperties.NotifyUrl ?? voice.DeliveryReportCallbackUrl;
 			if (string.IsNullOrWhiteSpace(url))
 				return null;
 

@@ -12,14 +12,22 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-using System.Text.Json.Serialization;
-namespace Transmitly.ChannelProvider.Infobip.Sms
+namespace Transmitly
 {
-	public sealed class SmsPrice
+	internal static class Util
 	{
-		[JsonPropertyName("pricePerMessage")]
-		public double? PricePerMessage { get; set; }
-		[JsonPropertyName("currency")]
-		public string? Currency { get; set; }
+		public static DispatchStatus ToDispatchStatus(int? groupId)
+		{
+			return (groupId) switch
+			{
+				//PENDING
+				1 => DispatchStatus.Dispatched,
+				//UNDELIVERABLE
+				2 or 4 or 5 => DispatchStatus.Undeliverable,
+				//DELIVERED
+				3 => DispatchStatus.Delivered,
+				_ => DispatchStatus.Unknown,
+			};
+		}
 	}
 }

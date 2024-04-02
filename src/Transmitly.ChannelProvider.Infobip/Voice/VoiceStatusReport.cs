@@ -12,13 +12,24 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-using System.Collections.Generic;
 using System.Text.Json.Serialization;
-namespace Transmitly.ChannelProvider.Infobip.Sms
+
+namespace Transmitly.ChannelProvider.Infobip.Voice
 {
-	sealed class SmsMessageReports
+	sealed class VoiceStatusReport
 	{
-		[JsonPropertyName("results")]
-		public List<SmsMessageReport>? Results { get; set; }
+		[JsonPropertyName("bulkId")]
+		public string? BulkId { get; set; }
+		[JsonPropertyName("messageId")]
+		public string? MessageId { get; set; }
+
+		[JsonPropertyName("feature")]
+		public string? Feature { get; set; }
+
+		[JsonPropertyName("status")]
+		public CallbackStatus? StatusDetail { get; set; }
+
+		[JsonPropertyName("error")]
+		public ErrorStatus? Error { get; set; }
 	}
 }

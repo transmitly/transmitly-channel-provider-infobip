@@ -12,25 +12,13 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-using System;
 using System.Collections.Generic;
-using System.Text.Json;
-using Transmitly.ChannelProvider.ProviderResponse;
-namespace Transmitly.ChannelProvider.Infobip.Sms
+using System.Text.Json.Serialization;
+namespace Transmitly.ChannelProvider.Infobip.Voice
 {
-	sealed class SmsCallbackHandler : IChannelProviderStatusReportHandler
-	{
-		public bool Handles(string requestBody)
-		{
-			return Array.TrueForAll(["messageId", "groupId", "groupName", "smsCount"], x => requestBody.Contains(x));
-		}
-
-		IReadOnlyCollection<ChannelProviderReport> IChannelProviderStatusReportHandler.Handle(string requestBody)
-		{
-			var obj = JsonSerializer.Deserialize<SmsMessageReports>(requestBody);
-			if (obj == null)
-				return null;
-			return obj.Results.AsReadOnly();
-		}
-	}
+    sealed class VoiceStatusReports
+    {
+        [JsonPropertyName("results")]
+        public List<VoiceStatusReport>? Results { get; set; }
+    }
 }

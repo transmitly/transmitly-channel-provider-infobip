@@ -30,8 +30,6 @@ namespace Transmitly.ChannelProvider.Infobip.Sms
 		private const string SendAdvancedSmsMessage = "sms/2/text/advanced";
 		private readonly InfobipChannelProviderConfiguration _configuration = configuration;
 
-		public override IReadOnlyCollection<string>? RegisteredEvents => [DeliveryReportEvent.Name.Dispatched(), DeliveryReportEvent.Name.Error()];
-
 		protected override async Task<IReadOnlyCollection<IDispatchResult?>> DispatchAsync(HttpClient restClient, ISms communication, IDispatchCommunicationContext communicationContext, CancellationToken cancellationToken)
 		{
 			Guard.AgainstNull(communication);
@@ -108,11 +106,11 @@ namespace Transmitly.ChannelProvider.Infobip.Sms
 
 		private static async Task<string?> GetNotifyUrl(string messageId, ExtendedSmsChannelProperties voiceProperties, ISms sms, IDispatchCommunicationContext context)
 		{
-			var urlResolver = voiceProperties.NotifyUrlResolver ?? sms.StatusCallbackUrlResolver;
+			var urlResolver = voiceProperties.NotifyUrlResolver ?? sms.DeliveryReportCallbackUrlResolver;
 			if (urlResolver != null)
 				return await urlResolver(context).ConfigureAwait(false);
 
-			string? url = voiceProperties.NotifyUrl ?? sms.StatusCallbackUrl;
+			string? url = voiceProperties.NotifyUrl ?? sms.DeliveryReportCallbackUrl;
 			if (string.IsNullOrWhiteSpace(url))
 				return null;
 			return AddParameter(new Uri(url), "resourceId", messageId).ToString();

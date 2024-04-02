@@ -14,11 +14,11 @@
 
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
-namespace Transmitly.ChannelProvider.Infobip.Voice
+namespace Transmitly.ChannelProvider.Infobip.Sms
 {
-    sealed class VoiceMessageReports
-    {
-        [JsonPropertyName("results")]
-        public List<VoiceMessageReport>? Results { get; set; }
-    }
+	sealed class SmsStatusReports
+	{
+		[JsonPropertyName("results")]
+		public List<SmsStatusReport>? Results { get; set; }
+	}
 }
