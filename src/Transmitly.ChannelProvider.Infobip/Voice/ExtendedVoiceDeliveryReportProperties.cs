@@ -12,8 +12,6 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-using System.Text.Json.Serialization;
-
 namespace Transmitly.ChannelProvider.Infobip.Voice
 {
 	public sealed class ExtendedVoiceDeliveryReportProperties
@@ -56,12 +54,58 @@ namespace Transmitly.ChannelProvider.Infobip.Voice
 		}
 
 		/// <summary>
+		/// Destination address of the voice message.
+		/// </summary>
+		public string? To
+		{
+			get => _extendedProperties.GetValue<string?>(ProviderKey, nameof(To));
+			set => _extendedProperties.AddOrUpdate(ProviderKey, nameof(To), value);
+		}
+
+		/// <summary>
+		/// Date and time when the voice message was initiated. 
+		/// Has the following format: yyyy-MM-dd'T'HH:mm:ss.SSSZ.
+		/// </summary>
+		public string? From
+		{
+			get => _extendedProperties.GetValue<string?>(ProviderKey, nameof(From));
+			set => _extendedProperties.AddOrUpdate(ProviderKey, nameof(From), value);
+		}
+
+		/// <summary>
+		/// Mobile country and network codes.
+		/// </summary>
+		public string? MccMnc
+		{
+			get => _extendedProperties.GetValue<string?>(ProviderKey, nameof(MccMnc));
+			set => _extendedProperties.AddOrUpdate(ProviderKey, nameof(MccMnc), value);
+		}
+
+		/// <summary>
+		/// Custom data sent over to the notifyUrl.
+		/// </summary>
+		public string? CallbackData
+		{
+			get => _extendedProperties.GetValue<string?>(ProviderKey, nameof(CallbackData));
+			set => _extendedProperties.AddOrUpdate(ProviderKey, nameof(CallbackData), value);
+		}
+
+		/// <summary>
 		/// Sent Voice message price.
 		/// </summary>
 		public VoicePrice? Price
 		{
 			get => _extendedProperties.GetValue<VoicePrice?>(ProviderKey, nameof(Price));
 			set => _extendedProperties.AddOrUpdate(ProviderKey, nameof(Price), value);
+		}
+
+		/// <summary>
+		/// Fields representing details specific for voice messages.
+		/// </summary>
+		public VoiceCallDetail? VoiceCall
+		{
+			get => _extendedProperties.GetValue<VoiceCallDetail?>(ProviderKey, nameof(VoiceCall));
+			set => _extendedProperties.AddOrUpdate(ProviderKey, nameof(VoiceCall), value);
 		}
 
 		/// <summary>
