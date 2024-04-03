@@ -12,6 +12,7 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json;
@@ -21,12 +22,15 @@ namespace Transmitly.ChannelProvider.Infobip.Sms
 {
 	sealed class SmsDeliveryStatusReportAdaptor : IChannelProviderDeliveryReportRequestAdaptor
 	{
-		public async Task<IReadOnlyCollection<DeliveryReport>?> AdaptAsync(Stream requestStream)
+		public Task<IReadOnlyCollection<DeliveryReport>?> AdaptAsync(string requestBody)
 		{
-			var statuses = await JsonSerializer.DeserializeAsync<SmsStatusReports>(requestStream);
+			if (!ShouldAdapt(requestBody))
+				return Task.FromResult<IReadOnlyCollection<DeliveryReport>?>(null);
+
+			var statuses = JsonSerializer.Deserialize<SmsStatusReports>(requestBody);
 
 			if (statuses?.Results == null)
-				return null;
+				return Task.FromResult<IReadOnlyCollection<DeliveryReport>?>(null);
 
 			var ret = new List<DeliveryReport>(statuses.Results.Count);
 			foreach (var smsReport in statuses.Results)
@@ -45,7 +49,12 @@ namespace Transmitly.ChannelProvider.Infobip.Sms
 				ret.Add(report);
 			}
 
-			return ret;
+			return Task.FromResult<IReadOnlyCollection<DeliveryReport>?>(ret);
+		}
+
+		private static bool ShouldAdapt(string requestBody)
+		{
+			return Array.TrueForAll(["pricePerMessage", "smsCount", "messageId", "bulkId"], x => requestBody.Contains(x));
 		}
 	}
 }
