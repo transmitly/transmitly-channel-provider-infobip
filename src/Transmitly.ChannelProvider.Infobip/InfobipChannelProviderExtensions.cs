@@ -13,7 +13,7 @@
 //  limitations under the License.
 
 using System;
-using Transmitly.ChannelProvider;
+using Transmitly.Delivery;
 using Transmitly.ChannelProvider.Infobip.Email;
 using Transmitly.ChannelProvider.Infobip.Sms;
 using Transmitly.ChannelProvider.Infobip.Voice;
@@ -69,9 +69,9 @@ namespace Transmitly
 		/// </summary>
 		/// <param name="deliveryReport">Delivery Report.</param>
 		/// <returns>Infobip SMS delivery report properties.</returns>
-		public static ExtendedSmsDeliveryReportProperties Infobip(this DeliveryReport deliveryReport)
+		public static DeliveryReportExtendedProperties Infobip(this DeliveryReport deliveryReport)
 		{
-			return new ExtendedSmsDeliveryReportProperties(deliveryReport);
+			return new DeliveryReportExtendedProperties(deliveryReport);
 		}
 
 		/// <summary>
@@ -93,7 +93,5 @@ namespace Transmitly
 			communicationsClientBuilder.ChannelProvider.AddDeliveryReportRequestAdaptor<VoiceDeliveryStatusReportAdaptor>();
 			return communicationsClientBuilder;
 		}
-
-
 	}
 }

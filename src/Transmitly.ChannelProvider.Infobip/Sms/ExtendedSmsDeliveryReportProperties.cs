@@ -13,6 +13,7 @@
 //  limitations under the License.
 
 using System;
+using Transmitly.Delivery;
 
 namespace Transmitly.ChannelProvider.Infobip.Sms
 {

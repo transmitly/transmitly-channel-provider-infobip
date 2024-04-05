@@ -21,8 +21,7 @@ using Transmitly.Infobip;
 using System.Text.Json;
 using Transmitly.ChannelProvider.Infobip.Voice.SendAdvancedVoiceMessage;
 using System;
-using System.Web;
-
+using Transmitly.Delivery;
 namespace Transmitly.ChannelProvider.Infobip.Voice
 {
 	internal sealed class VoiceChannelProviderClient(InfobipChannelProviderConfiguration configuration) : ChannelProviderRestClient<IVoice>(null)
@@ -130,8 +129,8 @@ namespace Transmitly.ChannelProvider.Infobip.Voice
 			string? url = smsProperties.NotifyUrl ?? voice.DeliveryReportCallbackUrl;
 			if (string.IsNullOrWhiteSpace(url))
 				return null;
-
-			return AddParameter(new Uri(url), "resourceId", messageId).ToString();
+			
+			return new Uri(url).AddPipelineContext(messageId, context.PipelineName, context.ChannelId, context.ChannelProviderId).ToString();
 		}
 
 		private static DispatchStatus ConvertStatus(InfobipGroupName status)
@@ -148,16 +147,7 @@ namespace Transmitly.ChannelProvider.Infobip.Voice
 					DispatchStatus.Unknown,
 			};
 		}
-		//Source=https://stackoverflow.com/a/19679135
-		private static Uri AddParameter(Uri url, string paramName, string paramValue)
-		{
-			var uriBuilder = new UriBuilder(url);
-			var query = HttpUtility.ParseQueryString(uriBuilder.Query);
-			query[paramName] = paramValue;
-			uriBuilder.Query = query.ToString();
 
-			return uriBuilder.Uri;
-		}
 		protected override void ConfigureHttpClient(HttpClient client)
 		{
 			RestClientConfiguration.Configure(client, _configuration);

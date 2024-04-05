@@ -19,6 +19,8 @@ using System.Net.Http;
 using System.Text.Json;
 using Transmitly.ChannelProvider.Infobip.Sms.SendSmsMessage;
 using Transmitly.Infobip;
+using System;
+using Transmitly.Delivery;
 
 namespace Transmitly.ChannelProvider.Infobip.Email
 {
@@ -51,7 +53,7 @@ namespace Transmitly.ChannelProvider.Infobip.Email
 			var result = await restClient
 				.PostAsync(
 					SendEmailPath,
-					CreateMessageContent(recipientList, communication),
+					CreateMessageContent(recipientList, communication, communicationContext),
 					cancellationToken
 				)
 				.ConfigureAwait(false);
@@ -87,7 +89,7 @@ namespace Transmitly.ChannelProvider.Infobip.Email
 			return results;
 		}
 
-		private static HttpContent CreateMessageContent(IAudienceAddress[] recipients, IEmail email)
+		private static HttpContent CreateMessageContent(IAudienceAddress[] recipients, IEmail email, IDispatchCommunicationContext context)
 		{
 			MultipartFormDataContent form = [];
 			var emailProperties = new ExtendedEmailChannelProperties(email.ExtendedProperties);
@@ -100,10 +102,17 @@ namespace Transmitly.ChannelProvider.Infobip.Email
 			AddStringContent(form, EmailField.TextBody, email.TextBody);
 			AddStringContent(form, EmailField.HtmlBody, email.HtmlBody);
 			AddStringContent(form, EmailField.IntermediateReport, emailProperties.IntermediateReport?.ToString().ToLowerInvariant());
-			AddStringContent(form, EmailField.NotifyUrl, emailProperties.NotifyUrl);
+			AddStringContent(form, EmailField.NotifyUrl, GetNotifyUrl(emailProperties.NotifyUrl, Guid.NewGuid().ToString("N"), context));
 			AddStringContent(form, EmailField.Track, emailProperties.Track.ToString().ToLowerInvariant());
 
 			return form;
+		}
+		private static string? GetNotifyUrl(string? notifyUrl, string messageId, IDispatchCommunicationContext context)
+		{
+			if (string.IsNullOrWhiteSpace(notifyUrl))
+				return null;
+
+			return new Uri(notifyUrl).AddPipelineContext(messageId, context.PipelineName, Id.Channel.Email(), Id.ChannelProvider.Infobip()).ToString();
 		}
 
 		private static void AddStringContent(MultipartFormDataContent form, string key, string? value, bool optional = true)

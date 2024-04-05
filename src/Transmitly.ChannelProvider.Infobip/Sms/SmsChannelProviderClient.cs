@@ -20,7 +20,7 @@ using System.Text.Json;
 using Transmitly.Infobip;
 using Transmitly.ChannelProvider.Infobip.Sms.SendSmsMessage;
 using System.Text;
-using System.Web;
+using Transmitly.Delivery;
 using System;
 
 namespace Transmitly.ChannelProvider.Infobip.Sms
@@ -113,18 +113,7 @@ namespace Transmitly.ChannelProvider.Infobip.Sms
 			string? url = voiceProperties.NotifyUrl ?? sms.DeliveryReportCallbackUrl;
 			if (string.IsNullOrWhiteSpace(url))
 				return null;
-			return AddParameter(new Uri(url), "resourceId", messageId).ToString();
-		}
-
-		//Source=https://stackoverflow.com/a/19679135
-		private static Uri AddParameter(Uri url, string paramName, string paramValue)
-		{
-			var uriBuilder = new UriBuilder(url);
-			var query = HttpUtility.ParseQueryString(uriBuilder.Query);
-			query[paramName] = paramValue;
-			uriBuilder.Query = query.ToString();
-
-			return uriBuilder.Uri;
+			return new Uri(url).AddPipelineContext(messageId, context.PipelineName, context.ChannelId, context.ChannelProviderId).ToString();
 		}
 
 		protected override void ConfigureHttpClient(HttpClient client)

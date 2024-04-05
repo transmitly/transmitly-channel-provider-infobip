@@ -14,20 +14,20 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Transmitly.Delivery;
 
 namespace Transmitly.ChannelProvider.Infobip.Sms
 {
 	sealed class SmsDeliveryStatusReportAdaptor : IChannelProviderDeliveryReportRequestAdaptor
 	{
-		public Task<IReadOnlyCollection<DeliveryReport>?> AdaptAsync(string requestBody)
+		public Task<IReadOnlyCollection<DeliveryReport>?> AdaptAsync(IRequestAdaptorContext context)
 		{
-			if (!ShouldAdapt(requestBody))
+			if (!ShouldAdapt(context.Content))
 				return Task.FromResult<IReadOnlyCollection<DeliveryReport>?>(null);
 
-			var statuses = JsonSerializer.Deserialize<SmsStatusReports>(requestBody);
+			var statuses = JsonSerializer.Deserialize<SmsStatusReports>(context.Content!);
 
 			if (statuses?.Results == null)
 				return Task.FromResult<IReadOnlyCollection<DeliveryReport>?>(null);
@@ -39,9 +39,10 @@ namespace Transmitly.ChannelProvider.Infobip.Sms
 						DeliveryReport.Event.StatusChanged(),
 						Id.Channel.Sms(),
 						Id.ChannelProvider.Infobip(),
-						null,
+						context.PipelineName,
 						smsReport.MessageId,
 						Util.ToDispatchStatus(smsReport.Status?.GroupId),
+						null,
 						null
 					);
 
@@ -52,9 +53,11 @@ namespace Transmitly.ChannelProvider.Infobip.Sms
 			return Task.FromResult<IReadOnlyCollection<DeliveryReport>?>(ret);
 		}
 
-		private static bool ShouldAdapt(string requestBody)
+		private static bool ShouldAdapt(string? content)
 		{
-			return Array.TrueForAll(["pricePerMessage", "smsCount", "messageId", "bulkId"], x => requestBody.Contains(x));
+			if (string.IsNullOrWhiteSpace(content))
+				return false;
+			return Array.TrueForAll(["pricePerMessage", "smsCount", "messageId", "bulkId"], x => content!.Contains(x));
 		}
 	}
 }
