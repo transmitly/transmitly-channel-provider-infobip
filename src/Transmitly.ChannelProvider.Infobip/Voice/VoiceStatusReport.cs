@@ -14,7 +14,6 @@
 
 using System;
 using System.Text.Json.Serialization;
-using Transmitly.ChannelProvider.Infobip.Common;
 
 namespace Transmitly.ChannelProvider.Infobip.Voice
 {
