@@ -18,10 +18,10 @@ using System.Text.Json.Serialization;
 using System.Text.Json;
 using System.Globalization;
 
-namespace Transmitly.ChannelProvider.Infobip.Common
+namespace Transmitly.ChannelProvider.Infobip
 {
 	//Source = https://stackoverflow.com/a/67857546
-	sealed class DateTimeOffsetConverter : JsonConverter<DateTimeOffset>
+	sealed class InfobipDateTimeOffsetConverter : JsonConverter<DateTimeOffset>
 	{
 		public override DateTimeOffset Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
 		{

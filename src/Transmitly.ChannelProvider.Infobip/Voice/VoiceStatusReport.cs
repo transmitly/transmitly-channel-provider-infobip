@@ -32,7 +32,7 @@ namespace Transmitly.ChannelProvider.Infobip.Voice
 		public string? To { get; set; }
 
 		[JsonPropertyName("sentAt")]
-		[JsonConverter(typeof(DateTimeOffsetConverter))]
+		[JsonConverter(typeof(InfobipDateTimeOffsetConverter))]
 		public DateTimeOffset? SentAt { get; set; }
 
 		[JsonPropertyName("mccMnc")]

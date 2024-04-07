@@ -33,21 +33,21 @@ namespace Transmitly.ChannelProvider.Infobip.Voice
 		/// Has the following format: yyyy-MM-dd'T'HH:mm:ss.SSSZ.
 		/// </summary>
 		[JsonPropertyName("startTime")]
-		[JsonConverter(typeof(DateTimeOffsetConverter))]
+		[JsonConverter(typeof(InfobipDateTimeOffsetConverter))]
 		public DateTimeOffset? StartTime { get; set; }
 		/// <summary>
 		/// Date and time when the voice message was answered. 
 		/// Has the following format: yyyy-MM-dd'T'HH:mm:ss.SSSZ.
 		/// </summary>
 		[JsonPropertyName("answerTime")]
-		[JsonConverter(typeof(DateTimeOffsetConverter))]
+		[JsonConverter(typeof(InfobipDateTimeOffsetConverter))]
 		public DateTimeOffset? AnswerTime { get; set; }
 		/// <summary>
 		/// Date and time when the voice message was ended. 
 		/// Has the following format: yyyy-MM-dd'T'HH:mm:ss.SSSZ.
 		/// </summary>
 		[JsonPropertyName("endTime")]
-		[JsonConverter(typeof(DateTimeOffsetConverter))]
+		[JsonConverter(typeof(InfobipDateTimeOffsetConverter))]
 		public DateTimeOffset? EndTime { get; set; }
 		/// <summary>
 		/// Duration of the voice message, in seconds.

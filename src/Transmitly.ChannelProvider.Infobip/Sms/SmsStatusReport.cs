@@ -14,7 +14,6 @@
 
 using System;
 using System.Text.Json.Serialization;
-using Transmitly.ChannelProvider.Infobip.Common;
 
 namespace Transmitly.ChannelProvider.Infobip.Sms
 {
@@ -33,11 +32,11 @@ namespace Transmitly.ChannelProvider.Infobip.Sms
 		public string? From { get; set; }
 
 		[JsonPropertyName("sentAt")]
-		[JsonConverter(typeof(DateTimeOffsetConverter))]
+		[JsonConverter(typeof(InfobipDateTimeOffsetConverter))]
 		public DateTimeOffset? SentAt { get; set; }
 
 		[JsonPropertyName("doneAt")]
-		[JsonConverter(typeof(DateTimeOffsetConverter))]
+		[JsonConverter(typeof(InfobipDateTimeOffsetConverter))]
 		public DateTimeOffset? DoneAt { get; set; }
 
 		[JsonPropertyName("smsCount")]
