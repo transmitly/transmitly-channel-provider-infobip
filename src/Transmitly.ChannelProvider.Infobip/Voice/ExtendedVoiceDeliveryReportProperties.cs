@@ -20,6 +20,11 @@ namespace Transmitly.ChannelProvider.Infobip.Voice
 	{
 		private readonly IExtendedProperties _extendedProperties;
 		private const string ProviderKey = Constant.SmsPropertiesKey;
+		internal ExtendedVoiceDeliveryReportProperties(DeliveryReport deliveryReport, VoiceStatusReport report) : this(deliveryReport)
+		{
+
+		}
+
 		internal ExtendedVoiceDeliveryReportProperties(DeliveryReport deliveryReport)
 		{
 			_extendedProperties = Guard.AgainstNull(deliveryReport).ExtendedProperties;
@@ -28,12 +33,6 @@ namespace Transmitly.ChannelProvider.Infobip.Voice
 		internal ExtendedVoiceDeliveryReportProperties(IExtendedProperties properties)
 		{
 			_extendedProperties = Guard.AgainstNull(properties);
-		}
-
-		internal void Apply(VoiceStatusReport report)
-		{
-			BulkId = report.BulkId;
-			MessageId = report.MessageId;
 		}
 
 		/// <summary>

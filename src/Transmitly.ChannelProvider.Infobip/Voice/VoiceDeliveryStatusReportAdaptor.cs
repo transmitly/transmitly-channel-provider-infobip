@@ -16,7 +16,6 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Threading.Tasks;
-using Transmitly.ChannelProvider.Infobip.Sms;
 using Transmitly.Delivery;
 
 namespace Transmitly.ChannelProvider.Infobip.Voice
@@ -28,26 +27,26 @@ namespace Transmitly.ChannelProvider.Infobip.Voice
 			if (!ShouldAdapt(adaptorContext.Content))
 				return Task.FromResult<IReadOnlyCollection<DeliveryReport>?>(null);
 
-			var statuses = JsonSerializer.Deserialize<SmsStatusReports>(adaptorContext.Content!);
+			var statuses = JsonSerializer.Deserialize<VoiceStatusReports>(adaptorContext.Content!);
 
 			if (statuses?.Results == null)
 				return Task.FromResult<IReadOnlyCollection<DeliveryReport>?>(null);
 
 			var ret = new List<DeliveryReport>(statuses.Results.Count);
-			foreach (var smsReport in statuses.Results)
+			foreach (var voiceReport in statuses.Results)
 			{
-				var report = new DeliveryReport(
+				var report = new VoiceDeliveryReport(
 						DeliveryReport.Event.StatusChanged(),
 						Id.Channel.Voice(),
 						Id.ChannelProvider.Infobip(),
 						adaptorContext.PipelineName,
-						smsReport.MessageId,
-						Util.ToDispatchStatus(smsReport.Status?.GroupId),
+						voiceReport.MessageId,
+						Util.ToDispatchStatus(voiceReport.Status?.GroupId),
 						null,
 						null
-					);
-
-				new ExtendedSmsDeliveryReportProperties(report).Apply(smsReport);
+					)
+					.ApplyExtendedProperties(voiceReport);
+				
 				ret.Add(report);
 			}
 
@@ -56,7 +55,7 @@ namespace Transmitly.ChannelProvider.Infobip.Voice
 
 		private static bool ShouldAdapt(string? content)
 		{
-			if(string.IsNullOrWhiteSpace(content))
+			if (string.IsNullOrWhiteSpace(content))
 				return false;
 			return Array.TrueForAll(["voiceCall", "pricePerSecond", "answerTime", "messageId", "bulkId"], x => content!.Contains(x));
 		}

@@ -12,7 +12,9 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
+using System;
 using System.Text.Json.Serialization;
+using Transmitly.ChannelProvider.Infobip.Common;
 
 namespace Transmitly.ChannelProvider.Infobip.Voice
 {
@@ -23,11 +25,30 @@ namespace Transmitly.ChannelProvider.Infobip.Voice
 		[JsonPropertyName("messageId")]
 		public string? MessageId { get; set; }
 
-		[JsonPropertyName("feature")]
-		public string? Feature { get; set; }
+		[JsonPropertyName("from")]
+		public string? From { get; set; }
+
+		[JsonPropertyName("to")]
+		public string? To { get; set; }
+
+		[JsonPropertyName("sentAt")]
+		[JsonConverter(typeof(DateTimeOffsetConverter))]
+		public DateTimeOffset? SentAt { get; set; }
+
+		[JsonPropertyName("mccMnc")]
+		public string? MccMnc { get; set; }
+
+		[JsonPropertyName("callbackData")]
+		public string? CallbackData { get; set; }
+
+		[JsonPropertyName("voiceCall")]
+		public VoiceCallDetail? VoiceCall { get; set; }
+
+		[JsonPropertyName("price")]
+		public VoicePrice? Price { get; set; }
 
 		[JsonPropertyName("status")]
-		public CallbackStatus? StatusDetail { get; set; }
+		public CallbackStatus? Status { get; set; }
 
 		[JsonPropertyName("error")]
 		public ErrorStatus? Error { get; set; }

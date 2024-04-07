@@ -22,12 +22,12 @@ namespace Transmitly.ChannelProvider.Infobip.Sms
 {
 	sealed class SmsDeliveryStatusReportAdaptor : IChannelProviderDeliveryReportRequestAdaptor
 	{
-		public Task<IReadOnlyCollection<DeliveryReport>?> AdaptAsync(IRequestAdaptorContext context)
+		public Task<IReadOnlyCollection<DeliveryReport>?> AdaptAsync(IRequestAdaptorContext adaptorContext)
 		{
-			if (!ShouldAdapt(context.Content))
+			if (!ShouldAdapt(adaptorContext.Content))
 				return Task.FromResult<IReadOnlyCollection<DeliveryReport>?>(null);
 
-			var statuses = JsonSerializer.Deserialize<SmsStatusReports>(context.Content!);
+			var statuses = JsonSerializer.Deserialize<SmsStatusReports>(adaptorContext.Content!);
 
 			if (statuses?.Results == null)
 				return Task.FromResult<IReadOnlyCollection<DeliveryReport>?>(null);
@@ -35,18 +35,17 @@ namespace Transmitly.ChannelProvider.Infobip.Sms
 			var ret = new List<DeliveryReport>(statuses.Results.Count);
 			foreach (var smsReport in statuses.Results)
 			{
-				var report = new DeliveryReport(
+				var report = new SmsDeliveryReport(
 						DeliveryReport.Event.StatusChanged(),
 						Id.Channel.Sms(),
 						Id.ChannelProvider.Infobip(),
-						context.PipelineName,
+						adaptorContext.PipelineName,
 						smsReport.MessageId,
 						Util.ToDispatchStatus(smsReport.Status?.GroupId),
 						null,
 						null
-					);
+					).ApplyExtendedProperties(smsReport);
 
-				new ExtendedSmsDeliveryReportProperties(report).Apply(smsReport);
 				ret.Add(report);
 			}
 
