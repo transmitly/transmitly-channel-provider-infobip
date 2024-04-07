@@ -122,14 +122,16 @@ namespace Transmitly.ChannelProvider.Infobip.Voice
 
 		private static async Task<string?> GetNotifyUrl(string messageId, ExtendedVoiceChannelProperties smsProperties, IVoice voice, IDispatchCommunicationContext context)
 		{
+			string? url;
 			var urlResolver = smsProperties.NotifyUrlResolver ?? voice.DeliveryReportCallbackUrlResolver;
 			if (urlResolver != null)
-				return await urlResolver(context).ConfigureAwait(false);
-
-			string? url = smsProperties.NotifyUrl ?? voice.DeliveryReportCallbackUrl;
-			if (string.IsNullOrWhiteSpace(url))
-				return null;
-			
+				url = await urlResolver(context).ConfigureAwait(false);
+			else
+			{
+				url = smsProperties.NotifyUrl ?? voice.DeliveryReportCallbackUrl;
+				if (string.IsNullOrWhiteSpace(url))
+					return null;
+			}
 			return new Uri(url).AddPipelineContext(messageId, context.PipelineName, context.ChannelId, context.ChannelProviderId).ToString();
 		}
 
