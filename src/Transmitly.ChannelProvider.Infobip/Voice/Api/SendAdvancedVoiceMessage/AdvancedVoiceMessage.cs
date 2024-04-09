@@ -17,7 +17,7 @@ using System.Text.Json.Serialization;
 
 namespace Transmitly.ChannelProvider.Infobip.Voice.SendAdvancedVoiceMessage
 {
-	internal sealed class AdvancedVoiceMessage
+    internal sealed class AdvancedVoiceMessage
 	{
 		private string? _callbackData;
 		private int? _ringTimeout;

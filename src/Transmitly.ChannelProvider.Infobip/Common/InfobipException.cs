@@ -16,7 +16,23 @@ using System;
 
 namespace Transmitly.ChannelProvider.Infobip
 {
-    public class InfobipException(string message) : Exception(message)
-    {
-    }
+	public sealed class InfobipException : Exception
+	{
+		public string? Name { get; }
+		public string? GroupName { get; }
+		public int? GroupId { get; }
+		public string? Description { get; }
+
+		internal InfobipException(string message) : base(message)
+		{
+		}
+
+		internal InfobipException(ErrorStatus? errorStatus) : this(errorStatus?.Description ?? "Unknown")
+		{
+			Name = errorStatus?.Name;
+			GroupName = errorStatus?.GroupName;
+			GroupId = errorStatus?.GroupId;
+			Description = errorStatus?.Description;
+		}
+	}
 }

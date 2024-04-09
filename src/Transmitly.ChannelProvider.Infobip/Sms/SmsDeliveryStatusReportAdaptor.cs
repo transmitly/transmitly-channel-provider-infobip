@@ -43,6 +43,7 @@ namespace Transmitly.ChannelProvider.Infobip.Sms
 						smsReport.MessageId,
 						Util.ToDispatchStatus(smsReport.Status?.GroupId),
 						null,
+						null,
 						null
 					).ApplyExtendedProperties(smsReport);
 

@@ -12,6 +12,7 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
+using System;
 using Transmitly.Delivery;
 
 namespace Transmitly.ChannelProvider.Infobip.Sms
@@ -23,10 +24,12 @@ namespace Transmitly.ChannelProvider.Infobip.Sms
 		}
 
 		public SmsDeliveryReport(string EventName, string? ChannelId, string? ChannelProviderId, string? PipelineName,
-				string? ResourceId, DispatchStatus DispatchStatus, object? ChannelCommunication, IContentModel? ContentModel)
-			: base(EventName, ChannelId, ChannelProviderId, PipelineName, ResourceId, DispatchStatus, ChannelCommunication, ContentModel)
+				string? ResourceId, DispatchStatus DispatchStatus, object? ChannelCommunication, IContentModel? ContentModel, Exception? Exception)
+			: base(EventName, ChannelId, ChannelProviderId, PipelineName, ResourceId, DispatchStatus, ChannelCommunication, ContentModel, Exception)
 		{
-
+			var infobipException = this.Infobip().Voice.Error;
+			if (infobipException != null && Exception == null)
+				base.Exception = new InfobipException(infobipException);
 		}
 
 		public string? To => this.Infobip().Sms.To;

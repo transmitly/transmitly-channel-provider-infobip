@@ -43,6 +43,7 @@ namespace Transmitly.ChannelProvider.Infobip.Voice
 						voiceReport.MessageId,
 						Util.ToDispatchStatus(voiceReport.Status?.GroupId),
 						null,
+						null, 
 						null
 					)
 					.ApplyExtendedProperties(voiceReport);
