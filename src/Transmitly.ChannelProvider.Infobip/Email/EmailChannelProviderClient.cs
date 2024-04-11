@@ -17,23 +17,18 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Net.Http;
 using System.Text.Json;
-using Transmitly.ChannelProvider.Infobip.Sms.SendSmsMessage;
 using Transmitly.Infobip;
 using System;
 using Transmitly.Delivery;
+using Transmitly.ChannelProvider.Infobip.Sms.SendSmsMessage;
 
 namespace Transmitly.ChannelProvider.Infobip.Email
 {
 
-	internal sealed class EmailChannelProviderClient(InfobipChannelProviderConfiguration configuration, HttpClient? httpClient) : ChannelProviderRestClient<IEmail>(httpClient)
+	internal sealed class EmailChannelProviderClient(InfobipChannelProviderConfiguration configuration) : ChannelProviderRestClient<IEmail>(null)
 	{
 		private const string SendEmailPath = "email/3/send";
 		private readonly InfobipChannelProviderConfiguration _configuration = configuration;
-
-		public EmailChannelProviderClient(InfobipChannelProviderConfiguration configuration) : this(configuration, null)
-		{
-			System.Text.Json.JsonSerializer.Serialize(new { });
-		}
 
 		protected override void ConfigureHttpClient(HttpClient client)
 		{
@@ -53,7 +48,7 @@ namespace Transmitly.ChannelProvider.Infobip.Email
 			var result = await restClient
 				.PostAsync(
 					SendEmailPath,
-					CreateMessageContent(recipientList, communication, communicationContext),
+					await CreateMessageContent(recipientList, communication, communicationContext),
 					cancellationToken
 				)
 				.ConfigureAwait(false);
@@ -89,30 +84,55 @@ namespace Transmitly.ChannelProvider.Infobip.Email
 			return results;
 		}
 
-		private static HttpContent CreateMessageContent(IAudienceAddress[] recipients, IEmail email, IDispatchCommunicationContext context)
+		private static async Task<HttpContent> CreateMessageContent(IAudienceAddress[] recipients, IEmail email, IDispatchCommunicationContext context)
 		{
 			MultipartFormDataContent form = [];
 			var emailProperties = new ExtendedEmailChannelProperties(email.ExtendedProperties);
 			bool hasTemplateId = emailProperties.TemplateId.HasValue && emailProperties.TemplateId.Value > 0;
-
+			var messageId = Guid.NewGuid().ToString("N");
 			TryAddRecipients(recipients, email, form);
 			AddStringContent(form, EmailField.TemplateId, emailProperties.TemplateId?.ToString());
 			AddStringContent(form, EmailField.From, email.From?.ToEmailAddress(), !hasTemplateId);
 			AddStringContent(form, EmailField.Subject, email.Subject, !hasTemplateId);
 			AddStringContent(form, EmailField.TextBody, email.TextBody);
 			AddStringContent(form, EmailField.HtmlBody, email.HtmlBody);
+			await TryAddAmpContent(email, context, form, emailProperties);
 			AddStringContent(form, EmailField.IntermediateReport, emailProperties.IntermediateReport?.ToString().ToLowerInvariant());
-			AddStringContent(form, EmailField.NotifyUrl, GetNotifyUrl(emailProperties.NotifyUrl, Guid.NewGuid().ToString("N"), context));
+			AddStringContent(form, EmailField.NotifyUrl, await GetNotifyUrl(messageId, emailProperties, email, context));
 			AddStringContent(form, EmailField.Track, emailProperties.Track.ToString().ToLowerInvariant());
+			AddStringContent(form, EmailField.TrackClicks, emailProperties.TrackClicks?.ToString().ToLowerInvariant());
+			AddStringContent(form, EmailField.trackOpens, emailProperties.TrackOpens?.ToString().ToLowerInvariant());
+			AddStringContent(form, EmailField.MessageId, messageId);
+			AddStringContent(form, EmailField.ApplicationId, emailProperties.ApplicationId);
+			AddStringContent(form, EmailField.EntityId, emailProperties.EntityId);
 
 			return form;
 		}
-		private static string? GetNotifyUrl(string? notifyUrl, string messageId, IDispatchCommunicationContext context)
-		{
-			if (string.IsNullOrWhiteSpace(notifyUrl))
-				return null;
 
-			return new Uri(notifyUrl).AddPipelineContext(messageId, context.PipelineName, Id.Channel.Email(), Id.ChannelProvider.Infobip()).ToString();
+		private static async Task TryAddAmpContent(IEmail email, IDispatchCommunicationContext context, MultipartFormDataContent form, ExtendedEmailChannelProperties emailProperties)
+		{
+			if (emailProperties.AmpHtml == null)
+				return;
+			if (string.IsNullOrWhiteSpace(email.HtmlBody))
+				throw new InfobipException("HtmlBody is required when using AmpHtml");
+
+			var ampContent = await context.TemplateEngine.RenderAsync(emailProperties.AmpHtml.GetTemplateRegistration(context.CultureInfo, true), context);
+			AddStringContent(form, EmailField.AmpHtml, ampContent, false);
+		}
+
+		private static async Task<string?> GetNotifyUrl(string messageId, ExtendedEmailChannelProperties emailProperties, IEmail email, IDispatchCommunicationContext context)
+		{
+			string? url;
+			var urlResolver = emailProperties.NotifyUrlResolver ?? email.DeliveryReportCallbackUrlResolver;
+			if (urlResolver != null)
+				url = await urlResolver(context).ConfigureAwait(false);
+			else
+			{
+				url = emailProperties.NotifyUrl ?? email.DeliveryReportCallbackUrl;
+				if (string.IsNullOrWhiteSpace(url))
+					return null;
+			}
+			return new Uri(url).AddPipelineContext(messageId, context.PipelineName, context.ChannelId, context.ChannelProviderId).ToString();
 		}
 
 		private static void AddStringContent(MultipartFormDataContent form, string key, string? value, bool optional = true)

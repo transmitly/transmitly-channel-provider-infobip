@@ -91,6 +91,7 @@ namespace Transmitly
 			communicationsClientBuilder.AddChannelProvider<VoiceChannelProviderClient, IVoice>(Id.ChannelProvider.Infobip(providerId), optionObj, Id.Channel.Voice());
 			communicationsClientBuilder.ChannelProvider.AddDeliveryReportRequestAdaptor<SmsDeliveryStatusReportAdaptor>();
 			communicationsClientBuilder.ChannelProvider.AddDeliveryReportRequestAdaptor<VoiceDeliveryStatusReportAdaptor>();
+			communicationsClientBuilder.ChannelProvider.AddDeliveryReportRequestAdaptor<EmailDeliveryStatusReportAdaptor>();
 			return communicationsClientBuilder;
 		}
 	}

@@ -12,6 +12,8 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
+using System.Threading.Tasks;
+using System;
 using Transmitly.Template.Configuration;
 
 namespace Transmitly.ChannelProvider.Infobip.Email
@@ -28,7 +30,7 @@ namespace Transmitly.ChannelProvider.Infobip.Email
 			AmpHtml = new ContentTemplateConfiguration();
 		}
 
-		internal ExtendedEmailChannelProperties(IEmailChannel channel):this(Guard.AgainstNull(channel).ExtendedProperties)
+		internal ExtendedEmailChannelProperties(IEmailChannel channel) : this(Guard.AgainstNull(channel).ExtendedProperties)
 		{
 		}
 
@@ -98,6 +100,33 @@ namespace Transmitly.ChannelProvider.Infobip.Email
 		{
 			get => _extendedProperties.GetValue<string?>(ProviderKey, nameof(NotifyUrl));
 			set => _extendedProperties.AddOrUpdate(ProviderKey, nameof(NotifyUrl), value);
+		}
+
+		/// <summary>
+		/// The resolver to get the URL on your callback server on which the Delivery report will be sent.
+		/// </summary>
+		public Func<IDispatchCommunicationContext, Task<string?>>? NotifyUrlResolver
+		{
+			get => _extendedProperties.GetValue<Func<IDispatchCommunicationContext, Task<string?>>>(ProviderKey, nameof(NotifyUrlResolver));
+			set => _extendedProperties.AddOrUpdate(ProviderKey, nameof(NotifyUrlResolver), value);
+		}
+
+		/// <summary>
+		/// Required for application use in a send request for outbound traffic. Returned in notification events.
+		/// </summary>
+		public string? ApplicationId
+		{
+			get => _extendedProperties.GetValue<string?>(ProviderKey, nameof(ApplicationId));
+			set => _extendedProperties.AddOrUpdate(ProviderKey, nameof(ApplicationId), value);
+		}
+
+		/// <summary>
+		/// Required for entity use in a send request for outbound traffic. Returned in notification events.
+		/// </summary>
+		public string? EntityId
+		{
+			get => _extendedProperties.GetValue<string?>(ProviderKey, nameof(EntityId));
+			set => _extendedProperties.AddOrUpdate(ProviderKey, nameof(EntityId), value);
 		}
 	}
 }

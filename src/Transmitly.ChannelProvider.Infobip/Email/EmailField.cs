@@ -28,6 +28,15 @@ namespace Transmitly.ChannelProvider.Infobip.Email
 		public const string NotifyUrl = "notifyUrl";
 		public const string Track = "track";
 		public const string EntityId = "entityId";
-		public const string ApplicationId = "applciationId";
+		public const string ApplicationId = "applicationId";
+		public const string AmpHtml = "ampHtml";
+		public const string TrackClicks = "trackClicks";
+		public const string trackOpens = "trackOpens";
+		public const string TrackingUrl = "trackingUrl";
+		public const string BulkId = "bulkId";
+		public const string MessageId = "messageId";
+		public const string ReplyTo = "replyTo";
+		public const string preserveRecipients = "preserveRecipients";
+		public const string sendAt = "sendAt";
 	}
 }
