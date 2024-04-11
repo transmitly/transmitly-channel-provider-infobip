@@ -24,7 +24,7 @@ namespace Transmitly.ChannelProvider.Infobip.Sms
 	{
 		public Task<IReadOnlyCollection<DeliveryReport>?> AdaptAsync(IRequestAdaptorContext adaptorContext)
 		{
-			if (!ShouldAdapt(adaptorContext.Content))
+			if (!ShouldAdapt(adaptorContext))
 				return Task.FromResult<IReadOnlyCollection<DeliveryReport>?>(null);
 
 			var statuses = JsonSerializer.Deserialize<SmsStatusReports>(adaptorContext.Content!);
@@ -53,11 +53,14 @@ namespace Transmitly.ChannelProvider.Infobip.Sms
 			return Task.FromResult<IReadOnlyCollection<DeliveryReport>?>(ret);
 		}
 
-		private static bool ShouldAdapt(string? content)
+		private static bool ShouldAdapt(IRequestAdaptorContext adaptorContext)
 		{
-			if (string.IsNullOrWhiteSpace(content))
+			if (string.IsNullOrWhiteSpace(adaptorContext.Content))
 				return false;
-			return Array.TrueForAll(["pricePerMessage", "smsCount", "messageId", "bulkId"], x => content!.Contains(x));
+
+			return
+				(adaptorContext.GetValue(DeliveryUtil.ChannelIdKey)?.Equals(Id.Channel.Sms(), StringComparison.InvariantCultureIgnoreCase) ?? false) &&
+				(adaptorContext.GetValue(DeliveryUtil.ChannelProviderIdKey)?.StartsWith(Id.ChannelProvider.Infobip(), StringComparison.InvariantCultureIgnoreCase) ?? false);
 		}
 	}
 }

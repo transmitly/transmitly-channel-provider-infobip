@@ -60,7 +60,7 @@ namespace Transmitly.ChannelProvider.Infobip.Email
 				return false;
 			return
 				(adaptorContext.GetValue(DeliveryUtil.ChannelIdKey)?.Equals(Id.Channel.Email(), StringComparison.InvariantCultureIgnoreCase) ?? false) &&
-				(adaptorContext.GetValue(DeliveryUtil.ChannelProviderIdKey)?.Equals(Id.ChannelProvider.Infobip(), StringComparison.InvariantCultureIgnoreCase) ?? false);
+				(adaptorContext.GetValue(DeliveryUtil.ChannelProviderIdKey)?.StartsWith(Id.ChannelProvider.Infobip(), StringComparison.InvariantCultureIgnoreCase) ?? false);
 
 
 		}

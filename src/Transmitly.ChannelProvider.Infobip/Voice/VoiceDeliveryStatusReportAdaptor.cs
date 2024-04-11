@@ -58,7 +58,9 @@ namespace Transmitly.ChannelProvider.Infobip.Voice
 		{
 			if (string.IsNullOrWhiteSpace(content))
 				return false;
-			return Array.TrueForAll(["voiceCall", "pricePerSecond", "answerTime", "messageId", "bulkId"], x => content!.Contains(x));
+			return
+				(adaptorContext.GetValue(DeliveryUtil.ChannelIdKey)?.Equals(Id.Channel.Voice(), StringComparison.InvariantCultureIgnoreCase) ?? false) &&
+				(adaptorContext.GetValue(DeliveryUtil.ChannelProviderIdKey)?.StartsWith(Id.ChannelProvider.Infobip(), StringComparison.InvariantCultureIgnoreCase) ?? false);
 		}
 	}
 }

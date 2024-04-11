@@ -111,12 +111,13 @@ namespace Transmitly.ChannelProvider.Infobip.Email
 
 		private static async Task TryAddAmpContent(IEmail email, IDispatchCommunicationContext context, MultipartFormDataContent form, ExtendedEmailChannelProperties emailProperties)
 		{
-			if (emailProperties.AmpHtml == null)
+			var ampTemplate = emailProperties.AmpHtml.GetTemplateRegistration(context.CultureInfo, false);
+			if (ampTemplate == null)
 				return;
 			if (string.IsNullOrWhiteSpace(email.HtmlBody))
 				throw new InfobipException("HtmlBody is required when using AmpHtml");
 
-			var ampContent = await context.TemplateEngine.RenderAsync(emailProperties.AmpHtml.GetTemplateRegistration(context.CultureInfo, true), context);
+			var ampContent = await context.TemplateEngine.RenderAsync(ampTemplate, context);
 			AddStringContent(form, EmailField.AmpHtml, ampContent, false);
 		}
 
@@ -144,7 +145,7 @@ namespace Transmitly.ChannelProvider.Infobip.Email
 				else
 					throw new InfobipException($"Cannot add {key} value is null.");
 			}
-			form.Add(new StringContent(value), key);
+			form.Add(new StringContent(value), String.Format("\"{0}\"", key));
 		}
 
 		private static void TryAddRecipients(IAudienceAddress[] recipients, IEmail email, MultipartFormDataContent form)
