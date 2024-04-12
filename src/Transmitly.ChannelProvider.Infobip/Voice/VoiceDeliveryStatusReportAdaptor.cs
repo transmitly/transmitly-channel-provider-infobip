@@ -24,7 +24,7 @@ namespace Transmitly.ChannelProvider.Infobip.Voice
 	{
 		public Task<IReadOnlyCollection<DeliveryReport>?> AdaptAsync(IRequestAdaptorContext adaptorContext)
 		{
-			if (!ShouldAdapt(adaptorContext.Content))
+			if (!ShouldAdapt(adaptorContext))
 				return Task.FromResult<IReadOnlyCollection<DeliveryReport>?>(null);
 
 			var statuses = JsonSerializer.Deserialize<VoiceStatusReports>(adaptorContext.Content!);
@@ -54,9 +54,9 @@ namespace Transmitly.ChannelProvider.Infobip.Voice
 			return Task.FromResult<IReadOnlyCollection<DeliveryReport>?>(ret);
 		}
 
-		private static bool ShouldAdapt(string? content)
+		private static bool ShouldAdapt(IRequestAdaptorContext adaptorContext)
 		{
-			if (string.IsNullOrWhiteSpace(content))
+			if (string.IsNullOrWhiteSpace(adaptorContext.Content))
 				return false;
 			return
 				(adaptorContext.GetValue(DeliveryUtil.ChannelIdKey)?.Equals(Id.Channel.Voice(), StringComparison.InvariantCultureIgnoreCase) ?? false) &&
