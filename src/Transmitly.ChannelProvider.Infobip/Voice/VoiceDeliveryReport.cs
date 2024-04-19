@@ -36,6 +36,15 @@ namespace Transmitly.ChannelProvider.Infobip.Voice
 
 		public string? From => this.Infobip().Voice.From;
 
-		public TimeSpan Duration => TimeSpan.FromSeconds(this.Infobip().Voice?.VoiceCall?.Duration ?? 0);
+		public TimeSpan? Duration
+		{
+			get
+			{
+				var duration = this.Infobip().Voice?.VoiceCall?.Duration;
+				if (!duration.HasValue)
+					return null;
+				return TimeSpan.FromSeconds(duration.Value);
+			}
+		}
 	}
 }
