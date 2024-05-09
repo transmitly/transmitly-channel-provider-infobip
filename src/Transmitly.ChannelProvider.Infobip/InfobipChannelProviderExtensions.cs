@@ -86,12 +86,15 @@ namespace Transmitly
 			var optionObj = new InfobipChannelProviderConfiguration();
 			options(optionObj);
 
-			communicationsClientBuilder.AddChannelProvider<SmsChannelProviderClient, ISms>(Id.ChannelProvider.Infobip(providerId), optionObj, Id.Channel.Sms());
-			communicationsClientBuilder.AddChannelProvider<EmailChannelProviderClient, IEmail>(Id.ChannelProvider.Infobip(providerId), optionObj, Id.Channel.Email());
-			communicationsClientBuilder.AddChannelProvider<VoiceChannelProviderClient, IVoice>(Id.ChannelProvider.Infobip(providerId), optionObj, Id.Channel.Voice());
-			communicationsClientBuilder.ChannelProvider.AddDeliveryReportRequestAdaptor<SmsDeliveryStatusReportAdaptor>();
-			communicationsClientBuilder.ChannelProvider.AddDeliveryReportRequestAdaptor<VoiceDeliveryStatusReportAdaptor>();
-			communicationsClientBuilder.ChannelProvider.AddDeliveryReportRequestAdaptor<EmailDeliveryStatusReportAdaptor>();
+			communicationsClientBuilder.ChannelProvider.Build(Id.ChannelProvider.Infobip(providerId), optionObj)
+				.AddClient<SmsChannelProviderClient, ISms>(Id.Channel.Sms())
+				.AddClient<EmailChannelProviderClient, IEmail>(Id.Channel.Email())
+				.AddClient<VoiceChannelProviderClient, IVoice>(Id.Channel.Voice())
+				.AddDeliveryReportRequestAdaptor<SmsDeliveryStatusReportAdaptor>()
+				.AddDeliveryReportRequestAdaptor<VoiceDeliveryStatusReportAdaptor>()
+				.AddDeliveryReportRequestAdaptor<EmailDeliveryStatusReportAdaptor>()
+				.Register();
+			
 			return communicationsClientBuilder;
 		}
 	}
