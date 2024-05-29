@@ -83,7 +83,7 @@ namespace Transmitly.ChannelProvider.Infobip.Sms
 		}
 
 
-		private async Task<HttpContent> CreateSingleMessageRequestContent(IAudienceAddress recipient, ISms sms, IDispatchCommunicationContext communicationContext)
+		private async Task<HttpContent> CreateSingleMessageRequestContent(IIdentityAddress recipient, ISms sms, IDispatchCommunicationContext communicationContext)
 		{
 			var smsProperties = new ExtendedSmsChannelProperties(sms.ExtendedProperties);
 

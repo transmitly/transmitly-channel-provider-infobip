@@ -84,7 +84,7 @@ namespace Transmitly.ChannelProvider.Infobip.Voice
 			return results;
 		}
 
-		private async Task<HttpContent> CreateAdvancedMessagePayloadAsync(IAudienceAddress recipient, IVoice voice, IDispatchCommunicationContext context)
+		private async Task<HttpContent> CreateAdvancedMessagePayloadAsync(IIdentityAddress recipient, IVoice voice, IDispatchCommunicationContext context)
 		{
 			var voiceProperties = new ExtendedVoiceChannelProperties(voice.ExtendedProperties);
 			var messageId = Guid.NewGuid().ToString("N");
