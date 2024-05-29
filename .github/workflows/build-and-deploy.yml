@@ -1,10 +1,11 @@
 name: Build and Deploy
+
 on: 
   workflow_dispatch:
   push:
     branches:
-     - "main" 
-   paths:
+      - "main"
+    paths:
       - "src/Transmitly.ChannelProvider.Infobip/**"
 jobs:
   build_test_deploy_channel_provider:
