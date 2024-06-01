@@ -84,7 +84,7 @@ namespace Transmitly.ChannelProvider.Infobip.Email
 			return results;
 		}
 
-		private static async Task<HttpContent> CreateMessageContent(IAudienceAddress[] recipients, IEmail email, IDispatchCommunicationContext context)
+		private static async Task<HttpContent> CreateMessageContent(IIdentityAddress[] recipients, IEmail email, IDispatchCommunicationContext context)
 		{
 			MultipartFormDataContent form = [];
 			var emailProperties = new ExtendedEmailChannelProperties(email.ExtendedProperties);
@@ -148,7 +148,7 @@ namespace Transmitly.ChannelProvider.Infobip.Email
 			form.Add(new StringContent(value), String.Format("\"{0}\"", key));
 		}
 
-		private static void TryAddRecipients(IAudienceAddress[] recipients, IEmail email, MultipartFormDataContent form)
+		private static void TryAddRecipients(IIdentityAddress[] recipients, IEmail email, MultipartFormDataContent form)
 		{
 			var ccs = email.Cc ?? [];
 			var bccs = email.Bcc ?? [];
