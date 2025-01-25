@@ -50,7 +50,6 @@
 		<Reference Include="System.Web" />
 	</ItemGroup>
 	<ItemGroup>
-	  <ProjectReference Include="..\src\Transmitly.ChannelProvider.Infobip.Configuration\Transmitly.ChannelProvider.Infobip.Configuration.csproj" />
 	  <ProjectReference Include="..\Transmitly.ChannelProvider.Infobip.Configuration\Transmitly.ChannelProvider.Infobip.Configuration.csproj" />
 	</ItemGroup>
 </Project>
