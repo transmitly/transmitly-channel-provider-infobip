@@ -22,6 +22,7 @@ using System.Text.Json;
 using Transmitly.ChannelProvider.Infobip.Voice.SendAdvancedVoiceMessage;
 using System;
 using Transmitly.Delivery;
+using Transmitly.ChannelProvider.Infobip.Configuration;
 namespace Transmitly.ChannelProvider.Infobip.Voice
 {
     public sealed class VoiceChannelProviderDispatcher(InfobipChannelProviderConfiguration configuration) : ChannelProviderRestDispatcher<IVoice>(null)

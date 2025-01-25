@@ -21,6 +21,7 @@ using Transmitly.Infobip;
 using System;
 using Transmitly.Delivery;
 using Transmitly.ChannelProvider.Infobip.Sms.SendSmsMessage;
+using Transmitly.ChannelProvider.Infobip.Configuration;
 
 namespace Transmitly.ChannelProvider.Infobip.Email
 {

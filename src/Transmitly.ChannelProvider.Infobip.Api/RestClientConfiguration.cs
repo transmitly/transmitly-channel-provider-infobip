@@ -15,6 +15,7 @@
 using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using Transmitly.ChannelProvider.Infobip.Configuration;
 
 namespace Transmitly.ChannelProvider.Infobip
 {

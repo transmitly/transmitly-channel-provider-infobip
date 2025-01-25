@@ -13,7 +13,7 @@
 //  limitations under the License.
 
 using System.Net;
-namespace Transmitly
+namespace Transmitly.ChannelProvider.Infobip.Configuration
 {
 	public sealed class InfobipChannelProviderConfiguration
 	{

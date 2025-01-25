@@ -22,6 +22,7 @@ using Transmitly.ChannelProvider.Infobip.Sms.SendSmsMessage;
 using System.Text;
 using Transmitly.Delivery;
 using System;
+using Transmitly.ChannelProvider.Infobip.Configuration;
 
 namespace Transmitly.ChannelProvider.Infobip.Sms
 {
