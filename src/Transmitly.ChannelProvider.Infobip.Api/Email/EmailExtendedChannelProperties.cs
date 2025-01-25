@@ -81,7 +81,7 @@ namespace Transmitly.ChannelProvider.Infobip.Email
         /// <summary>
         /// Amp HTML body of the message. If ampHtml is present, html is mandatory. 
         /// Amp HTML is not supported by all the email clients. 
-        /// Please check this link for configuring Gmail client <seealso cref="https://developers.google.com/gmail/ampemail/"/>.
+        /// <see href="https://developers.google.com/gmail/ampemail/">Please check this link for configuring Gmail client</see>.
         /// </summary>
         public IContentTemplateConfiguration AmpHtml
         {
