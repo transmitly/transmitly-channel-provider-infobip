@@ -1,4 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
 	<PropertyGroup>
 		<TargetFrameworks Condition=" '$(OS)' == 'Windows_NT'">net48;net472</TargetFrameworks>
 		<TargetFrameworks>$(TargetFrameworks);netstandard2.0;net6.0;net8.0</TargetFrameworks>
@@ -7,11 +8,11 @@
 		<IsPackable>true</IsPackable>
 		<AssemblyVersion>0.0.1</AssemblyVersion>
 		<AssemblyFileVersion>0.0.1</AssemblyFileVersion>
-		<PackageId>Transmitly.ChannelProvider.Infobip</PackageId>
+		<PackageId>Transmitly.ChannelProvider.Infobip.Api</PackageId>
 		<Product>Transmitly</Product>
 		<ProductName>Transmit.ly</ProductName>
 		<Company>Code Impressions, LLC</Company>
-		<Title>Transmit.ly Infobip Channel Provider</Title>
+		<Title>Transmit.ly Infobip Api Channel Provider</Title>
 		<Description>An Infobip channel provider for the Transmitly library.</Description>
 		<Copyright>Copyright (c) Code Impressions, LLC</Copyright>
 		<Authors>Code Impressions, LLC</Authors>
@@ -49,11 +50,7 @@
 		<Reference Include="System.Web" />
 	</ItemGroup>
 	<ItemGroup>
-	  <ProjectReference Include="..\..\Transmitly.ChannelProvider.Infobip.Api\Transmitly.ChannelProvider.Infobip.Api.csproj" />
-	  <ProjectReference Include="..\Transmitly.ChannelProvider.Infobip.Api\Transmitly.ChannelProvider.Infobip.Api.csproj" />
+	  <ProjectReference Include="..\src\Transmitly.ChannelProvider.Infobip.Configuration\Transmitly.ChannelProvider.Infobip.Configuration.csproj" />
 	  <ProjectReference Include="..\Transmitly.ChannelProvider.Infobip.Configuration\Transmitly.ChannelProvider.Infobip.Configuration.csproj" />
-	</ItemGroup>
-	<ItemGroup>
-	  <Folder Include="Voice\Api\" />
 	</ItemGroup>
 </Project>

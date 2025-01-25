@@ -5,6 +5,10 @@ VisualStudioVersion = 17.9.34518.117
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Transmitly.ChannelProvider.Infobip", "src\Transmitly.ChannelProvider.InfoBip\Transmitly.ChannelProvider.Infobip.csproj", "{721F1CB3-BD3A-4F80-B159-55882D2AE965}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transmitly.ChannelProvider.Infobip.Configuration", "src\Transmitly.ChannelProvider.Infobip.Configuration\Transmitly.ChannelProvider.Infobip.Configuration.csproj", "{757C8EF0-8A54-4FD0-805E-33ADAAFEBC11}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Transmitly.ChannelProvider.Infobip.Api", "src\Transmitly.ChannelProvider.Infobip.Api\Transmitly.ChannelProvider.Infobip.Api.csproj", "{E4153F3B-3555-AE9D-F457-BB4280DDB1F0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{721F1CB3-BD3A-4F80-B159-55882D2AE965}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{721F1CB3-BD3A-4F80-B159-55882D2AE965}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{721F1CB3-BD3A-4F80-B159-55882D2AE965}.Release|Any CPU.Build.0 = Release|Any CPU
+		{757C8EF0-8A54-4FD0-805E-33ADAAFEBC11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{757C8EF0-8A54-4FD0-805E-33ADAAFEBC11}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{757C8EF0-8A54-4FD0-805E-33ADAAFEBC11}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{757C8EF0-8A54-4FD0-805E-33ADAAFEBC11}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E4153F3B-3555-AE9D-F457-BB4280DDB1F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E4153F3B-3555-AE9D-F457-BB4280DDB1F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E4153F3B-3555-AE9D-F457-BB4280DDB1F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E4153F3B-3555-AE9D-F457-BB4280DDB1F0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -13,89 +13,40 @@
 //  limitations under the License.
 
 using System;
-using Transmitly.Delivery;
 using Transmitly.ChannelProvider.Infobip.Email;
 using Transmitly.ChannelProvider.Infobip.Sms;
 using Transmitly.ChannelProvider.Infobip.Voice;
+using Transmitly.ChannelProvider.Infobip.Configuration;
 
 namespace Transmitly
 {
-	public static class InfobipChannelProviderExtensions
-	{
-		/// <summary>
-		/// Gets the channel provider id for Infobip.
-		/// </summary>
-		/// <param name="channelProviders">Channel providers object.</param>
-		/// <param name="providerId">Optional channel provider Id.</param>
-		/// <returns>Infobip channel provider id.</returns>
-		public static string Infobip(this ChannelProviders channelProviders, string? providerId = null)
-		{
-			Guard.AgainstNull(channelProviders);
-			return channelProviders.GetId(Constant.Id, providerId);
-		}
+    public static class InfobipChannelProviderExtensions
+    {
+        /// <summary>
+        /// Adds channel provider support for Infobip.
+        /// </summary>
+        /// <param name="communicationsClientBuilder">Communications builder.</param>
+        /// <param name="options">Infobip channel provider options and settings.</param>
+        /// <param name="providerId">Optional channel provider Id.</param>
+        /// <returns></returns>
+        public static CommunicationsClientBuilder AddInfobipSupport(this CommunicationsClientBuilder communicationsClientBuilder, Action<InfobipChannelProviderConfiguration> options, string? providerId = null)
+        {
+            var optionObj = new InfobipChannelProviderConfiguration();
+            options(optionObj);
 
-		/// <summary>
-		/// Infobip specific settings for email channels.
-		/// </summary>
-		/// <param name="sms">Email Channel.</param>
-		/// <returns>Infobip email properties.</returns>
-		public static ExtendedEmailChannelProperties Infobip(this IEmailChannel email)
-		{
-			return new ExtendedEmailChannelProperties(email);
-		}
+            communicationsClientBuilder.ChannelProvider.Build(Id.ChannelProvider.Infobip(providerId), optionObj)
+                .AddDispatcher<SmsChannelProviderDispatcher, ISms>(Id.Channel.Sms())
+                .AddDispatcher<EmailChannelProviderDispatcher, IEmail>(Id.Channel.Email())
+                .AddDispatcher<VoiceChannelProviderDispatcher, IVoice>(Id.Channel.Voice())
+                .AddDeliveryReportRequestAdaptor<SmsDeliveryStatusReportAdaptor>()
+                .AddDeliveryReportRequestAdaptor<VoiceDeliveryStatusReportAdaptor>()
+                .AddDeliveryReportRequestAdaptor<EmailDeliveryStatusReportAdaptor>()
+                .AddSmsExtendedPropertiesAdaptor<SmsExtendedChannelProperties>()
+                .AddVoiceExtendedPropertiesAdaptor<VoiceExtendedChannelProperties>()
+                .AddEmailExtendedPropertiesAdaptor<EmailExtendedChannelProperties>()
+                .Register();
 
-		/// <summary>
-		/// Infobip specific settings for Sms channels.
-		/// </summary>
-		/// <param name="sms">Sms Channel.</param>
-		/// <returns>Infobip Sms properties.</returns>
-		public static ExtendedSmsChannelProperties Infobip(this ISmsChannel sms)
-		{
-			return new ExtendedSmsChannelProperties(sms);
-		}
-
-		/// <summary>
-		/// Infobip specific settings for voice channels.
-		/// </summary>
-		/// <param name="sms">Voice Channel.</param>
-		/// <returns>Infobip voice properties.</returns>
-		public static ExtendedVoiceChannelProperties Infobip(this IVoiceChannel email)
-		{
-			return new ExtendedVoiceChannelProperties(email);
-		}
-
-		/// <summary>
-		/// Infobip specific settings for sms delivery reports.
-		/// </summary>
-		/// <param name="deliveryReport">Delivery Report.</param>
-		/// <returns>Infobip SMS delivery report properties.</returns>
-		public static DeliveryReportExtendedProperties Infobip(this DeliveryReport deliveryReport)
-		{
-			return new DeliveryReportExtendedProperties(deliveryReport);
-		}
-
-		/// <summary>
-		/// Adds channel provider support for Infobip.
-		/// </summary>
-		/// <param name="communicationsClientBuilder">Communications builder.</param>
-		/// <param name="options">Infobip channel provider options and settings.</param>
-		/// <param name="providerId">Optional channel provider Id.</param>
-		/// <returns></returns>
-		public static CommunicationsClientBuilder AddInfobipSupport(this CommunicationsClientBuilder communicationsClientBuilder, Action<InfobipChannelProviderConfiguration> options, string? providerId = null)
-		{
-			var optionObj = new InfobipChannelProviderConfiguration();
-			options(optionObj);
-
-			communicationsClientBuilder.ChannelProvider.Build(Id.ChannelProvider.Infobip(providerId), optionObj)
-				.AddClient<SmsChannelProviderClient, ISms>(Id.Channel.Sms())
-				.AddClient<EmailChannelProviderClient, IEmail>(Id.Channel.Email())
-				.AddClient<VoiceChannelProviderClient, IVoice>(Id.Channel.Voice())
-				.AddDeliveryReportRequestAdaptor<SmsDeliveryStatusReportAdaptor>()
-				.AddDeliveryReportRequestAdaptor<VoiceDeliveryStatusReportAdaptor>()
-				.AddDeliveryReportRequestAdaptor<EmailDeliveryStatusReportAdaptor>()
-				.Register();
-			
-			return communicationsClientBuilder;
-		}
-	}
+            return communicationsClientBuilder;
+        }
+    }
 }

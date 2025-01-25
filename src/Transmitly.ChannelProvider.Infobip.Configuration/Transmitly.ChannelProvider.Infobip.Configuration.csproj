@@ -1,4 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
 	<PropertyGroup>
 		<TargetFrameworks Condition=" '$(OS)' == 'Windows_NT'">net48;net472</TargetFrameworks>
 		<TargetFrameworks>$(TargetFrameworks);netstandard2.0;net6.0;net8.0</TargetFrameworks>
@@ -7,12 +8,12 @@
 		<IsPackable>true</IsPackable>
 		<AssemblyVersion>0.0.1</AssemblyVersion>
 		<AssemblyFileVersion>0.0.1</AssemblyFileVersion>
-		<PackageId>Transmitly.ChannelProvider.Infobip</PackageId>
+		<PackageId>Transmitly.ChannelProvider.Infobip.Configuration</PackageId>
 		<Product>Transmitly</Product>
 		<ProductName>Transmit.ly</ProductName>
 		<Company>Code Impressions, LLC</Company>
 		<Title>Transmit.ly Infobip Channel Provider</Title>
-		<Description>An Infobip channel provider for the Transmitly library.</Description>
+		<Description>An Infobip channel provider configuration for the Transmitly library.</Description>
 		<Copyright>Copyright (c) Code Impressions, LLC</Copyright>
 		<Authors>Code Impressions, LLC</Authors>
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
@@ -42,18 +43,9 @@
 		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
 		<PackageReference Include="PolySharp" Version="1.14.1" PrivateAssets="All" />
 		<PackageReference Include="Transmitly" Version="0.1.0-229.bd2c7be" />
-		<PackageReference Include="System.Text.Json" Version="6.0.0" Condition="'$(TargetFrameworkIdentifier)' == '.NETFramework' or '$(TargetFrameworkIdentifier)' == '.NETStandard'" />
 	</ItemGroup>
 	<ItemGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETFramework'">
 		<Reference Include="System.Net.Http" />
 		<Reference Include="System.Web" />
-	</ItemGroup>
-	<ItemGroup>
-	  <ProjectReference Include="..\..\Transmitly.ChannelProvider.Infobip.Api\Transmitly.ChannelProvider.Infobip.Api.csproj" />
-	  <ProjectReference Include="..\Transmitly.ChannelProvider.Infobip.Api\Transmitly.ChannelProvider.Infobip.Api.csproj" />
-	  <ProjectReference Include="..\Transmitly.ChannelProvider.Infobip.Configuration\Transmitly.ChannelProvider.Infobip.Configuration.csproj" />
-	</ItemGroup>
-	<ItemGroup>
-	  <Folder Include="Voice\Api\" />
 	</ItemGroup>
 </Project>
