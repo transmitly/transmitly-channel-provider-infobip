@@ -12,14 +12,13 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-using System;
 using System.IO;
 
 namespace Transmitly.ChannelProvider.Infobip.Email.SendEmail
 {
 	internal sealed class EmailAttachment(Stream stream, string? fileName = null)
 	{
-		public string FileName { get; set; } = string.IsNullOrWhiteSpace(fileName) ? Guid.NewGuid().ToString("N") : fileName;
+		public string FileName { get; set; } = string.IsNullOrWhiteSpace(fileName) ? Path.GetTempFileName(): fileName!;
 		public Stream Stream { get; set; } = Guard.AgainstNull(stream);
 	}
 }
