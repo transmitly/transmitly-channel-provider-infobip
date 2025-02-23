@@ -21,8 +21,8 @@ namespace Transmitly.ChannelProvider.Infobip.Configuration
 		
 		public WebProxy? WebProxy { get; set; }
 		public string? ApiKey { get; set; }
-		public string? BasePath { get; set; }
-		public string ApiKeyPrefix { get; set; } = "App";
+		public string BasePath { get; set; }= "https://base.infobip.com";
+        public string ApiKeyPrefix { get; set; } = "App";
 		public string UserAgent => _userAgent;
 
 		private static string GetUserAgent()
@@ -35,7 +35,6 @@ namespace Transmitly.ChannelProvider.Infobip.Configuration
 			catch
 			{
 				//eat error
-
 			}
 			
 			if (string.IsNullOrWhiteSpace(version))
