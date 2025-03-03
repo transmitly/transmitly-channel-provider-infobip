@@ -25,136 +25,136 @@ using Transmitly.Delivery;
 using Transmitly.ChannelProvider.Infobip.Configuration;
 namespace Transmitly.ChannelProvider.Infobip.Voice
 {
-    public sealed class VoiceChannelProviderDispatcher(InfobipChannelProviderConfiguration configuration) : ChannelProviderRestDispatcher<IVoice>(null)
-    {
-        private const string AdvancedCallEndpoint = "tts/3/advanced";
-        private readonly InfobipChannelProviderConfiguration _configuration = configuration;
+	public sealed class VoiceChannelProviderDispatcher(InfobipChannelProviderConfiguration configuration) : ChannelProviderRestDispatcher<IVoice>(null)
+	{
+		private const string AdvancedCallEndpoint = "tts/3/advanced";
+		private readonly InfobipChannelProviderConfiguration _configuration = configuration;
 
-        protected override async Task<IReadOnlyCollection<IDispatchResult?>> DispatchAsync(HttpClient restClient, IVoice communication, IDispatchCommunicationContext communicationContext, CancellationToken cancellationToken)
-        {
-            Guard.AgainstNull(communication);
-            Guard.AgainstNull(communicationContext);
-            Guard.AgainstNullOrWhiteSpace(communication.From?.Value);
+		protected override async Task<IReadOnlyCollection<IDispatchResult?>> DispatchAsync(HttpClient restClient, IVoice communication, IDispatchCommunicationContext communicationContext, CancellationToken cancellationToken)
+		{
+			Guard.AgainstNull(communication);
+			Guard.AgainstNull(communicationContext);
+			Guard.AgainstNullOrWhiteSpace(communication.From?.Value);
 
-            var recipients = communication.To ?? [];
+			var recipients = communication.To ?? [];
 
-            var results = new List<IDispatchResult>(recipients.Length);
+			var results = new List<IDispatchResult>(recipients.Length);
 
-            foreach (var recipient in recipients)
-            {
-                Dispatch(communicationContext, communication);
+			foreach (var recipient in recipients)
+			{
+				Dispatch(communicationContext, communication);
 
-                var result = await restClient
-                    .PostAsync(
-                        AdvancedCallEndpoint,
-                        await CreateAdvancedMessagePayloadAsync(recipient, communication, communicationContext).ConfigureAwait(false),
-                        cancellationToken
-                    )
-                    .ConfigureAwait(false);
+				var result = await restClient
+					.PostAsync(
+						AdvancedCallEndpoint,
+						await CreateAdvancedMessagePayloadAsync(recipient, communication, communicationContext).ConfigureAwait(false),
+						cancellationToken
+					)
+					.ConfigureAwait(false);
 
-                var responseContent = await result.Content.ReadAsStringAsync().ConfigureAwait(false);
+				var responseContent = await result.Content.ReadAsStringAsync().ConfigureAwait(false);
 
-                if (!result.IsSuccessStatusCode)
-                {
-                    var error = JsonSerializer.Deserialize<ApiRequestErrorResult>(responseContent);
-                    results.Add(new InfobipDispatchResult
-                    {
-                        DispatchStatus = DispatchStatus.Exception,
-                        ResourceId = error?.ServiceException?.MessageId,
-                        Exception = new ApiResultException(error),
-                    });
-                    Error(communicationContext, communication, results);
-                }
-                else
-                {
-                    var success = Guard.AgainstNull(JsonSerializer.Deserialize<SendVoiceApiSuccessResponse>(responseContent));
-                    foreach (var message in success.Messages)
-                    {
-                        results.Add(new InfobipDispatchResult
-                        {
-                            ResourceId = message.MessageId,
-                            DispatchStatus = ConvertStatus(message.Status.GroupName),
-                            BulkId = success.BulkId
-                        });
+				if (!result.IsSuccessStatusCode)
+				{
+					var error = JsonSerializer.Deserialize<ApiRequestErrorResult>(responseContent);
+					results.Add(new InfobipDispatchResult
+					{
+						DispatchStatus = DispatchStatus.Exception,
+						ResourceId = error?.ServiceException?.MessageId,
+						Exception = new ApiResultException(error),
+					});
+					Error(communicationContext, communication, results);
+				}
+				else
+				{
+					var success = Guard.AgainstNull(JsonSerializer.Deserialize<SendVoiceApiSuccessResponse>(responseContent));
+					foreach (var message in success.Messages)
+					{
+						results.Add(new InfobipDispatchResult
+						{
+							ResourceId = message.MessageId,
+							DispatchStatus = ConvertStatus(message.Status.GroupName),
+							BulkId = success.BulkId
+						});
 
-                        Dispatched(communicationContext, communication, results);
-                    }
-                }
-            }
+						Dispatched(communicationContext, communication, results);
+					}
+				}
+			}
 
-            return results;
-        }
+			return results;
+		}
 
-        private async Task<HttpContent> CreateAdvancedMessagePayloadAsync(IIdentityAddress recipient, IVoice voice, IDispatchCommunicationContext context)
-        {
-            var voiceProperties = new VoiceExtendedChannelProperties(voice.ExtendedProperties);
-            var messageId = Guid.NewGuid().ToString("N");
-            var bulkId = Guid.NewGuid().ToString("N");
+		private async Task<HttpContent> CreateAdvancedMessagePayloadAsync(IIdentityAddress recipient, IVoice voice, IDispatchCommunicationContext context)
+		{
+			var voiceProperties = new VoiceExtendedChannelProperties(voice.ExtendedProperties);
+			var messageId = Guid.NewGuid().ToString("N");
+			var bulkId = Guid.NewGuid().ToString("N");
 
-            var request = new AdvancedVoiceMessage(recipient.Value, messageId)
-            {
-                Text = voice.Message,
-                From = voice.From?.Value,
-                MachineDetection = voice.MachineDetection,//ConvertMachineDetection(voice.MachineDetection, voiceProperties.MachineDetection),
-                NotifyUrl = await GetNotifyUrl(messageId, voiceProperties, voice, context).ConfigureAwait(false),
-                CallTimeout = voiceProperties.CallTimeout,
-                Language = context.CultureInfo.TwoLetterISOLanguageNameDefault(),
-                VoiceType = new InfobipVoiceType(voice.VoiceType, voiceProperties.VoiceGender, voiceProperties.VoiceName).ToObject(),
+			var request = new AdvancedVoiceMessage(recipient.Value, messageId)
+			{
+				Text = voice.Message,
+				From = voice.From?.Value,
+				MachineDetection = voice.MachineDetection,//ConvertMachineDetection(voice.MachineDetection, voiceProperties.MachineDetection),
+				NotifyUrl = await GetNotifyUrl(messageId, voiceProperties, voice, context).ConfigureAwait(false),
+				CallTimeout = voiceProperties.CallTimeout,
+				Language = context.CultureInfo.TwoLetterISOLanguageNameDefault(),
+				VoiceType = new InfobipVoiceType(voice.VoiceType, voiceProperties.VoiceGender, voiceProperties.VoiceName).ToObject(),
 
-            };
-            var message = new SendAdvancedVoiceMessageRequest([request], bulkId);
-            return new StringContent(JsonSerializer.Serialize(message), Encoding.UTF8, "application/json");
-        }
+			};
+			var message = new SendAdvancedVoiceMessageRequest([request], bulkId);
+			return new StringContent(JsonSerializer.Serialize(message), Encoding.UTF8, "application/json");
+		}
 
-        //private MachineDetection? ConvertMachineDetection(Transmitly.MachineDetection tlyValue, MachineDetection? overrideValue)
-        //{
-        //	if (overrideValue.HasValue)
-        //		return overrideValue;
+		//private MachineDetection? ConvertMachineDetection(Transmitly.MachineDetection tlyValue, MachineDetection? overrideValue)
+		//{
+		//	if (overrideValue.HasValue)
+		//		return overrideValue;
 
-        //	return tlyValue switch
-        //	{
-        //		Transmitly.MachineDetection.Disabled =>
-        //			(MachineDetection?)MachineDetection.HangUp,
-        //		Transmitly.MachineDetection.Enabled or Transmitly.MachineDetection.MessageEnd =>
-        //			(MachineDetection?)MachineDetection.Continue,
-        //		_ => null,
-        //	};
-        //}
+		//	return tlyValue switch
+		//	{
+		//		Transmitly.MachineDetection.Disabled =>
+		//			(MachineDetection?)MachineDetection.HangUp,
+		//		Transmitly.MachineDetection.Enabled or Transmitly.MachineDetection.MessageEnd =>
+		//			(MachineDetection?)MachineDetection.Continue,
+		//		_ => null,
+		//	};
+		//}
 
-        private static async Task<string?> GetNotifyUrl(string messageId, VoiceExtendedChannelProperties smsProperties, IVoice voice, IDispatchCommunicationContext context)
-        {
-            string? url;
-            var urlResolver = smsProperties.NotifyUrlResolver ?? voice.DeliveryReportCallbackUrlResolver;
-            if (urlResolver != null)
-                url = await urlResolver(context).ConfigureAwait(false);
-            else
-            {
-                url = smsProperties.NotifyUrl ?? voice.DeliveryReportCallbackUrl;
-                if (string.IsNullOrWhiteSpace(url))
-                    return null;
-            }
-            return new Uri(url).AddPipelineContext(messageId, context.PipelineName, context.ChannelId, context.ChannelProviderId).ToString();
-        }
+		private static async Task<string?> GetNotifyUrl(string messageId, VoiceExtendedChannelProperties smsProperties, IVoice voice, IDispatchCommunicationContext context)
+		{
+			string? url;
+			var urlResolver = smsProperties.NotifyUrlResolver ?? voice.DeliveryReportCallbackUrlResolver;
+			if (urlResolver != null)
+				url = await urlResolver(context).ConfigureAwait(false);
+			else
+			{
+				url = smsProperties.NotifyUrl ?? voice.DeliveryReportCallbackUrl;
+				if (string.IsNullOrWhiteSpace(url))
+					return null;
+			}
+			return new Uri(url).AddPipelineContext(messageId, context.PipelineName, context.ChannelId, context.ChannelProviderId).ToString();
+		}
 
-        private static DispatchStatus ConvertStatus(InfobipGroupName status)
-        {
-            return status switch
-            {
-                InfobipGroupName.COMPLETED or
-                InfobipGroupName.PENDING or
-                InfobipGroupName.IN_PROGRESS =>
-                    DispatchStatus.Dispatched,
-                InfobipGroupName.FAILED =>
-                    DispatchStatus.Exception,
-                _ =>
-                    DispatchStatus.Unknown,
-            };
-        }
+		private static DispatchStatus ConvertStatus(InfobipGroupName status)
+		{
+			return status switch
+			{
+				InfobipGroupName.COMPLETED or
+				InfobipGroupName.PENDING or
+				InfobipGroupName.IN_PROGRESS =>
+					DispatchStatus.Dispatched,
+				InfobipGroupName.FAILED =>
+					DispatchStatus.Exception,
+				_ =>
+					DispatchStatus.Unknown,
+			};
+		}
 
-        protected override void ConfigureHttpClient(HttpClient client)
-        {
-            RestClientConfiguration.Configure(client, _configuration);
-            base.ConfigureHttpClient(client);
-        }
-    }
+		protected override void ConfigureHttpClient(HttpClient client)
+		{
+			RestClientConfiguration.Configure(client, _configuration);
+			base.ConfigureHttpClient(client);
+		}
+	}
 }

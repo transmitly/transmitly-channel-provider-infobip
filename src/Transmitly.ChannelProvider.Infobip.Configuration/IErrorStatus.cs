@@ -14,12 +14,12 @@
 
 namespace Transmitly.ChannelProvider.Infobip.Configuration
 {
-    public interface IErrorStatus
-    {
-        string? Description { get; set; }
-        int? GroupId { get; set; }
-        string? GroupName { get; set; }
-        int? Id { get; set; }
-        string? Name { get; set; }
-    }
+	public interface IErrorStatus
+	{
+		string? Description { get; set; }
+		int? GroupId { get; set; }
+		string? GroupName { get; set; }
+		int? Id { get; set; }
+		string? Name { get; set; }
+	}
 }

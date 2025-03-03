@@ -16,9 +16,9 @@ using System.Text.Json.Serialization;
 
 namespace Transmitly.ChannelProvider.Infobip
 {
-    internal sealed class ApiRequestErrorResult
-    {
-        [JsonPropertyName("serviceException")]
-        public ServiceExceptionResult? ServiceException { get; set; }
-    }
+	internal sealed class ApiRequestErrorResult
+	{
+		[JsonPropertyName("serviceException")]
+		public ServiceExceptionResult? ServiceException { get; set; }
+	}
 }

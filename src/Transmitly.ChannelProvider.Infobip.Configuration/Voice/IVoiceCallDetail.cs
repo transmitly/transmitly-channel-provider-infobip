@@ -16,16 +16,16 @@ using System;
 
 namespace Transmitly.ChannelProvider.Infobip.Configuration.Voice
 {
-    public interface IVoiceCallDetail
-    {
-        DateTimeOffset? AnswerTime { get; set; }
-        int? ChargedDuration { get; set; }
-        string? DtmfCodes { get; set; }
-        int? Duration { get; set; }
-        DateTimeOffset? EndTime { get; set; }
-        string? Feature { get; set; }
-        double? FileDuration { get; set; }
-        object? Ivr { get; set; }
-        DateTimeOffset? StartTime { get; set; }
-    }
+	public interface IVoiceCallDetail
+	{
+		DateTimeOffset? AnswerTime { get; set; }
+		int? ChargedDuration { get; set; }
+		string? DtmfCodes { get; set; }
+		int? Duration { get; set; }
+		DateTimeOffset? EndTime { get; set; }
+		string? Feature { get; set; }
+		double? FileDuration { get; set; }
+		object? Ivr { get; set; }
+		DateTimeOffset? StartTime { get; set; }
+	}
 }

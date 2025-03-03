@@ -14,9 +14,9 @@
 
 namespace Transmitly.ChannelProvider.Infobip.Configuration.Voice
 {
-    public interface IVoicePrice
-    {
-        string? Currency { get; set; }
-        double? PricePerMessage { get; set; }
-    }
+	public interface IVoicePrice
+	{
+		string? Currency { get; set; }
+		double? PricePerMessage { get; set; }
+	}
 }

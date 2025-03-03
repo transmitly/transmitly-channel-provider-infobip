@@ -14,9 +14,9 @@
 
 namespace Transmitly.ChannelProvider.Infobip.Configuration.Sms
 {
-    public interface ISmsPrice
-    {
-        string? Currency { get; set; }
-        double? PricePerMessage { get; set; }
-    }
+	public interface ISmsPrice
+	{
+		string? Currency { get; set; }
+		double? PricePerMessage { get; set; }
+	}
 }

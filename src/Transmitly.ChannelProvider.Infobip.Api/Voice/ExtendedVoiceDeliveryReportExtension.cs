@@ -29,7 +29,7 @@ namespace Transmitly.ChannelProvider.Infobip.Voice
 			ext.VoiceCall = report.VoiceCall;
 			ext.Status = report.Status;
 			ext.Error = report.Error;
-			
+
 			return voiceDeliveryReport;
 		}
 	}

@@ -22,7 +22,7 @@ using Transmitly.Delivery;
 namespace Transmitly.ChannelProvider.Infobip.Sms
 {
 	public sealed class SmsDeliveryStatusReportAdaptor : IChannelProviderDeliveryReportRequestAdaptor
-    {
+	{
 		public Task<IReadOnlyCollection<DeliveryReport>?> AdaptAsync(IRequestAdaptorContext adaptorContext)
 		{
 			if (!ShouldAdapt(adaptorContext))

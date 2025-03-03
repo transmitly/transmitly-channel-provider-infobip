@@ -27,7 +27,7 @@ namespace Transmitly.Infobip
 		string? IDispatchResult.ChannelId { get; }
 
 		public DispatchStatus DispatchStatus { get; set; }
-		
+
 		public Exception? Exception { get; set; }
 	}
 }

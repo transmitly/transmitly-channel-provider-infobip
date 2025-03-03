@@ -16,14 +16,14 @@ using System.Text.Json.Serialization;
 
 namespace Transmitly.ChannelProvider.Infobip
 {
-    /// <summary>
-    /// Indicates whether the message is successfully sent, not sent, delivered, 
-    /// not delivered, waiting for delivery or any other possible status.
-    /// <see href="https://dev.infobip.com/getting-started/response-status-and-error-codes#status-object-example">
-    /// Response status and error codes
-    /// </see>
-    /// </summary>
-    sealed class ApiMessageStatus
+	/// <summary>
+	/// Indicates whether the message is successfully sent, not sent, delivered, 
+	/// not delivered, waiting for delivery or any other possible status.
+	/// <see href="https://dev.infobip.com/getting-started/response-status-and-error-codes#status-object-example">
+	/// Response status and error codes
+	/// </see>
+	/// </summary>
+	sealed class ApiMessageStatus
 	{
 		/// <summary>
 		/// Status group ID.

@@ -18,17 +18,17 @@ using Transmitly.Template.Configuration;
 
 namespace Transmitly.ChannelProvider.Infobip.Configuration.Email
 {
-    public interface IExtendedEmailChannelProperties
-    {
-        IContentTemplateConfiguration AmpHtml { get; set; }
-        string? ApplicationId { get; set; }
-        string? EntityId { get; set; }
-        bool? IntermediateReport { get; set; }
-        string? NotifyUrl { get; set; }
-        Func<IDispatchCommunicationContext, Task<string?>>? NotifyUrlResolver { get; set; }
-        long? TemplateId { get; set; }
-        bool Track { get; set; }
-        bool? TrackClicks { get; set; }
-        bool? TrackOpens { get; set; }
-    }
+	public interface IExtendedEmailChannelProperties
+	{
+		IContentTemplateConfiguration AmpHtml { get; set; }
+		string? ApplicationId { get; set; }
+		string? EntityId { get; set; }
+		bool? IntermediateReport { get; set; }
+		string? NotifyUrl { get; set; }
+		Func<IDispatchCommunicationContext, Task<string?>>? NotifyUrlResolver { get; set; }
+		long? TemplateId { get; set; }
+		bool Track { get; set; }
+		bool? TrackClicks { get; set; }
+		bool? TrackOpens { get; set; }
+	}
 }

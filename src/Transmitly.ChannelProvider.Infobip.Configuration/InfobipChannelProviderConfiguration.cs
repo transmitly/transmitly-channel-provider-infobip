@@ -18,11 +18,11 @@ namespace Transmitly.ChannelProvider.Infobip.Configuration
 	public sealed class InfobipChannelProviderConfiguration
 	{
 		private readonly string _userAgent = GetUserAgent();
-		
+
 		public WebProxy? WebProxy { get; set; }
 		public string? ApiKey { get; set; }
-		public string BasePath { get; set; }= "https://base.infobip.com";
-        public string ApiKeyPrefix { get; set; } = "App";
+		public string BasePath { get; set; } = "https://base.infobip.com";
+		public string ApiKeyPrefix { get; set; } = "App";
 		public string UserAgent => _userAgent;
 
 		private static string GetUserAgent()
@@ -36,7 +36,7 @@ namespace Transmitly.ChannelProvider.Infobip.Configuration
 			{
 				//eat error
 			}
-			
+
 			if (string.IsNullOrWhiteSpace(version))
 				version = "0.1.0";
 

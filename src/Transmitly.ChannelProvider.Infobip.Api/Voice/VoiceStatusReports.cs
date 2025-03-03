@@ -16,9 +16,9 @@ using System.Collections.Generic;
 using System.Text.Json.Serialization;
 namespace Transmitly.ChannelProvider.Infobip.Voice
 {
-    sealed class VoiceStatusReports
-    {
-        [JsonPropertyName("results")]
-        public List<VoiceStatusReport>? Results { get; set; }
-    }
+	sealed class VoiceStatusReports
+	{
+		[JsonPropertyName("results")]
+		public List<VoiceStatusReport>? Results { get; set; }
+	}
 }

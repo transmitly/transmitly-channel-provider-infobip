@@ -18,19 +18,19 @@ using Transmitly.Delivery;
 
 namespace Transmitly.ChannelProvider.Infobip.Email
 {
-    sealed record EmailDeliveryReport : DeliveryReport
-    {
-        public EmailDeliveryReport(DeliveryReport original) : base(original)
-        {
-        }
+	sealed record EmailDeliveryReport : DeliveryReport
+	{
+		public EmailDeliveryReport(DeliveryReport original) : base(original)
+		{
+		}
 
-        public EmailDeliveryReport(string EventName, string? ChannelId, string? ChannelProviderId, string? PipelineName,
-                string? ResourceId, DispatchStatus DispatchStatus, object? ChannelCommunication, IContentModel? ContentModel, Exception? Exception)
-            : base(EventName, ChannelId, ChannelProviderId, PipelineName, ResourceId, DispatchStatus, ChannelCommunication, ContentModel, Exception)
-        {
-            var infobipException = this.Infobip().Voice.Error as ErrorStatus;
-            if (infobipException != null && Exception == null)
-                base.Exception = new InfobipException(infobipException);
-        }
-    }
+		public EmailDeliveryReport(string EventName, string? ChannelId, string? ChannelProviderId, string? PipelineName,
+				string? ResourceId, DispatchStatus DispatchStatus, object? ChannelCommunication, IContentModel? ContentModel, Exception? Exception)
+			: base(EventName, ChannelId, ChannelProviderId, PipelineName, ResourceId, DispatchStatus, ChannelCommunication, ContentModel, Exception)
+		{
+			var infobipException = this.Infobip().Voice.Error as ErrorStatus;
+			if (infobipException != null && Exception == null)
+				base.Exception = new InfobipException(infobipException);
+		}
+	}
 }

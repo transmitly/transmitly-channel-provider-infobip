@@ -14,17 +14,17 @@
 
 namespace Transmitly.ChannelProvider.Infobip.Configuration.Voice
 {
-    public interface IVoiceExtendedDeliveryReportProperties
-    {
-        string? BulkId { get; set; }
-        string? CallbackData { get; set; }
-        IErrorStatus? Error { get; set; }
-        string? From { get; set; }
-        string? MccMnc { get; set; }
-        string? MessageId { get; set; }
-        IVoicePrice? Price { get; set; }
-        ICallbackStatus? Status { get; set; }
-        string? To { get; set; }
-        IVoiceCallDetail? VoiceCall { get; set; }
-    }
+	public interface IVoiceExtendedDeliveryReportProperties
+	{
+		string? BulkId { get; set; }
+		string? CallbackData { get; set; }
+		IErrorStatus? Error { get; set; }
+		string? From { get; set; }
+		string? MccMnc { get; set; }
+		string? MessageId { get; set; }
+		IVoicePrice? Price { get; set; }
+		ICallbackStatus? Status { get; set; }
+		string? To { get; set; }
+		IVoiceCallDetail? VoiceCall { get; set; }
+	}
 }

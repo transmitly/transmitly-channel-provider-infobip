@@ -16,22 +16,22 @@ using System;
 
 namespace Transmitly.ChannelProvider.Infobip.Configuration.Sms
 {
-    public interface ISmsExtendedDeliveryReportProperties
-    {
-        ISmsExtendedChannelProperties Adapt(ISmsChannel sms);
-        string? ApplicationId { get; set; }
-        string? BulkId { get; set; }
-        string? CallbackData { get; set; }
-        DateTimeOffset? DoneAt { get; set; }
-        string? EntityId { get; set; }
-        IErrorStatus? Error { get; set; }
-        string? From { get; set; }
-        string? MccMnc { get; set; }
-        string? MessageId { get; set; }
-        ISmsPrice? Price { get; set; }
-        DateTimeOffset? SentAt { get; set; }
-        int? SmsCount { get; set; }
-        ICallbackStatus? Status { get; set; }
-        string? To { get; set; }
-    }
+	public interface ISmsExtendedDeliveryReportProperties
+	{
+		ISmsExtendedChannelProperties Adapt(ISmsChannel sms);
+		string? ApplicationId { get; set; }
+		string? BulkId { get; set; }
+		string? CallbackData { get; set; }
+		DateTimeOffset? DoneAt { get; set; }
+		string? EntityId { get; set; }
+		IErrorStatus? Error { get; set; }
+		string? From { get; set; }
+		string? MccMnc { get; set; }
+		string? MessageId { get; set; }
+		ISmsPrice? Price { get; set; }
+		DateTimeOffset? SentAt { get; set; }
+		int? SmsCount { get; set; }
+		ICallbackStatus? Status { get; set; }
+		string? To { get; set; }
+	}
 }

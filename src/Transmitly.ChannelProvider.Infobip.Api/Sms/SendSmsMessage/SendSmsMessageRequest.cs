@@ -38,6 +38,6 @@ namespace Transmitly.ChannelProvider.Infobip.Sms.SendSmsMessage
 		[JsonPropertyName("messages")]
 		public List<SendSmsMessageRequestMessage> Messages { get; } = Guard.AgainstNullOrEmpty(messages);
 
-		
+
 	}
 }

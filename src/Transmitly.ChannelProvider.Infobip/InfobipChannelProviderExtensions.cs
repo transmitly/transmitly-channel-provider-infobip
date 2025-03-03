@@ -20,33 +20,33 @@ using Transmitly.ChannelProvider.Infobip.Configuration;
 
 namespace Transmitly
 {
-    public static class InfobipChannelProviderExtensions
-    {
-        /// <summary>
-        /// Adds channel provider support for Infobip.
-        /// </summary>
-        /// <param name="communicationsClientBuilder">Communications builder.</param>
-        /// <param name="options">Infobip channel provider options and settings.</param>
-        /// <param name="providerId">Optional channel provider Id.</param>
-        /// <returns></returns>
-        public static CommunicationsClientBuilder AddInfobipSupport(this CommunicationsClientBuilder communicationsClientBuilder, Action<InfobipChannelProviderConfiguration> options, string? providerId = null)
-        {
-            var optionObj = new InfobipChannelProviderConfiguration();
-            options(optionObj);
+	public static class InfobipChannelProviderExtensions
+	{
+		/// <summary>
+		/// Adds channel provider support for Infobip.
+		/// </summary>
+		/// <param name="communicationsClientBuilder">Communications builder.</param>
+		/// <param name="options">Infobip channel provider options and settings.</param>
+		/// <param name="providerId">Optional channel provider Id.</param>
+		/// <returns></returns>
+		public static CommunicationsClientBuilder AddInfobipSupport(this CommunicationsClientBuilder communicationsClientBuilder, Action<InfobipChannelProviderConfiguration> options, string? providerId = null)
+		{
+			var optionObj = new InfobipChannelProviderConfiguration();
+			options(optionObj);
 
-            communicationsClientBuilder.ChannelProvider.Build(Id.ChannelProvider.Infobip(providerId), optionObj)
-                .AddDispatcher<SmsChannelProviderDispatcher, ISms>(Id.Channel.Sms())
-                .AddDispatcher<EmailChannelProviderDispatcher, IEmail>(Id.Channel.Email())
-                .AddDispatcher<VoiceChannelProviderDispatcher, IVoice>(Id.Channel.Voice())
-                .AddDeliveryReportRequestAdaptor<SmsDeliveryStatusReportAdaptor>()
-                .AddDeliveryReportRequestAdaptor<VoiceDeliveryStatusReportAdaptor>()
-                .AddDeliveryReportRequestAdaptor<EmailDeliveryStatusReportAdaptor>()
-                .AddSmsExtendedPropertiesAdaptor<SmsExtendedChannelProperties>()
-                .AddVoiceExtendedPropertiesAdaptor<VoiceExtendedChannelProperties>()
-                .AddEmailExtendedPropertiesAdaptor<EmailExtendedChannelProperties>()
-                .Register();
+			communicationsClientBuilder.ChannelProvider.Build(Id.ChannelProvider.Infobip(providerId), optionObj)
+				.AddDispatcher<SmsChannelProviderDispatcher, ISms>(Id.Channel.Sms())
+				.AddDispatcher<EmailChannelProviderDispatcher, IEmail>(Id.Channel.Email())
+				.AddDispatcher<VoiceChannelProviderDispatcher, IVoice>(Id.Channel.Voice())
+				.AddDeliveryReportRequestAdaptor<SmsDeliveryStatusReportAdaptor>()
+				.AddDeliveryReportRequestAdaptor<VoiceDeliveryStatusReportAdaptor>()
+				.AddDeliveryReportRequestAdaptor<EmailDeliveryStatusReportAdaptor>()
+				.AddSmsExtendedPropertiesAdaptor<SmsExtendedChannelProperties>()
+				.AddVoiceExtendedPropertiesAdaptor<VoiceExtendedChannelProperties>()
+				.AddEmailExtendedPropertiesAdaptor<EmailExtendedChannelProperties>()
+				.Register();
 
-            return communicationsClientBuilder;
-        }
-    }
+			return communicationsClientBuilder;
+		}
+	}
 }

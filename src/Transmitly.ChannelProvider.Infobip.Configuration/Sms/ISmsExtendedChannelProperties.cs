@@ -17,14 +17,14 @@ using System.Threading.Tasks;
 
 namespace Transmitly.ChannelProvider.Infobip.Configuration.Sms
 {
-    public interface ISmsExtendedChannelProperties
-    {
-        ISmsExtendedChannelProperties Adapt(ISmsChannel sms);
+	public interface ISmsExtendedChannelProperties
+	{
+		ISmsExtendedChannelProperties Adapt(ISmsChannel sms);
 
-        string? ApplicationId { get; set; }
-        string? EntityId { get; set; }
-        string? NotifyUrl { get; set; }
-        Func<IDispatchCommunicationContext, Task<string?>>? NotifyUrlResolver { get; set; }
-        long? ValidityPeriod { get; set; }
-    }
+		string? ApplicationId { get; set; }
+		string? EntityId { get; set; }
+		string? NotifyUrl { get; set; }
+		Func<IDispatchCommunicationContext, Task<string?>>? NotifyUrlResolver { get; set; }
+		long? ValidityPeriod { get; set; }
+	}
 }

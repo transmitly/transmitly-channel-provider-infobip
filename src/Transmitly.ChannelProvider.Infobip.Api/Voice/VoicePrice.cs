@@ -17,17 +17,17 @@ using Transmitly.ChannelProvider.Infobip.Configuration.Voice;
 
 namespace Transmitly.ChannelProvider.Infobip.Voice
 {
-    sealed class VoicePrice : IVoicePrice
-    {
-        /// <summary>
-        /// Price per one second of the Voice message.
-        /// </summary>
-        [JsonPropertyName("pricePerSecond")]
-        public double? PricePerMessage { get; set; }
-        /// <summary>
-        /// The currency in which the price is expressed.
-        /// </summary>
-        [JsonPropertyName("currency")]
-        public string? Currency { get; set; }
-    }
+	sealed class VoicePrice : IVoicePrice
+	{
+		/// <summary>
+		/// Price per one second of the Voice message.
+		/// </summary>
+		[JsonPropertyName("pricePerSecond")]
+		public double? PricePerMessage { get; set; }
+		/// <summary>
+		/// The currency in which the price is expressed.
+		/// </summary>
+		[JsonPropertyName("currency")]
+		public string? Currency { get; set; }
+	}
 }

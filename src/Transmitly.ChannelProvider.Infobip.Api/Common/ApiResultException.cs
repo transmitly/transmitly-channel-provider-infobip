@@ -17,18 +17,18 @@ using System.Collections.Generic;
 
 namespace Transmitly.ChannelProvider.Infobip
 {
-    public sealed class ApiResultException : Exception
-    {
-        public string? MessageId { get; }
-        public string? Text { get; }
-        public IReadOnlyCollection<string>? ValidationErrors { get; }
-        internal ApiResultException(ApiRequestErrorResult? requestError) : base(string.Join(",", requestError?.ServiceException?.ValidationErrors??[]))
-        {
-            if (requestError == null || requestError.ServiceException == null)
-                return;
-            MessageId = requestError.ServiceException.MessageId;
-            Text = requestError.ServiceException.Text;
-            ValidationErrors = requestError.ServiceException.ValidationErrors?.AsReadOnly();
-        }
-    }
+	public sealed class ApiResultException : Exception
+	{
+		public string? MessageId { get; }
+		public string? Text { get; }
+		public IReadOnlyCollection<string>? ValidationErrors { get; }
+		internal ApiResultException(ApiRequestErrorResult? requestError) : base(string.Join(",", requestError?.ServiceException?.ValidationErrors ?? []))
+		{
+			if (requestError == null || requestError.ServiceException == null)
+				return;
+			MessageId = requestError.ServiceException.MessageId;
+			Text = requestError.ServiceException.Text;
+			ValidationErrors = requestError.ServiceException.ValidationErrors?.AsReadOnly();
+		}
+	}
 }

@@ -17,11 +17,11 @@ using Transmitly.ChannelProvider.Infobip.Configuration.Sms;
 
 namespace Transmitly.ChannelProvider.Infobip.Sms
 {
-    sealed class SmsPrice : ISmsPrice
-    {
-        [JsonPropertyName("pricePerMessage")]
-        public double? PricePerMessage { get; set; }
-        [JsonPropertyName("currency")]
-        public string? Currency { get; set; }
-    }
+	sealed class SmsPrice : ISmsPrice
+	{
+		[JsonPropertyName("pricePerMessage")]
+		public double? PricePerMessage { get; set; }
+		[JsonPropertyName("currency")]
+		public string? Currency { get; set; }
+	}
 }

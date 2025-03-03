@@ -17,18 +17,18 @@ using Transmitly.ChannelProvider.Infobip.Configuration;
 
 namespace Transmitly.ChannelProvider.Infobip
 {
-    sealed class CallbackStatus : ICallbackStatus
-    {
-        [JsonPropertyName("groupId")]
-        public int? GroupId { get; set; }
-        [JsonPropertyName("groupName")]
-        public string? GroupName { get; set; }
-        [JsonPropertyName("id")]
-        public int? Id { get; set; }
-        [JsonPropertyName("name")]
-        public string? Name { get; set; }
-        [JsonPropertyName("description")]
-        public string? Description { get; set; }
+	sealed class CallbackStatus : ICallbackStatus
+	{
+		[JsonPropertyName("groupId")]
+		public int? GroupId { get; set; }
+		[JsonPropertyName("groupName")]
+		public string? GroupName { get; set; }
+		[JsonPropertyName("id")]
+		public int? Id { get; set; }
+		[JsonPropertyName("name")]
+		public string? Name { get; set; }
+		[JsonPropertyName("description")]
+		public string? Description { get; set; }
 
-    }
+	}
 }

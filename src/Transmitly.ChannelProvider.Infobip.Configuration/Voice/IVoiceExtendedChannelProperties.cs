@@ -18,18 +18,18 @@ using Transmitly.ChannelProvider.Infobip.Voice;
 
 namespace Transmitly.ChannelProvider.Infobip.Configuration.Voice
 {
-    public interface IVoiceExtendedChannelProperties
-    {
-        IVoiceExtendedChannelProperties Adapt(IVoiceChannel voice);
-        int? CallTimeout { get; set; }
-        MachineDetection MachineDetection { get; set; }
-        int? MaxDtmf { get; set; }
-        string? NotifyUrl { get; set; }
-        Func<IDispatchCommunicationContext, Task<string?>>? NotifyUrlResolver { get; set; }
-        int? Pause { get; set; }
-        bool? Record { get; set; }
-        int? RingTimeout { get; set; }
-        VoiceGender VoiceGender { get; set; }
-        string? VoiceName { get; set; }
-    }
+	public interface IVoiceExtendedChannelProperties
+	{
+		IVoiceExtendedChannelProperties Adapt(IVoiceChannel voice);
+		int? CallTimeout { get; set; }
+		MachineDetection MachineDetection { get; set; }
+		int? MaxDtmf { get; set; }
+		string? NotifyUrl { get; set; }
+		Func<IDispatchCommunicationContext, Task<string?>>? NotifyUrlResolver { get; set; }
+		int? Pause { get; set; }
+		bool? Record { get; set; }
+		int? RingTimeout { get; set; }
+		VoiceGender VoiceGender { get; set; }
+		string? VoiceName { get; set; }
+	}
 }

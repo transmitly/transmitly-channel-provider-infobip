@@ -23,7 +23,7 @@ namespace Transmitly.ChannelProvider.Infobip.Sms.SendSmsMessage
 
 		[JsonPropertyName("to")]
 		public string? To { get; set; }
-		
+
 		[JsonPropertyName("status")]
 		public ApiMessageStatus Status { get; set; } = new ApiMessageStatus();
 	}
