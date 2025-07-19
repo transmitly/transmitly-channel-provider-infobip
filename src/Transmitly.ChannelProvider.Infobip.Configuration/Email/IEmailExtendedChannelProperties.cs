@@ -14,13 +14,14 @@
 
 using System;
 using System.Threading.Tasks;
+using Transmitly.Channel.Configuration;
 using Transmitly.Template.Configuration;
 
 namespace Transmitly.ChannelProvider.Infobip.Configuration.Email
 {
 	public interface IEmailExtendedChannelProperties
 	{
-		IEmailExtendedChannelProperties Adapt(IEmailChannel email);
+		IEmailExtendedChannelProperties Adapt(IChannel<IEmail> email);
 		IContentTemplateConfiguration AmpHtml { get; set; }
 		string? ApplicationId { get; set; }
 		string? EntityId { get; set; }

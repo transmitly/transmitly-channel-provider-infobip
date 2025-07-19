@@ -29,7 +29,7 @@
 
 using System.Text.Json.Serialization;
 
-namespace Transmitly.ChannelProvider.Infobip.Voice
+namespace Transmitly.ChannelProvider.Infobip.Api.Voice
 {
 	sealed class SendVoiceApiResponseMessage
 	{

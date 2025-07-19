@@ -12,21 +12,23 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-namespace Transmitly
+using Transmitly.ChannelProvider.Infobip.Configuration;
+
+namespace Transmitly.ChannelProvider.Infobip.Api
 {
 	internal static class Util
 	{
-		public static DispatchStatus ToDispatchStatus(int? groupId)
+		public static CommunicationsStatus ToDispatchStatus(int? groupId)
 		{
 			return (groupId) switch
 			{
 				//PENDING
-				1 => DispatchStatus.Dispatched,
+				1 => CommunicationsStatus.Success(InfobipConstant.Id, "Dispatched", 1),
 				//UNDELIVERABLE
-				2 or 4 or 5 => DispatchStatus.Undeliverable,
+				2 or 4 or 5 => CommunicationsStatus.ServerError(InfobipConstant.Id, "Undeliverable"),
 				//DELIVERED
-				3 => DispatchStatus.Delivered,
-				_ => DispatchStatus.Unknown,
+				3 => CommunicationsStatus.Success(InfobipConstant.Id, "Delivered"),
+				_ => CommunicationsStatus.ClientError(InfobipConstant.Id, "Unknown")
 			};
 		}
 	}

@@ -12,14 +12,14 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
+using Transmitly.ChannelProvider.Infobip.Api.Sms;
+using Transmitly.ChannelProvider.Infobip.Api.Voice;
 using Transmitly.ChannelProvider.Infobip.Configuration;
 using Transmitly.ChannelProvider.Infobip.Configuration.Sms;
 using Transmitly.ChannelProvider.Infobip.Configuration.Voice;
-using Transmitly.ChannelProvider.Infobip.Sms;
-using Transmitly.ChannelProvider.Infobip.Voice;
 using Transmitly.Delivery;
 
-namespace Transmitly
+namespace Transmitly.ChannelProvider.Infobip.Api
 {
 	public sealed class DeliveryReportExtendedProperties(DeliveryReport deliveryReport)
 	{

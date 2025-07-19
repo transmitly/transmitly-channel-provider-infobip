@@ -12,22 +12,24 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
+using Transmitly.ChannelProvider.Infobip.Configuration;
+
 namespace Transmitly.ChannelProvider.Infobip
 {
 	static class GroupNameExtensions
 	{
-		public static DispatchStatus ToDispatchStatus(this InfobipGroupName status)
+		public static CommunicationsStatus ToDispatchStatus(this InfobipGroupName status)
 		{
 			return status switch
 			{
 				InfobipGroupName.COMPLETED or
 				InfobipGroupName.PENDING or
 				InfobipGroupName.IN_PROGRESS =>
-					DispatchStatus.Dispatched,
+					CommunicationsStatus.Success(InfobipConstant.Id, "Dispatched", 1),
 				InfobipGroupName.FAILED =>
-					DispatchStatus.Exception,
+					CommunicationsStatus.ServerError(InfobipConstant.Id, "Failed", 1),
 				_ =>
-					DispatchStatus.Unknown,
+					CommunicationsStatus.ClientError(InfobipConstant.Id, "Unknown"),
 			};
 		}
 	}

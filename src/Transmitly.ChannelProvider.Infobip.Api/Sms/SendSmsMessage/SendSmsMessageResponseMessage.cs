@@ -14,7 +14,7 @@
 
 using System.Text.Json.Serialization;
 
-namespace Transmitly.ChannelProvider.Infobip.Sms.SendSmsMessage
+namespace Transmitly.ChannelProvider.Infobip.Api.Sms.SendSmsMessage
 {
 	internal sealed class SendSmsMessageResponseMessage
 	{

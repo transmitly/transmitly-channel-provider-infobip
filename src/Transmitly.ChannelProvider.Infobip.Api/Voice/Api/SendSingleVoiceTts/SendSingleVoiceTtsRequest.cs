@@ -13,8 +13,9 @@
 //  limitations under the License.
 
 using System.Text.Json.Serialization;
+using Transmitly.Util;
 
-namespace Transmitly.ChannelProvider.Infobip.Voice
+namespace Transmitly.ChannelProvider.Infobip.Api.Voice
 {
 	/// <summary>
 	/// Send a single voice message to one or more destination addresses. 

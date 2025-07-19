@@ -16,7 +16,7 @@ using Transmitly.ChannelProvider.Infobip.Configuration.Sms;
 using Transmitly.ChannelProvider.Infobip.Configuration.Voice;
 using Transmitly.Delivery;
 
-namespace Transmitly
+namespace Transmitly.ChannelProvider.Infobip.Configuration
 {
 	public interface IDeliveryReportExtendedProperties
 	{

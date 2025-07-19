@@ -14,15 +14,18 @@
 
 using System;
 using System.Threading.Tasks;
+using Transmitly.Channel.Configuration;
+using Transmitly.ChannelProvider.Infobip.Configuration;
 using Transmitly.ChannelProvider.Infobip.Configuration.Voice;
+using Transmitly.Util;
 
-namespace Transmitly.ChannelProvider.Infobip.Voice
+namespace Transmitly.ChannelProvider.Infobip.Api.Voice
 {
 	public sealed class VoiceExtendedChannelProperties : IVoiceExtendedChannelProperties
 	{
 		private readonly IExtendedProperties _extendedProperties;
-		private const string ProviderKey = Constant.VoicePropertiesKey;
-		internal VoiceExtendedChannelProperties(IVoiceChannel voiceChannel)
+		private const string ProviderKey = InfobipConstant.VoicePropertiesKey;
+		internal VoiceExtendedChannelProperties(IChannel<IVoice> voiceChannel)
 		{
 			Guard.AgainstNull(voiceChannel);
 			_extendedProperties = Guard.AgainstNull(voiceChannel.ExtendedProperties);
@@ -149,7 +152,7 @@ namespace Transmitly.ChannelProvider.Infobip.Voice
 			set => _extendedProperties.AddOrUpdate(ProviderKey, nameof(NotifyUrlResolver), value);
 		}
 
-		public IVoiceExtendedChannelProperties Adapt(IVoiceChannel voice)
+		public IVoiceExtendedChannelProperties Adapt(IChannel<IVoice> voice)
 		{
 			return new VoiceExtendedChannelProperties(voice);
 		}

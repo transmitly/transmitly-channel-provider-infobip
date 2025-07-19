@@ -19,7 +19,7 @@ using System.Threading.Tasks;
 using Transmitly.ChannelProvider.Infobip.Configuration;
 using Transmitly.Delivery;
 
-namespace Transmitly.ChannelProvider.Infobip.Email
+namespace Transmitly.ChannelProvider.Infobip.Api.Email
 {
 	public sealed class EmailDeliveryStatusReportAdaptor : IChannelProviderDeliveryReportRequestAdaptor
 	{
@@ -41,7 +41,8 @@ namespace Transmitly.ChannelProvider.Infobip.Email
 						DeliveryReport.Event.StatusChanged(),
 						Id.Channel.Email(),
 						Id.ChannelProvider.Infobip(),
-						adaptorContext.PipelineName,
+						adaptorContext.PipelineIntent,
+						adaptorContext.PipelineId,
 						emailReport.MessageId,
 						Util.ToDispatchStatus(emailReport.Status?.GroupId),
 						null,

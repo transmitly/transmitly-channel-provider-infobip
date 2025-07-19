@@ -17,9 +17,9 @@ using Transmitly.ChannelProvider.Configuration;
 using Transmitly.ChannelProvider.Infobip.Configuration.Email;
 using Transmitly.ChannelProvider.Infobip.Configuration.Sms;
 using Transmitly.ChannelProvider.Infobip.Configuration.Voice;
-using Transmitly.Delivery;
+using Transmitly.Util;
 
-namespace Transmitly
+namespace Transmitly.ChannelProvider.Infobip.Configuration
 {
 	public static class InfobipChannelProviderExtendedProprtiesBuilderExtensions
 	{

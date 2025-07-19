@@ -14,8 +14,9 @@
 
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
+using Transmitly.Util;
 
-namespace Transmitly.ChannelProvider.Infobip.Voice.SendAdvancedVoiceMessage
+namespace Transmitly.ChannelProvider.Infobip.Api.Voice.SendAdvancedVoiceMessage
 {
 	internal sealed class AdvancedVoiceMessage
 	{

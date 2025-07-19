@@ -20,7 +20,7 @@ using System.Runtime.Serialization;
 using System.Text.Json.Serialization;
 using System.Text.Json;
 
-namespace Transmitly.Serialization
+namespace Transmitly.ChannelProvider.Infobip.Api
 {
 	sealed class JsonEnumMemberAttributeConverter<TEnum> : JsonStringEnumConverter
 		where TEnum : struct, Enum

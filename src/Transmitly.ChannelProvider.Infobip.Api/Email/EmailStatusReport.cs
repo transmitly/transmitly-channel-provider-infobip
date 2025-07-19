@@ -15,7 +15,7 @@
 using System;
 using System.Text.Json.Serialization;
 
-namespace Transmitly.ChannelProvider.Infobip.Email
+namespace Transmitly.ChannelProvider.Infobip.Api.Email
 {
 	sealed class EmailStatusReport
 	{

@@ -15,7 +15,7 @@
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-namespace Transmitly.ChannelProvider.Infobip.Voice
+namespace Transmitly.ChannelProvider.Infobip.Api.Voice
 {
 	//https://www.infobip.com/docs/api/channels/voice/voice-message/send-single-voice-tts
 	sealed class SendVoiceApiSuccessResponse

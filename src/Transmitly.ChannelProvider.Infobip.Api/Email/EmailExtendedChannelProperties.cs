@@ -16,12 +16,15 @@ using System.Threading.Tasks;
 using System;
 using Transmitly.Template.Configuration;
 using Transmitly.ChannelProvider.Infobip.Configuration.Email;
+using Transmitly.ChannelProvider.Infobip.Configuration;
+using Transmitly.Util;
+using Transmitly.Channel.Configuration;
 
-namespace Transmitly.ChannelProvider.Infobip.Email
+namespace Transmitly.ChannelProvider.Infobip.Api.Email
 {
 	public sealed class EmailExtendedChannelProperties : IEmailExtendedChannelProperties
 	{
-		private const string ProviderKey = Constant.EmailPropertiesKey;
+		private const string ProviderKey = InfobipConstant.EmailPropertiesKey;
 		private readonly IExtendedProperties _extendedProperties;
 
 		internal EmailExtendedChannelProperties(IExtendedProperties properties)
@@ -31,7 +34,7 @@ namespace Transmitly.ChannelProvider.Infobip.Email
 			AmpHtml = new ContentTemplateConfiguration();
 		}
 
-		internal EmailExtendedChannelProperties(IEmailChannel channel) : this(Guard.AgainstNull(channel).ExtendedProperties)
+		internal EmailExtendedChannelProperties(IChannel<IEmail> channel) : this(Guard.AgainstNull(channel).ExtendedProperties)
 		{
 		}
 
@@ -134,7 +137,7 @@ namespace Transmitly.ChannelProvider.Infobip.Email
 			set => _extendedProperties.AddOrUpdate(ProviderKey, nameof(EntityId), value);
 		}
 
-		public IEmailExtendedChannelProperties Adapt(IEmailChannel email)
+		public IEmailExtendedChannelProperties Adapt(IChannel<IEmail> email)
 		{
 			return new EmailExtendedChannelProperties(email);
 		}

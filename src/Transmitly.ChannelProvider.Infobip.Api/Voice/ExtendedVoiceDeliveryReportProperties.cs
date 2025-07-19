@@ -14,14 +14,15 @@
 using Transmitly.ChannelProvider.Infobip.Configuration;
 using Transmitly.ChannelProvider.Infobip.Configuration.Voice;
 using Transmitly.Delivery;
+using Transmitly.Util;
 
 
-namespace Transmitly.ChannelProvider.Infobip.Voice
+namespace Transmitly.ChannelProvider.Infobip.Api.Voice
 {
 	sealed class ExtendedVoiceDeliveryReportProperties : IVoiceExtendedDeliveryReportProperties
 	{
 		private readonly IExtendedProperties _extendedProperties;
-		private const string ProviderKey = Constant.SmsPropertiesKey;
+		private const string ProviderKey = InfobipConstant.SmsPropertiesKey;
 		internal ExtendedVoiceDeliveryReportProperties(DeliveryReport deliveryReport, VoiceStatusReport report) : this(deliveryReport)
 		{
 
@@ -117,8 +118,8 @@ namespace Transmitly.ChannelProvider.Infobip.Voice
 		/// </summary>
 		public ICallbackStatus? Status
 		{
-			get => _extendedProperties.GetValue<CallbackStatus?>(Constant.SmsPropertiesKey, nameof(Status));
-			set => _extendedProperties.AddOrUpdate(Constant.SmsPropertiesKey, nameof(Status), value);
+			get => _extendedProperties.GetValue<CallbackStatus?>(InfobipConstant.SmsPropertiesKey, nameof(Status));
+			set => _extendedProperties.AddOrUpdate(InfobipConstant.SmsPropertiesKey, nameof(Status), value);
 		}
 
 		/// <summary>
@@ -127,8 +128,8 @@ namespace Transmitly.ChannelProvider.Infobip.Voice
 		/// </summary>
 		public IErrorStatus? Error
 		{
-			get => _extendedProperties.GetValue<ErrorStatus?>(Constant.SmsPropertiesKey, nameof(Error));
-			set => _extendedProperties.AddOrUpdate(Constant.SmsPropertiesKey, nameof(Error), value);
+			get => _extendedProperties.GetValue<ErrorStatus?>(InfobipConstant.SmsPropertiesKey, nameof(Error));
+			set => _extendedProperties.AddOrUpdate(InfobipConstant.SmsPropertiesKey, nameof(Error), value);
 		}
 	}
 }
