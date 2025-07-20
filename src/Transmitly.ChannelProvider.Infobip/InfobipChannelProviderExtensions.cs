@@ -13,9 +13,9 @@
 //  limitations under the License.
 
 using System;
-using Transmitly.ChannelProvider.Infobip.Email;
-using Transmitly.ChannelProvider.Infobip.Sms;
-using Transmitly.ChannelProvider.Infobip.Voice;
+using Transmitly.ChannelProvider.Infobip.Api.Email;
+using Transmitly.ChannelProvider.Infobip.Api.Sms;
+using Transmitly.ChannelProvider.Infobip.Api.Voice;
 using Transmitly.ChannelProvider.Infobip.Configuration;
 
 namespace Transmitly

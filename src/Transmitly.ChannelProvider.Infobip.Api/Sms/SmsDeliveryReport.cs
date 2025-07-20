@@ -16,7 +16,7 @@ using System;
 using Transmitly.ChannelProvider.Infobip.Configuration;
 using Transmitly.Delivery;
 
-namespace Transmitly.ChannelProvider.Infobip.Sms
+namespace Transmitly.ChannelProvider.Infobip.Api.Sms
 {
 	sealed record SmsDeliveryReport : DeliveryReport, ISmsDeliveryReport
 	{
@@ -24,9 +24,9 @@ namespace Transmitly.ChannelProvider.Infobip.Sms
 		{
 		}
 
-		public SmsDeliveryReport(string EventName, string? ChannelId, string? ChannelProviderId, string? PipelineName,
-				string? ResourceId, DispatchStatus DispatchStatus, object? ChannelCommunication, IContentModel? ContentModel, Exception? Exception)
-			: base(EventName, ChannelId, ChannelProviderId, PipelineName, ResourceId, DispatchStatus, ChannelCommunication, ContentModel, Exception)
+		public SmsDeliveryReport(string EventName, string? ChannelId, string? ChannelProviderId, string? PipelineName, string? PipelineId,
+				string? ResourceId, CommunicationsStatus Status, object? ChannelCommunication, IContentModel? ContentModel, Exception? Exception)
+			: base(EventName, ChannelId, ChannelProviderId, PipelineName, PipelineId, ResourceId, Status, ChannelCommunication, ContentModel, Exception)
 		{
 			var infobipException = this.Infobip().Voice.Error as ErrorStatus;
 			if (infobipException != null && Exception == null)

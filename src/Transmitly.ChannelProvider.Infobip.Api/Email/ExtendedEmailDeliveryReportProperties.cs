@@ -15,13 +15,14 @@
 using System;
 using Transmitly.ChannelProvider.Infobip.Configuration;
 using Transmitly.Delivery;
+using Transmitly.Util;
 
-namespace Transmitly.ChannelProvider.Infobip.Email
+namespace Transmitly.ChannelProvider.Infobip.Api.Email
 {
 	public sealed class ExtendedEmailDeliveryReportProperties
 	{
 		private readonly IExtendedProperties _extendedProperties;
-		private const string ProviderKey = Constant.SmsPropertiesKey;
+		private const string ProviderKey = InfobipConstant.SmsPropertiesKey;
 		internal ExtendedEmailDeliveryReportProperties(DeliveryReport deliveryReport)
 		{
 			_extendedProperties = Guard.AgainstNull(deliveryReport).ExtendedProperties;

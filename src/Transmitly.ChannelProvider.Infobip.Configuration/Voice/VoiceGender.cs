@@ -14,7 +14,7 @@
 
 using System.Runtime.Serialization;
 
-namespace Transmitly.ChannelProvider.Infobip.Voice
+namespace Transmitly.ChannelProvider.Infobip.Configuration.Voice
 {
 	public enum VoiceGender
 	{

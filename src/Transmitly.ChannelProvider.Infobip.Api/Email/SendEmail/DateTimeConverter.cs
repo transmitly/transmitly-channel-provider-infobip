@@ -17,7 +17,7 @@ using System.Globalization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Transmitly.ChannelProvider.Infobip
+namespace Transmitly.ChannelProvider.Infobip.Api.Email.SendEmail
 {
 	internal sealed class DateTimeConverter : JsonConverter<DateTime>
 	{

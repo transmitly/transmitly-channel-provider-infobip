@@ -12,9 +12,9 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-namespace Transmitly.ChannelProvider.Infobip
+namespace Transmitly.ChannelProvider.Infobip.Configuration
 {
-	public static class Constant
+	public static class InfobipConstant
 	{
 		public const string Id = "Infobip";
 		public const string EmailPropertiesKey = $"{Id}.Email";

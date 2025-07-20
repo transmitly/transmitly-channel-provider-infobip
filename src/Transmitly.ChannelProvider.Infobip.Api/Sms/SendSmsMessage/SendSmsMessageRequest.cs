@@ -14,8 +14,9 @@
 
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
+using Transmitly.Util;
 
-namespace Transmitly.ChannelProvider.Infobip.Sms.SendSmsMessage
+namespace Transmitly.ChannelProvider.Infobip.Api.Sms.SendSmsMessage
 {
 	/// <summary>
 	/// <see href="https://www.infobip.com/docs/api/channels/sms/sms-messaging/outbound-sms/send-sms-message">Send SMS Message Documentation</see>

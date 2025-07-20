@@ -17,14 +17,14 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Text.Json;
-using Transmitly.Infobip;
-using Transmitly.ChannelProvider.Infobip.Sms.SendSmsMessage;
 using System.Text;
 using Transmitly.Delivery;
 using System;
 using Transmitly.ChannelProvider.Infobip.Configuration;
+using Transmitly.ChannelProvider.Infobip.Api.Sms.SendSmsMessage;
+using Transmitly.Util;
 
-namespace Transmitly.ChannelProvider.Infobip.Sms
+namespace Transmitly.ChannelProvider.Infobip.Api.Sms
 {
 	public sealed class SmsChannelProviderDispatcher(InfobipChannelProviderConfiguration configuration) : ChannelProviderRestDispatcher<ISms>(null)
 	{
@@ -57,7 +57,7 @@ namespace Transmitly.ChannelProvider.Infobip.Sms
 					var error = JsonSerializer.Deserialize<ApiRequestErrorResult>(responseContent);
 					results.Add(new InfobipDispatchResult
 					{
-						DispatchStatus = DispatchStatus.Exception,
+						Status = CommunicationsStatus.ServerError(InfobipConstant.Id, "Exception"),
 						ResourceId = error?.ServiceException?.MessageId,
 						Exception = new ApiResultException(error),
 					});
@@ -72,7 +72,7 @@ namespace Transmitly.ChannelProvider.Infobip.Sms
 						results.Add(new InfobipDispatchResult
 						{
 							ResourceId = message.MessageId,
-							DispatchStatus = message.Status.GroupName.ToDispatchStatus()
+							Status = message.Status.GroupName.ToDispatchStatus()
 						});
 
 						Dispatched(communicationContext, communication, results);
@@ -84,7 +84,7 @@ namespace Transmitly.ChannelProvider.Infobip.Sms
 		}
 
 
-		private async Task<HttpContent> CreateSingleMessageRequestContent(IIdentityAddress recipient, ISms sms, IDispatchCommunicationContext communicationContext)
+		private async Task<HttpContent> CreateSingleMessageRequestContent(IPlatformIdentityAddress recipient, ISms sms, IDispatchCommunicationContext communicationContext)
 		{
 			var smsProperties = new SmsExtendedChannelProperties(sms.ExtendedProperties);
 
@@ -114,17 +114,21 @@ namespace Transmitly.ChannelProvider.Infobip.Sms
 			else
 			{
 
-				url = voiceProperties.NotifyUrl ?? sms.DeliveryReportCallbackUrl;
+				url = voiceProperties.NotifyUrl;
 				if (string.IsNullOrWhiteSpace(url))
 					return null;
 			}
-			return new Uri(url).AddPipelineContext(messageId, context.PipelineName, context.ChannelId, context.ChannelProviderId).ToString();
+
+			if (string.IsNullOrWhiteSpace(url))
+				return null;
+
+			return new Uri(url).AddPipelineContext(messageId, context.PipelineIntent, context.PipelineId, context.ChannelId, context.ChannelProviderId).ToString();
 		}
 
-		protected override void ConfigureHttpClient(HttpClient client)
+		protected override void ConfigureHttpClient(HttpClient httpClient)
 		{
-			RestClientConfiguration.Configure(client, _configuration);
-			base.ConfigureHttpClient(client);
+			RestClientConfiguration.Configure(httpClient, _configuration);
+			base.ConfigureHttpClient(httpClient);
 		}
 	}
 }

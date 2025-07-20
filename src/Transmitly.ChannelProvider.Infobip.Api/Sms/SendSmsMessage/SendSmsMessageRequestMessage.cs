@@ -14,8 +14,9 @@
 
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
+using Transmitly.Util;
 
-namespace Transmitly.ChannelProvider.Infobip.Sms.SendSmsMessage
+namespace Transmitly.ChannelProvider.Infobip.Api.Sms.SendSmsMessage
 {
 	internal sealed class SendSmsMessageRequestMessage(string? text, List<SendSmsMessageRequestMessageDestination> destinations)
 	{

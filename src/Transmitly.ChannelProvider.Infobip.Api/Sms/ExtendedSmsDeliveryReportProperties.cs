@@ -13,16 +13,18 @@
 //  limitations under the License.
 
 using System;
+using Transmitly.Channel.Configuration;
 using Transmitly.ChannelProvider.Infobip.Configuration;
 using Transmitly.ChannelProvider.Infobip.Configuration.Sms;
 using Transmitly.Delivery;
+using Transmitly.Util;
 
-namespace Transmitly.ChannelProvider.Infobip.Sms
+namespace Transmitly.ChannelProvider.Infobip.Api.Sms
 {
 	sealed class ExtendedSmsDeliveryReportProperties : ISmsExtendedDeliveryReportProperties
 	{
 		private readonly IExtendedProperties _extendedProperties;
-		private const string ProviderKey = Constant.SmsPropertiesKey;
+		private const string ProviderKey = InfobipConstant.SmsPropertiesKey;
 		internal ExtendedSmsDeliveryReportProperties(DeliveryReport deliveryReport)
 		{
 			_extendedProperties = Guard.AgainstNull(deliveryReport).ExtendedProperties;
@@ -56,7 +58,7 @@ namespace Transmitly.ChannelProvider.Infobip.Sms
 
 		}
 
-		public ISmsExtendedChannelProperties Adapt(ISmsChannel sms)
+		public ISmsExtendedChannelProperties Adapt(IChannel<ISms> sms)
 		{
 			return new SmsExtendedChannelProperties(sms);
 		}

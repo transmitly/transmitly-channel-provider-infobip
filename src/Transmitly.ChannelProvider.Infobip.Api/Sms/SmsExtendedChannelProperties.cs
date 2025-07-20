@@ -14,16 +14,19 @@
 
 using System;
 using System.Threading.Tasks;
+using Transmitly.Channel.Configuration;
+using Transmitly.ChannelProvider.Infobip.Configuration;
 using Transmitly.ChannelProvider.Infobip.Configuration.Sms;
+using Transmitly.Util;
 
-namespace Transmitly.ChannelProvider.Infobip.Sms
+namespace Transmitly.ChannelProvider.Infobip.Api.Sms
 {
 	public sealed class SmsExtendedChannelProperties : ISmsExtendedChannelProperties
 	{
 		private readonly IExtendedProperties _extendedProperties;
-		private const string ProviderKey = Constant.SmsPropertiesKey;
+		private const string ProviderKey = InfobipConstant.SmsPropertiesKey;
 
-		internal SmsExtendedChannelProperties(ISmsChannel smsChannel)
+		internal SmsExtendedChannelProperties(IChannel<ISms> smsChannel)
 		{
 			Guard.AgainstNull(smsChannel);
 			_extendedProperties = Guard.AgainstNull(smsChannel.ExtendedProperties);
@@ -111,7 +114,7 @@ namespace Transmitly.ChannelProvider.Infobip.Sms
 			set => _extendedProperties.AddOrUpdate(ProviderKey, nameof(NotifyUrlResolver), value);
 		}
 
-		public ISmsExtendedChannelProperties Adapt(ISmsChannel sms)
+		public ISmsExtendedChannelProperties Adapt(IChannel<ISms> sms)
 		{
 			return new SmsExtendedChannelProperties(sms);
 		}

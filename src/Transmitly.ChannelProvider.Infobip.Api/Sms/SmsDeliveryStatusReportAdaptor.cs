@@ -19,7 +19,7 @@ using System.Threading.Tasks;
 using Transmitly.ChannelProvider.Infobip.Configuration;
 using Transmitly.Delivery;
 
-namespace Transmitly.ChannelProvider.Infobip.Sms
+namespace Transmitly.ChannelProvider.Infobip.Api.Sms
 {
 	public sealed class SmsDeliveryStatusReportAdaptor : IChannelProviderDeliveryReportRequestAdaptor
 	{
@@ -40,7 +40,8 @@ namespace Transmitly.ChannelProvider.Infobip.Sms
 						DeliveryReport.Event.StatusChanged(),
 						Id.Channel.Sms(),
 						Id.ChannelProvider.Infobip(),
-						adaptorContext.PipelineName,
+						adaptorContext.PipelineIntent,
+						adaptorContext.PipelineId,
 						smsReport.MessageId,
 						Util.ToDispatchStatus(smsReport.Status?.GroupId),
 						null,

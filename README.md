@@ -27,7 +27,7 @@ var communicationClient = new CommunicationsClientBuilder()
 	//AddEmail is a channel that is core to the Transmitly library.
 	//AsAudienceAddress() is also a convenience method that helps us create an audience address
 	//Audience addresses can be anything, email, phone, or even a device/app Id for push notifications!
-	pipeline.AddEmail("from@mydomain.com".AsAudienceAddress("Test Display Name"), email =>
+	pipeline.AddEmail("from@mydomain.com".AsIdentityAddress("Test Display Name"), email =>
 	{
 		//Transmitly is a bit different. All of our content is supported by templates out of the box.
 		//There are multiple types of templates to get you started. You can even create templates 
@@ -40,7 +40,7 @@ var communicationClient = new CommunicationsClientBuilder()
 	//AddSms is a channel that is core to the Transmitly library.
 	pipeline.AddSms(sms =>
 	{
-		sms.Body.AddStringTemplate("Check out Transmit.ly!");
+		sms.Message.AddStringTemplate("Check out Transmit.ly!");
 	});
 });
 //Dispatch (send) the transsactional messages to our friend Joe (joe@mydomain.com & 888-555-1234) using our configured InfoBip account with our "first-pipeline" pipeline.

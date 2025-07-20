@@ -1,8 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
 	<PropertyGroup>
-		<TargetFrameworks Condition=" '$(OS)' == 'Windows_NT'">net48;net472</TargetFrameworks>
-		<TargetFrameworks>$(TargetFrameworks);netstandard2.0;net6.0;net8.0</TargetFrameworks>
+		<TargetFrameworks>net9.0;net8.0;net6.0;netstandard2.0</TargetFrameworks>
+	</PropertyGroup>
+	<PropertyGroup>
+		<TargetFrameworks Condition=" '$(OS)' == 'Windows_NT'">net48;net472;$(TargetFrameworks);</TargetFrameworks>
+	</PropertyGroup>
+	<PropertyGroup>
 		<Nullable>enable</Nullable>
 		<LangVersion>latest</LangVersion>
 		<IsPackable>true</IsPackable>
@@ -42,8 +45,8 @@
 	<ItemGroup>
 		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
 		<PackageReference Include="PolySharp" Version="1.15.0" PrivateAssets="All" />
-		<PackageReference Include="Transmitly" Version="0.1.0-271.a05261c" />
 		<PackageReference Include="System.Text.Json" Version="9.0.1" Condition="'$(TargetFrameworkIdentifier)' == '.NETFramework' or '$(TargetFrameworkIdentifier)' == '.NETStandard'" />
+		<PackageReference Include="Transmitly" Version="0.2.0" />
 	</ItemGroup>
 	<ItemGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETFramework'">
 		<Reference Include="System.Net.Http" />

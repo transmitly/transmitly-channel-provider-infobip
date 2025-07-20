@@ -14,8 +14,9 @@
 
 using System;
 using System.Text.Json.Serialization;
+using Transmitly.Util;
 
-namespace Transmitly.ChannelProvider.Infobip.Voice.SendAdvancedVoiceMessage
+namespace Transmitly.ChannelProvider.Infobip.Api.Voice.SendAdvancedVoiceMessage
 {
 	/// <summary>
 	/// Message destination addresses. Destination address must be in the E.164 standard format (Example: 41793026727).

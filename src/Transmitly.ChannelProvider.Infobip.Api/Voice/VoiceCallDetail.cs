@@ -16,7 +16,7 @@ using System;
 using System.Text.Json.Serialization;
 using Transmitly.ChannelProvider.Infobip.Configuration.Voice;
 
-namespace Transmitly.ChannelProvider.Infobip.Voice
+namespace Transmitly.ChannelProvider.Infobip.Api.Voice
 {
 	/// <summary>
 	/// Fields representing details specific for voice messages.

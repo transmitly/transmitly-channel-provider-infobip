@@ -14,7 +14,7 @@
 
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
-namespace Transmitly.ChannelProvider.Infobip.Sms
+namespace Transmitly.ChannelProvider.Infobip.Api.Sms
 {
 	sealed class SmsStatusReports
 	{

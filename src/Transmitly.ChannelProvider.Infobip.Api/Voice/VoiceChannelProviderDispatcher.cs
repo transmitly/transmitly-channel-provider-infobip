@@ -17,13 +17,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Net.Http;
 using System.Text;
-using Transmitly.Infobip;
 using System.Text.Json;
-using Transmitly.ChannelProvider.Infobip.Voice.SendAdvancedVoiceMessage;
 using System;
 using Transmitly.Delivery;
 using Transmitly.ChannelProvider.Infobip.Configuration;
-namespace Transmitly.ChannelProvider.Infobip.Voice
+using Transmitly.Util;
+using Transmitly.ChannelProvider.Infobip.Api.Voice.SendAdvancedVoiceMessage;
+namespace Transmitly.ChannelProvider.Infobip.Api.Voice
 {
 	public sealed class VoiceChannelProviderDispatcher(InfobipChannelProviderConfiguration configuration) : ChannelProviderRestDispatcher<IVoice>(null)
 	{
@@ -59,7 +59,7 @@ namespace Transmitly.ChannelProvider.Infobip.Voice
 					var error = JsonSerializer.Deserialize<ApiRequestErrorResult>(responseContent);
 					results.Add(new InfobipDispatchResult
 					{
-						DispatchStatus = DispatchStatus.Exception,
+						Status = CommunicationsStatus.ServerError(InfobipConstant.Id, "Exception"),
 						ResourceId = error?.ServiceException?.MessageId,
 						Exception = new ApiResultException(error),
 					});
@@ -73,7 +73,7 @@ namespace Transmitly.ChannelProvider.Infobip.Voice
 						results.Add(new InfobipDispatchResult
 						{
 							ResourceId = message.MessageId,
-							DispatchStatus = ConvertStatus(message.Status.GroupName),
+							Status = ConvertStatus(message.Status.GroupName),
 							BulkId = success.BulkId
 						});
 
@@ -85,7 +85,7 @@ namespace Transmitly.ChannelProvider.Infobip.Voice
 			return results;
 		}
 
-		private async Task<HttpContent> CreateAdvancedMessagePayloadAsync(IIdentityAddress recipient, IVoice voice, IDispatchCommunicationContext context)
+		private async Task<HttpContent> CreateAdvancedMessagePayloadAsync(IPlatformIdentityAddress recipient, IVoice voice, IDispatchCommunicationContext context)
 		{
 			var voiceProperties = new VoiceExtendedChannelProperties(voice.ExtendedProperties);
 			var messageId = Guid.NewGuid().ToString("N");
@@ -121,40 +121,40 @@ namespace Transmitly.ChannelProvider.Infobip.Voice
 		//	};
 		//}
 
-		private static async Task<string?> GetNotifyUrl(string messageId, VoiceExtendedChannelProperties smsProperties, IVoice voice, IDispatchCommunicationContext context)
+		private static async Task<string?> GetNotifyUrl(string messageId, VoiceExtendedChannelProperties voiceProperties, IVoice voice, IDispatchCommunicationContext context)
 		{
 			string? url;
-			var urlResolver = smsProperties.NotifyUrlResolver ?? voice.DeliveryReportCallbackUrlResolver;
+			var urlResolver = voiceProperties.NotifyUrlResolver ?? voice.DeliveryReportCallbackUrlResolver;
 			if (urlResolver != null)
 				url = await urlResolver(context).ConfigureAwait(false);
 			else
 			{
-				url = smsProperties.NotifyUrl ?? voice.DeliveryReportCallbackUrl;
+				url = voiceProperties.NotifyUrl;
 				if (string.IsNullOrWhiteSpace(url))
 					return null;
 			}
-			return new Uri(url).AddPipelineContext(messageId, context.PipelineName, context.ChannelId, context.ChannelProviderId).ToString();
+			return new Uri(url).AddPipelineContext(messageId, context.PipelineIntent, context.PipelineId, context.ChannelId, context.ChannelProviderId).ToString();
 		}
 
-		private static DispatchStatus ConvertStatus(InfobipGroupName status)
+		private static CommunicationsStatus ConvertStatus(InfobipGroupName status)
 		{
 			return status switch
 			{
 				InfobipGroupName.COMPLETED or
 				InfobipGroupName.PENDING or
 				InfobipGroupName.IN_PROGRESS =>
-					DispatchStatus.Dispatched,
+					CommunicationsStatus.Success(InfobipConstant.Id, "Dispatched"),
 				InfobipGroupName.FAILED =>
-					DispatchStatus.Exception,
+					CommunicationsStatus.ServerError(InfobipConstant.Id, "Failed", 1),
 				_ =>
-					DispatchStatus.Unknown,
+					CommunicationsStatus.ClientError(InfobipConstant.Id, "Unknown")
 			};
 		}
 
-		protected override void ConfigureHttpClient(HttpClient client)
+		protected override void ConfigureHttpClient(HttpClient httpClient)
 		{
-			RestClientConfiguration.Configure(client, _configuration);
-			base.ConfigureHttpClient(client);
+			RestClientConfiguration.Configure(httpClient, _configuration);
+			base.ConfigureHttpClient(httpClient);
 		}
 	}
 }

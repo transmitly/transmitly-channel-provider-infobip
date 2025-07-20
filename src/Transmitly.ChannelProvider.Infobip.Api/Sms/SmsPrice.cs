@@ -15,7 +15,7 @@
 using System.Text.Json.Serialization;
 using Transmitly.ChannelProvider.Infobip.Configuration.Sms;
 
-namespace Transmitly.ChannelProvider.Infobip.Sms
+namespace Transmitly.ChannelProvider.Infobip.Api.Sms
 {
 	sealed class SmsPrice : ISmsPrice
 	{

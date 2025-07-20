@@ -19,7 +19,7 @@ using System.Threading.Tasks;
 using Transmitly.ChannelProvider.Infobip.Configuration;
 using Transmitly.Delivery;
 
-namespace Transmitly.ChannelProvider.Infobip.Voice
+namespace Transmitly.ChannelProvider.Infobip.Api.Voice
 {
 	public sealed class VoiceDeliveryStatusReportAdaptor : IChannelProviderDeliveryReportRequestAdaptor
 	{
@@ -40,7 +40,8 @@ namespace Transmitly.ChannelProvider.Infobip.Voice
 						DeliveryReport.Event.StatusChanged(),
 						Id.Channel.Voice(),
 						Id.ChannelProvider.Infobip(),
-						adaptorContext.PipelineName,
+						adaptorContext.PipelineIntent,
+						adaptorContext.PipelineId,
 						voiceReport.MessageId,
 						Util.ToDispatchStatus(voiceReport.Status?.GroupId),
 						null,

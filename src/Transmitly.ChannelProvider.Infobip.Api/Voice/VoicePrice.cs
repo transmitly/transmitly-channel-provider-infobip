@@ -15,7 +15,7 @@
 using System.Text.Json.Serialization;
 using Transmitly.ChannelProvider.Infobip.Configuration.Voice;
 
-namespace Transmitly.ChannelProvider.Infobip.Voice
+namespace Transmitly.ChannelProvider.Infobip.Api.Voice
 {
 	sealed class VoicePrice : IVoicePrice
 	{

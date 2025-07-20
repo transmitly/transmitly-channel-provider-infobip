@@ -14,8 +14,9 @@
 
 using System;
 using System.Text.Json.Serialization;
+using Transmitly.ChannelProvider.Infobip.Configuration.Voice;
 
-namespace Transmitly.ChannelProvider.Infobip.Voice
+namespace Transmitly.ChannelProvider.Infobip.Api.Voice
 {
 	/// <summary>
 	/// <see href="https://www.infobip.com/docs/voice-and-video/getting-started#text-to-speech"/>

@@ -13,20 +13,25 @@
 //  limitations under the License.
 
 using System;
+using Transmitly.ChannelProvider.Infobip.Configuration;
 
-namespace Transmitly.Infobip
+namespace Transmitly.ChannelProvider.Infobip.Api
 {
 	internal sealed class InfobipDispatchResult : IDispatchResult
 	{
-		public string? ResourceId { get; set; }
-
 		public string? BulkId { get; set; }
 
-		string? IDispatchResult.ChannelProviderId { get; }
+		public string? ResourceId { get; set; }
 
-		string? IDispatchResult.ChannelId { get; }
+		public CommunicationsStatus Status { get; set; } = CommunicationsStatus.ClientError(InfobipConstant.Id, "Unknown");
 
-		public DispatchStatus DispatchStatus { get; set; }
+		public string? ChannelProviderId { get; }
+
+		public string? ChannelId { get; }
+
+		public string? PipelineId { get; }
+
+		public string? PipelineIntent { get; }
 
 		public Exception? Exception { get; set; }
 	}

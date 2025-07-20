@@ -17,13 +17,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Net.Http;
 using System.Text.Json;
-using Transmitly.Infobip;
 using System;
 using Transmitly.Delivery;
-using Transmitly.ChannelProvider.Infobip.Sms.SendSmsMessage;
+using Transmitly.ChannelProvider.Infobip.Api.Sms.SendSmsMessage;
 using Transmitly.ChannelProvider.Infobip.Configuration;
+using Transmitly.Util;
 
-namespace Transmitly.ChannelProvider.Infobip.Email
+namespace Transmitly.ChannelProvider.Infobip.Api.Email
 {
 
 	public sealed class EmailChannelProviderDispatcher(InfobipChannelProviderConfiguration configuration) : ChannelProviderRestDispatcher<IEmail>(null)
@@ -61,7 +61,7 @@ namespace Transmitly.ChannelProvider.Infobip.Email
 				var error = JsonSerializer.Deserialize<ApiRequestErrorResult>(responseContent);
 				results.Add(new InfobipDispatchResult
 				{
-					DispatchStatus = DispatchStatus.Exception,
+					Status = CommunicationsStatus.ServerError(InfobipConstant.Id, "Exception"),
 					ResourceId = error?.ServiceException?.MessageId,
 					Exception = new ApiResultException(error),
 				});
@@ -76,7 +76,7 @@ namespace Transmitly.ChannelProvider.Infobip.Email
 					results.Add(new InfobipDispatchResult
 					{
 						ResourceId = message.MessageId,
-						DispatchStatus = message.Status.GroupName.ToDispatchStatus()
+						Status = message.Status.GroupName.ToDispatchStatus()
 					});
 
 					Dispatched(communicationContext, communication, results);
@@ -85,7 +85,7 @@ namespace Transmitly.ChannelProvider.Infobip.Email
 			return results;
 		}
 
-		private static async Task<HttpContent> CreateMessageContent(IIdentityAddress[] recipients, IEmail email, IDispatchCommunicationContext context)
+		private static async Task<HttpContent> CreateMessageContent(IPlatformIdentityAddress[] recipients, IEmail email, IDispatchCommunicationContext context)
 		{
 			MultipartFormDataContent form = [];
 			var emailProperties = new EmailExtendedChannelProperties(email.ExtendedProperties);
@@ -130,11 +130,15 @@ namespace Transmitly.ChannelProvider.Infobip.Email
 				url = await urlResolver(context).ConfigureAwait(false);
 			else
 			{
-				url = emailProperties.NotifyUrl ?? email.DeliveryReportCallbackUrl;
+				url = emailProperties.NotifyUrl;
 				if (string.IsNullOrWhiteSpace(url))
 					return null;
 			}
-			return new Uri(url).AddPipelineContext(messageId, context.PipelineName, context.ChannelId, context.ChannelProviderId).ToString();
+
+			if (string.IsNullOrWhiteSpace(url))
+				return null;
+
+			return new Uri(url).AddPipelineContext(messageId, context.PipelineIntent, context.PipelineId, context.ChannelId, context.ChannelProviderId).ToString();
 		}
 
 		private static void AddStringContent(MultipartFormDataContent form, string key, string? value, bool optional = true)
@@ -146,10 +150,10 @@ namespace Transmitly.ChannelProvider.Infobip.Email
 				else
 					throw new InfobipException($"Cannot add {key} value is null.");
 			}
-			form.Add(new StringContent(value), String.Format("\"{0}\"", key));
+			form.Add(new StringContent(value), string.Format("\"{0}\"", key));
 		}
 
-		private static void TryAddRecipients(IIdentityAddress[] recipients, IEmail email, MultipartFormDataContent form)
+		private static void TryAddRecipients(IPlatformIdentityAddress[] recipients, IEmail email, MultipartFormDataContent form)
 		{
 			var ccs = email.Cc ?? [];
 			var bccs = email.Bcc ?? [];

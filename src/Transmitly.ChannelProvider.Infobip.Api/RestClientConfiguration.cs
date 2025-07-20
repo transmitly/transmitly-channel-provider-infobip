@@ -16,8 +16,9 @@ using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using Transmitly.ChannelProvider.Infobip.Configuration;
+using Transmitly.Util;
 
-namespace Transmitly.ChannelProvider.Infobip
+namespace Transmitly.ChannelProvider.Infobip.Api
 {
 	internal static class RestClientConfiguration
 	{

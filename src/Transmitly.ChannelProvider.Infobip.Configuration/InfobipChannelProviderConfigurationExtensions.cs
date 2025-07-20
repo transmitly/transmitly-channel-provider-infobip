@@ -12,10 +12,12 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
+using Transmitly.Channel.Configuration;
 using Transmitly.ChannelProvider.Infobip.Configuration.Email;
 using Transmitly.ChannelProvider.Infobip.Configuration.Sms;
 using Transmitly.ChannelProvider.Infobip.Configuration.Voice;
 using Transmitly.Delivery;
+using Transmitly.Util;
 
 namespace Transmitly.ChannelProvider.Infobip.Configuration
 {
@@ -30,7 +32,7 @@ namespace Transmitly.ChannelProvider.Infobip.Configuration
 		public static string Infobip(this ChannelProviders channelProviders, string? providerId = null)
 		{
 			Guard.AgainstNull(channelProviders);
-			return channelProviders.GetId(Constant.Id, providerId);
+			return channelProviders.GetId(InfobipConstant.Id, providerId);
 		}
 
 		/// <summary>
@@ -38,7 +40,7 @@ namespace Transmitly.ChannelProvider.Infobip.Configuration
 		/// </summary>
 		/// <param name="email">Email Channel.</param>
 		/// <returns>Infobip email properties.</returns>
-		public static IEmailExtendedChannelProperties Infobip(this IEmailChannel email)
+		public static IEmailExtendedChannelProperties Infobip(this IChannel<IEmail> email)
 		{
 			return InfobipChannelProviderExtendedProprtiesBuilderExtensions.Email.Adapt(email);
 		}
@@ -48,7 +50,7 @@ namespace Transmitly.ChannelProvider.Infobip.Configuration
 		/// </summary>
 		/// <param name="sms">Sms Channel.</param>
 		/// <returns>Infobip Sms properties.</returns>
-		public static ISmsExtendedChannelProperties Infobip(this ISmsChannel sms)
+		public static ISmsExtendedChannelProperties Infobip(this IChannel<ISms> sms)
 		{
 			return InfobipChannelProviderExtendedProprtiesBuilderExtensions.Sms.Adapt(sms);
 		}
@@ -58,7 +60,7 @@ namespace Transmitly.ChannelProvider.Infobip.Configuration
 		/// </summary>
 		/// <param name="voice">Voice Channel.</param>
 		/// <returns>Infobip voice properties.</returns>
-		public static IVoiceExtendedChannelProperties Infobip(this IVoiceChannel voice)
+		public static IVoiceExtendedChannelProperties Infobip(this IChannel<IVoice> voice)
 		{
 			return InfobipChannelProviderExtendedProprtiesBuilderExtensions.Voice.Adapt(voice);
 		}

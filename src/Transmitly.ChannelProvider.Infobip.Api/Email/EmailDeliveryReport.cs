@@ -16,7 +16,7 @@ using System;
 using Transmitly.ChannelProvider.Infobip.Configuration;
 using Transmitly.Delivery;
 
-namespace Transmitly.ChannelProvider.Infobip.Email
+namespace Transmitly.ChannelProvider.Infobip.Api.Email
 {
 	sealed record EmailDeliveryReport : DeliveryReport
 	{
@@ -24,12 +24,11 @@ namespace Transmitly.ChannelProvider.Infobip.Email
 		{
 		}
 
-		public EmailDeliveryReport(string EventName, string? ChannelId, string? ChannelProviderId, string? PipelineName,
-				string? ResourceId, DispatchStatus DispatchStatus, object? ChannelCommunication, IContentModel? ContentModel, Exception? Exception)
-			: base(EventName, ChannelId, ChannelProviderId, PipelineName, ResourceId, DispatchStatus, ChannelCommunication, ContentModel, Exception)
+		public EmailDeliveryReport(string EventName, string? ChannelId, string? ChannelProviderId, string? PipelineIntent, string? PipelineId,
+				string? ResourceId, CommunicationsStatus Status, object? ChannelCommunication, IContentModel? ContentModel, Exception? Exception)
+			: base(EventName, ChannelId, ChannelProviderId, PipelineIntent, PipelineId, ResourceId, Status, ChannelCommunication, ContentModel, Exception)
 		{
-			var infobipException = this.Infobip().Voice.Error as ErrorStatus;
-			if (infobipException != null && Exception == null)
+			if (this.Infobip().Voice.Error is ErrorStatus infobipException && Exception == null)
 				base.Exception = new InfobipException(infobipException);
 		}
 	}

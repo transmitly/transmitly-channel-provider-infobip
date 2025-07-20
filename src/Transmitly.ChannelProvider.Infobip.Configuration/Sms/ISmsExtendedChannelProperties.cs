@@ -14,12 +14,13 @@
 
 using System;
 using System.Threading.Tasks;
+using Transmitly.Channel.Configuration;
 
 namespace Transmitly.ChannelProvider.Infobip.Configuration.Sms
 {
 	public interface ISmsExtendedChannelProperties
 	{
-		ISmsExtendedChannelProperties Adapt(ISmsChannel sms);
+		ISmsExtendedChannelProperties Adapt(IChannel<ISms> sms);
 
 		string? ApplicationId { get; set; }
 		string? EntityId { get; set; }
