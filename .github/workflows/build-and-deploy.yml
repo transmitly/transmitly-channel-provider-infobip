@@ -1,15 +1,18 @@
-name: Build and Deploy
-
+name: Build and Test
+permissions:
+  contents: read
 on: 
   workflow_dispatch:
   push:
     branches:
-      - "main"
+     - "main"
     paths:
       - "src/Transmitly.ChannelProvider.Infobip/**"
 jobs:
   build_test_deploy_channel_provider:
-    uses: transmitly/transmitly/.github/workflows/build-and-deploy-channel-provider-group.yml@main
+    uses: transmitly/transmitly/.github/workflows/build-and-deploy-channel-provider.yml@main
     with: 
       channelProviderName: Transmitly.ChannelProvider.Infobip
     secrets: inherit
+
+      
