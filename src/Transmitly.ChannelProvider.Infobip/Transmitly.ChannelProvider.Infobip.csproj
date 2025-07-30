@@ -45,8 +45,8 @@
 		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
 		<PackageReference Include="PolySharp" Version="1.15.0" PrivateAssets="All" />
 		<PackageReference Include="Transmitly" Version="0.2.1" />
-		<PackageReference Include="Transmitly.ChannelProvider.Infobip.Api" Version="0.2.2" />
-		<PackageReference Include="Transmitly.ChannelProvider.Infobip.Configuration" Version="0.2.3" />
+		<PackageReference Include="Transmitly.ChannelProvider.Infobip.Api" Version="0.2.3" />
+		<PackageReference Include="Transmitly.ChannelProvider.Infobip.Configuration" Version="0.2.4" />
 	</ItemGroup>
 	<ItemGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETFramework'">
 		<Reference Include="System.Net.Http" />
