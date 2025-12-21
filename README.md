@@ -1,6 +1,6 @@
 # Transmitly.ChannelProvider.Infobip
 
-A [Transmitly](https://github.com/transmitly/transmitly) channel provider that enables sending Email and SMS communications with [Infobip](https://www.infobip.com/).
+A [Transmitly™](https://github.com/transmitly/transmitly) channel provider that enables sending Email and SMS communications with [Infobip](https://www.infobip.com/).
 
 ### Getting started
 
