@@ -1,55 +1,85 @@
-# Transmitly.ChannelProvider.Infobip
+﻿# Transmitly.ChannelProvider.Infobip
 
-A [Transmitly](https://github.com/transmitly/transmitly) channel provider that enables sending Email and SMS communications with [Infobip](https://www.infobip.com/).
+`Transmitly.ChannelProvider.Infobip` is the convenience package for using [Transmitly](https://github.com/transmitly/transmitly) with [Infobip](https://www.infobip.com/).
 
-### Getting started
+This is the package most applications should install. It wires together:
 
-To use the Infobip channel provider, first install the [NuGet package](https://nuget.org/packages/transmitly.channelprovider.infobip):
+- `Transmitly.ChannelProvider.Infobip.Configuration`
+- `Transmitly.ChannelProvider.Infobip.Api`
+
+Supported channels:
+
+- `Email`
+- `Sms`
+- `Voice`
+
+## Install
 
 ```shell
 dotnet add package Transmitly.ChannelProvider.Infobip
 ```
 
-Then add the channel provider using `AddInfobipSupport()`:
+## Quick Start
 
 ```csharp
 using Transmitly;
-...
-var communicationClient = new CommunicationsClientBuilder()
-.AddInfobipSupport(options =>
-{
-	options.BasePath = "https://base.infobip.com";
-	options.ApiKey = "key";
-	options.ApiKeyPrefix = "App";
-})
-.AddPipeline("first-pipeline", pipeline =>
-{
-	//AddEmail is a channel that is core to the Transmitly library.
-	//AsIdentityAddress() is also a convenience method that helps us create an identity address
-	//Identity addresses can be anything, email, phone, or even a device/app Id for push notifications!
-	pipeline.AddEmail("from@mydomain.com".AsIdentityAddress("Test Display Name"), email =>
-	{
-		//Transmitly is a bit different. All of our content is supported by templates out of the box.
-		//There are multiple types of templates to get you started. You can even create templates 
-		//specific to certain cultures!
-		email.Subject.AddStringTemplate("Hey, Check out Transmit.ly!");
-		email.HtmlBody.AddStringTemplate("Hey, check out this cool new library for managing app communications. <a href=\"https://transmit.ly\">");
-		email.TextBody.AddStringTemplate("Hey, check out this cool new library. https://transmitly.ly");
-	});
 
-	//AddSms is a channel that is core to the Transmitly library.
-	pipeline.AddSms(sms =>
+ICommunicationsClient client = new CommunicationsClientBuilder()
+	.AddInfobipSupport(options =>
 	{
-		sms.Message.AddStringTemplate("Check out Transmit.ly!");
-	});
-});
-//Dispatch (send) the transsactional messages to our friend Joe (joe@mydomain.com & 888-555-1234) using our configured InfoBip account with our "first-pipeline" pipeline.
-var result = await communicationsClient.DispatchAsync("first-pipeline", ["joe@mydomain.com".AsIdentityAddress("Joe"),"+18885551234".AsIdentityAddress()], new { });
+		options.BasePath = "https://base.infobip.com";
+		options.ApiKey = "your-infobip-api-key";
+		options.ApiKeyPrefix = "App";
+	})
+	.AddPipeline("account-alert", pipeline =>
+	{
+		pipeline.AddEmail("alerts@example.com".AsIdentityAddress("Example App"), email =>
+		{
+			email.Subject.AddStringTemplate("Important account alert");
+			email.TextBody.AddStringTemplate("There is an update on your account.");
+		});
+
+		pipeline.AddSms(sms =>
+		{
+			sms.Message.AddStringTemplate("There is an update on your account.");
+		});
+	})
+	.BuildClient();
+
+var result = await client.DispatchAsync(
+	"account-alert",
+	new[]
+	{
+		"customer@example.com".AsIdentityAddress("Customer"),
+		"+15551234567".AsIdentityAddress()
+	},
+	new { });
 ```
-* See the [Transmitly](https://github.com/transmitly/transmitly) project for more details on what a channel provider is and how it can be configured.
 
+## Configuration
 
+`AddInfobipSupport(options => ...)` accepts `InfobipChannelProviderConfiguration`.
+
+Common settings:
+
+- `ApiKey`: your Infobip API key.
+- `BasePath`: defaults to `https://base.infobip.com`.
+- `ApiKeyPrefix`: defaults to `App`.
+- `WebProxy`: optional outbound proxy.
+
+## Infobip-Specific Channel Features
+
+Infobip channel extensions are available through the configuration package:
+
+- `email.Infobip()` for email-specific settings such as `TemplateId`, tracking flags, `AmpHtml`, and notify URLs.
+- `sms.Infobip()` for SMS-specific settings such as `ValidityPeriod` and notify URLs.
+- `voice.Infobip()` for voice-specific settings such as timeouts, recording, machine detection, and voice selection.
+
+## Related Packages
+
+- [Transmitly](https://github.com/transmitly/transmitly)
+- [Transmitly.ChannelProvider.Infobip.Configuration](https://github.com/transmitly/transmitly-channel-provider-infobip-configuration)
+- [Transmitly.ChannelProvider.Infobip.Api](https://github.com/transmitly/transmitly-channel-provider-infobip-api)
 
 ---
-_Copyright © Code Impressions, LLC.  This open-source project is sponsored and maintained by Code Impressions
-and is licensed under the [Apache License, Version 2.0](http://apache.org/licenses/LICENSE-2.0.html)._
+_Copyright (c) Code Impressions, LLC. This open-source project is sponsored and maintained by Code Impressions and is licensed under the [Apache License, Version 2.0](http://apache.org/licenses/LICENSE-2.0.html)._
