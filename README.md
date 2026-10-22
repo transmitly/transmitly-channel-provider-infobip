@@ -50,8 +50,8 @@ var result = await client.DispatchAsync(
 	"account-alert",
 	new[]
 	{
-		"customer@example.com".AsIdentityAddress("Customer"),
-		"+15551234567".AsIdentityAddress()
+		"customer@example.com",
+		"+15551234567"
 	},
 	new { });
 ```
