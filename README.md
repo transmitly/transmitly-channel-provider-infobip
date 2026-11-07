@@ -30,6 +30,8 @@ ICommunicationsClient client = new CommunicationsClientBuilder()
 		options.BasePath = "https://base.infobip.com";
 		options.ApiKey = "your-infobip-api-key";
 		options.ApiKeyPrefix = "App";
+		// Required unless ValidateDeliveryReportSignature = false. See Configuration.
+		options.WebhookSecret = "your-notification-profile-hmac-secret";
 	})
 	.AddPipeline("account-alert", pipeline =>
 	{
@@ -66,6 +68,8 @@ Common settings:
 - `BasePath`: defaults to `https://base.infobip.com`.
 - `ApiKeyPrefix`: defaults to `App`.
 - `WebProxy`: optional outbound proxy.
+- `WebhookSecret`: the secret for delivery-report signatures. In Infobip, create a notification profile for your delivery-report URL with an HMAC authentication setting (algorithm `HMAC_SHA_256`), then use its secret key here. Reports without a valid `X-Hub-Signature` are rejected with `403 Forbidden` by the MVC integration packages. `AddInfobipSupport` throws at startup if it is missing while `ValidateDeliveryReportSignature` is `true`. Only HMAC authentication is supported; Basic, OAuth and mTLS are not yet.
+- `ValidateDeliveryReportSignature`: defaults to `true`. Set it to `false` if you don't receive Infobip delivery reports; then no secret is needed.
 
 ## Infobip-Specific Channel Features
 

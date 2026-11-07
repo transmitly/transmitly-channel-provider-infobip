@@ -17,6 +17,7 @@ using Transmitly.ChannelProvider.Infobip.Api.Email;
 using Transmitly.ChannelProvider.Infobip.Api.Sms;
 using Transmitly.ChannelProvider.Infobip.Api.Voice;
 using Transmitly.ChannelProvider.Infobip.Configuration;
+using Transmitly.Exceptions;
 
 namespace Transmitly
 {
@@ -29,10 +30,13 @@ namespace Transmitly
 		/// <param name="options">Infobip channel provider options and settings.</param>
 		/// <param name="providerId">Optional channel provider Id.</param>
 		/// <returns></returns>
+		/// <exception cref="CommunicationsException">Signature validation is on but no <see cref="InfobipChannelProviderConfiguration.WebhookSecret"/> is set.</exception>
 		public static CommunicationsClientBuilder AddInfobipSupport(this CommunicationsClientBuilder communicationsClientBuilder, Action<InfobipChannelProviderConfiguration> options, string? providerId = null)
 		{
 			var optionObj = new InfobipChannelProviderConfiguration();
 			options(optionObj);
+			if (optionObj.ValidateDeliveryReportSignature && string.IsNullOrWhiteSpace(optionObj.WebhookSecret))
+				throw new CommunicationsException($"Infobip {nameof(InfobipChannelProviderConfiguration.WebhookSecret)} is required when {nameof(InfobipChannelProviderConfiguration.ValidateDeliveryReportSignature)} is true. Set it to the HMAC_SHA_256 secret key of the notification profile for your delivery-report URL, or set {nameof(InfobipChannelProviderConfiguration.ValidateDeliveryReportSignature)} = false if you don't receive Infobip delivery reports with Transmitly.");
 
 			communicationsClientBuilder.ChannelProvider.Build(Id.ChannelProvider.Infobip(providerId), optionObj)
 				.AddDispatcher<SmsChannelProviderDispatcher, ISms>(Id.Channel.Sms())
@@ -41,9 +45,6 @@ namespace Transmitly
 				.AddDeliveryReportRequestAdaptor<SmsDeliveryStatusReportAdaptor>()
 				.AddDeliveryReportRequestAdaptor<VoiceDeliveryStatusReportAdaptor>()
 				.AddDeliveryReportRequestAdaptor<EmailDeliveryStatusReportAdaptor>()
-				.AddSmsExtendedPropertiesAdaptor<SmsExtendedChannelProperties>()
-				.AddVoiceExtendedPropertiesAdaptor<VoiceExtendedChannelProperties>()
-				.AddEmailExtendedPropertiesAdaptor<EmailExtendedChannelProperties>()
 				.Register();
 
 			return communicationsClientBuilder;
